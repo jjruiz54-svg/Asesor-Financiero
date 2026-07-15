@@ -4,6 +4,7 @@
 - **Fecha de análisis:** 2026-07-15
 - **Fecha de corte de datos:** 2026-07-15 (TRM vigente: $3.252,11)
 - **Analista / agente:** `bolsa-colombia`
+- **Gráfico interactivo:** [`2026-07-15-usd-cop-grafico.html`](2026-07-15-usd-cop-grafico.html)
 
 ## Resumen ejecutivo
 

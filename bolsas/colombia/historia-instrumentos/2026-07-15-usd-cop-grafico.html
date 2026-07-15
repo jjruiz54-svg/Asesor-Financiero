@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USD/COP — Histórico 5 años (2021–2026)</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--ink); padding: 24px 16px; line-height: 1.45;
+  }
+  .viz-root {
+    --page: #f9f9f7; --surface-1: #fcfcfb;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --baseline: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6;            /* Colombia — slot 1 (validado) */
+    --delta-good: #006300;
+    max-width: 860px; margin: 0 auto;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root, :root:where(:not([data-theme="light"])) body {
+      --page: #0d0d0d; --surface-1: #1a1a19;
+      --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5; --delta-good: #0ca30c;
+    }
+  }
+  :root[data-theme="dark"] .viz-root, :root[data-theme="dark"] body {
+    --page: #0d0d0d; --surface-1: #1a1a19;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5; --delta-good: #0ca30c;
+  }
+  h1 { font-size: 1.25rem; font-weight: 650; }
+  .subtitle { color: var(--ink-2); font-size: 0.86rem; margin-top: 4px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+  .tile {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+  }
+  .tile .k { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .tile .v { font-size: 1.55rem; font-weight: 650; margin-top: 2px; }
+  .tile .d { font-size: 0.8rem; margin-top: 2px; color: var(--ink-2); }
+  .tile .d.good { color: var(--delta-good); font-weight: 600; }
+  .card {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 18px 10px; position: relative; overflow: hidden;
+  }
+  .card h2 { font-size: 0.95rem; font-weight: 650; }
+  .card .note { font-size: 0.78rem; color: var(--muted); margin: 2px 0 8px; }
+  #chartwrap { position: relative; }
+  svg { display: block; width: 100%; height: auto; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .baseline { stroke: var(--baseline); stroke-width: 1; }
+  .tick, .axlab { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .dlabel { font-size: 11.5px; fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dlabel-sub { font-size: 10px; fill: var(--ink-2); font-weight: 400; }
+  .line { fill: none; stroke: var(--series-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .pt { fill: var(--series-1); stroke: var(--surface-1); stroke-width: 2; }
+  .hit { fill: transparent; cursor: pointer; }
+  .crosshair { stroke: var(--baseline); stroke-width: 1; stroke-dasharray: 3 3; visibility: hidden; }
+  #tooltip {
+    position: absolute; pointer-events: none; visibility: hidden; z-index: 5;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18); padding: 8px 11px; font-size: 0.8rem; min-width: 150px;
+  }
+  #tooltip .tt-date { color: var(--muted); font-size: 0.72rem; }
+  #tooltip .tt-val { font-weight: 650; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  #tooltip .tt-evt { color: var(--ink-2); font-size: 0.74rem; margin-top: 2px; }
+  .swatch { display: inline-block; width: 9px; height: 9px; border-radius: 2px; background: var(--series-1); margin-right: 5px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.84rem; }
+  caption { text-align: left; font-size: 0.9rem; font-weight: 650; padding-bottom: 6px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  th, td { padding: 7px 10px; border-bottom: 1px solid var(--grid); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .rev { color: var(--delta-good); font-weight: 600; }
+  .foot { color: var(--muted); font-size: 0.74rem; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <h1>USD/COP — Tasa de cambio en los últimos 5 años</h1>
+  <p class="subtitle">TRM oficial certificada por la Superintendencia Financiera · cierres anuales e hitos · corte 15-jul-2026</p>
+
+  <div class="tiles">
+    <div class="tile">
+      <div class="k">TRM actual (15-jul-2026)</div>
+      <div class="v">$3.252,11</div>
+      <div class="d good">↓ mínimo en casi 7 años</div>
+    </div>
+    <div class="tile">
+      <div class="k">Variación 2026 (acum.)</div>
+      <div class="v">−13,4 %</div>
+      <div class="d good">revaluación del peso</div>
+    </div>
+    <div class="tile">
+      <div class="k">Máximo histórico</div>
+      <div class="v">$5.061,21</div>
+      <div class="d">5-nov-2022</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="swatch" aria-hidden="true"></span>TRM — pesos colombianos por dólar</h2>
+    <p class="note">Puntos: cierres oficiales al 31 de diciembre de cada año, máximo histórico (5-nov-2022) y TRM vigente al corte. La línea interpola entre hitos.</p>
+    <div id="chartwrap">
+      <svg id="chart" viewBox="0 0 820 360" role="img" aria-label="Línea de la TRM peso-dólar entre diciembre de 2021 y julio de 2026, desde 3.981 hasta 3.252 pesos, con máximo histórico de 5.061 pesos en noviembre de 2022"></svg>
+      <div id="tooltip"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <table>
+      <caption>Vista de datos — cierres oficiales de la TRM</caption>
+      <thead>
+        <tr><th>Fecha</th><th class="num">TRM (COP/USD)</th><th class="num">Variación anual</th><th>Hito</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>31-dic-2021</td><td class="num">$3.981,16</td><td class="num">≈ +16,0 %</td><td>Pérdida del grado de inversión</td></tr>
+        <tr><td>05-nov-2022</td><td class="num">$5.061,21</td><td class="num">—</td><td>Máximo histórico</td></tr>
+        <tr><td>31-dic-2022</td><td class="num">$4.810,20</td><td class="num">+20,82 %</td><td>Fed agresiva + incertidumbre local</td></tr>
+        <tr><td>31-dic-2023</td><td class="num">$3.822,05</td><td class="num rev">−20,54 %</td><td>Carry trade, mejor moneda EM</td></tr>
+        <tr><td>31-dic-2024</td><td class="num">$4.409,15</td><td class="num">+15,36 %</td><td>Recaída fiscal</td></tr>
+        <tr><td>31-dic-2025</td><td class="num">$3.757,08</td><td class="num rev">−14,79 %</td><td>Moneda más revaluada de la región</td></tr>
+        <tr><td>15-jul-2026</td><td class="num">$3.252,11</td><td class="num rev">≈ −13,4 % acum.</td><td>Mínimo desde octubre de 2019</td></tr>
+      </tbody>
+    </table>
+    <p class="foot">Fuentes: Banco de la República (serie TRM) y Superintendencia Financiera de Colombia, consultadas el 2026-07-15. Documento educativo — no constituye asesoría financiera. Ficha completa: <code>2026-07-15-usd-cop-historia-5-anos.md</code>.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const data = [
+    { d: new Date(2021, 11, 31), v: 3981.16, evt: "Cierre 2021 — pérdida del grado de inversión" },
+    { d: new Date(2022, 10, 5),  v: 5061.21, evt: "Máximo histórico de la TRM", key: "max" },
+    { d: new Date(2022, 11, 31), v: 4810.20, evt: "Cierre 2022 — devaluación de 20,82 %" },
+    { d: new Date(2023, 11, 31), v: 3822.05, evt: "Cierre 2023 — revaluación de 20,54 %" },
+    { d: new Date(2024, 11, 31), v: 4409.15, evt: "Cierre 2024 — devaluación de 15,36 %" },
+    { d: new Date(2025, 11, 31), v: 3757.08, evt: "Cierre 2025 — moneda más revaluada de la región" },
+    { d: new Date(2026, 6, 15),  v: 3252.11, evt: "TRM vigente — mínimo en casi 7 años", key: "last" }
+  ];
+  const W = 820, H = 360, m = { t: 26, r: 24, b: 34, l: 58 };
+  const iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const t0 = new Date(2021, 9, 1).getTime(), t1 = new Date(2026, 9, 1).getTime();
+  const v0 = 3000, v1 = 5300;
+  const X = t => m.l + (t - t0) / (t1 - t0) * iw;
+  const Y = v => m.t + (1 - (v - v0) / (v1 - v0)) * ih;
+  const fmt = v => "$" + v.toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fdate = d => d.toLocaleDateString("es-CO", { day: "numeric", month: "short", year: "numeric" });
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("chart");
+  const el = (tag, attrs, parent) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  };
+
+  // gridlines + y ticks
+  for (let v = 3000; v <= 5000; v += 500) {
+    el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: v === 3000 ? "baseline" : "gridline" });
+    const t = el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", class: "tick" });
+    t.textContent = "$" + v.toLocaleString("es-CO");
+  }
+  // x ticks (1 de enero de cada año)
+  for (let yr = 2022; yr <= 2026; yr++) {
+    const x = X(new Date(yr, 0, 1).getTime());
+    el("line", { x1: x, x2: x, y1: H - m.b, y2: H - m.b + 5, class: "baseline" });
+    const t = el("text", { x: x, y: H - m.b + 18, "text-anchor": "middle", class: "axlab" });
+    t.textContent = yr;
+  }
+
+  // línea
+  const dAttr = data.map((p, i) => (i ? "L" : "M") + X(p.d.getTime()).toFixed(1) + " " + Y(p.v).toFixed(1)).join(" ");
+  el("path", { d: dAttr, class: "line" });
+
+  // crosshair
+  const cross = el("line", { y1: m.t, y2: H - m.b, class: "crosshair" });
+
+  // puntos + etiquetas selectivas
+  data.forEach(p => {
+    const x = X(p.d.getTime()), y = Y(p.v);
+    el("circle", { cx: x, cy: y, r: 4.5, class: "pt" });
+    if (p.key === "max") {
+      const t = el("text", { x: x, y: y - 14, "text-anchor": "middle", class: "dlabel" });
+      t.textContent = fmt(p.v);
+      const s = el("text", { x: x, y: y - 28, "text-anchor": "middle", class: "dlabel-sub" });
+      s.textContent = "máximo histórico · nov-2022";
+    }
+    if (p.key === "last") {
+      const t = el("text", { x: x - 8, y: y + 22, "text-anchor": "end", class: "dlabel" });
+      t.textContent = fmt(p.v);
+      const s = el("text", { x: x - 8, y: y + 35, "text-anchor": "end", class: "dlabel-sub" });
+      s.textContent = "15-jul-2026";
+    }
+  });
+
+  // capa de interacción: objetivos amplios + tooltip
+  const tip = document.getElementById("tooltip");
+  const wrap = document.getElementById("chartwrap");
+  data.forEach(p => {
+    const x = X(p.d.getTime()), y = Y(p.v);
+    const hit = el("circle", { cx: x, cy: y, r: 18, class: "hit" });
+    hit.addEventListener("mouseenter", () => {
+      cross.setAttribute("x1", x); cross.setAttribute("x2", x);
+      cross.style.visibility = "visible";
+      tip.innerHTML = '<div class="tt-date">' + fdate(p.d) + '</div>' +
+        '<div class="tt-val"><span class="swatch"></span>' + fmt(p.v) + '</div>' +
+        '<div class="tt-evt">' + p.evt + '</div>';
+      tip.style.visibility = "visible";
+      const r = wrap.getBoundingClientRect(), sx = r.width / W;
+      let lx = x * sx + 14, ly = y * (r.height / H) - 10;
+      tip.style.left = "0px"; tip.style.top = "0px";
+      const tw = tip.offsetWidth;
+      if (lx + tw > r.width - 4) lx = x * sx - tw - 14;
+      tip.style.left = lx + "px"; tip.style.top = Math.max(2, ly) + "px";
+    });
+    hit.addEventListener("mouseleave", () => {
+      tip.style.visibility = "hidden"; cross.style.visibility = "hidden";
+    });
+  });
+})();
+</script>
+</body>
+</html>

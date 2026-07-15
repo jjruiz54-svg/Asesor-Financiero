@@ -78,3 +78,22 @@ Antes de cualquier análisis, lee [`PERFIL.md`](PERFIL.md) para entender el cont
 3. **No se suben archivos binarios pesados** (>5 MB). Los gráficos se prefieren como imágenes ligeras o descripciones con datos tabulados.
 4. **Commits descriptivos y en español**: `Agregar análisis de Ecopetrol Q2 2026`, `Actualizar histórico del Nikkei 225`.
 5. **Idioma de trabajo:** español. Resúmenes de fuentes en inglés u otros idiomas se traducen al documentar.
+
+## 7. Reglas de visualización de datos
+
+Todo gráfico del repositorio se crea siguiendo el procedimiento de la skill **dataviz** de Claude Code (elección de forma → color por función → validación de paleta → especificación de marcas → capa de interacción → accesibilidad → revisión visual). Reglas concretas:
+
+1. **Formato:** HTML autocontenido (sin librerías externas ni CDNs), con modo claro y oscuro, guardado junto a la ficha de análisis a la que pertenece y con la misma nomenclatura (`AAAA-MM-DD-tema-grafico.html`).
+2. **Un solo eje Y por gráfico.** Nunca gráficos de doble eje. Para comparar mercados de escalas distintas (p. ej. COLCAP vs. S&P 500) se indexa todo a base 100 o se usan gráficos pequeños en paralelo.
+3. **Color fijo por mercado** (validado con el script de la skill en modo claro y oscuro — no cambiar sin re-validar):
+
+   | Mercado | Claro | Oscuro |
+   |---------|-------|--------|
+   | Colombia | `#2a78d6` | `#3987e5` |
+   | Estados Unidos | `#008300` | `#008300` |
+   | Asia | `#e87ba4` | `#d55181` |
+   | Europa | `#eda100` | `#c98500` |
+
+   El color sigue al mercado siempre, en cualquier gráfico comparativo, aunque cambie el número de series. En modo claro, Asia y Europa quedan por debajo de 3:1 de contraste: sus series llevan **obligatoriamente etiquetas directas visibles** o vista de tabla adjunta.
+4. **Accesibilidad mínima:** con 2 o más series, leyenda siempre presente; toda cifra clave con etiqueta directa selectiva (nunca todas); tooltips al pasar el cursor; y **una tabla de datos** debajo de cada gráfico como vista alternativa.
+5. **Integridad:** el gráfico solo representa datos ya verificados y citados en su ficha `.md`; los puntos interpolados o estimados se declaran en el subtítulo.
