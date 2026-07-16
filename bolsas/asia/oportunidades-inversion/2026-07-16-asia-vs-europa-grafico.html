@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolsas de Asia vs. Europa — 2025 y 2026</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--ink); padding: 24px 16px; line-height: 1.45;
+  }
+  .viz-root {
+    --page: #f9f9f7; --surface-1: #fcfcfb;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --baseline: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --asia: #e87ba4;    /* slot 3 (validado) */
+    --europa: #eda100;  /* slot 4 (validado) */
+    max-width: 860px; margin: 0 auto;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root, :root:where(:not([data-theme="light"])) body {
+      --page: #0d0d0d; --surface-1: #1a1a19;
+      --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+      --asia: #d55181; --europa: #c98500;
+    }
+  }
+  :root[data-theme="dark"] .viz-root, :root[data-theme="dark"] body {
+    --page: #0d0d0d; --surface-1: #1a1a19;
+    --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --asia: #d55181; --europa: #c98500;
+  }
+  h1 { font-size: 1.25rem; font-weight: 650; }
+  .subtitle { color: var(--ink-2); font-size: 0.86rem; margin-top: 4px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .tile .k { font-size: 0.73rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .tile .v { font-size: 1.5rem; font-weight: 650; margin-top: 2px; }
+  .tile .d { font-size: 0.8rem; margin-top: 2px; color: var(--ink-2); }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 18px 18px 12px; margin-bottom: 16px; position: relative; }
+  .card h2 { font-size: 0.95rem; font-weight: 650; }
+  .card .note { font-size: 0.78rem; color: var(--muted); margin: 2px 0 6px; }
+  .legend { display: flex; gap: 16px; font-size: 0.78rem; color: var(--ink-2); margin: 4px 0 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .sw.asia { background: var(--asia); } .sw.europa { background: var(--europa); }
+  .chartwrap { position: relative; }
+  svg { display: block; width: 100%; height: auto; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .zero { stroke: var(--baseline); stroke-width: 1; }
+  .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .ylab { font-size: 12px; fill: var(--ink); font-weight: 600; }
+  .ysub { font-size: 10px; fill: var(--muted); }
+  .vlab { font-size: 11.5px; fill: var(--ink); font-weight: 650; font-variant-numeric: tabular-nums; }
+  .bar-asia { fill: var(--asia); } .bar-europa { fill: var(--europa); }
+  .hit { fill: transparent; cursor: pointer; }
+  .tt {
+    position: absolute; pointer-events: none; visibility: hidden; z-index: 5;
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18); padding: 8px 11px; font-size: 0.78rem; max-width: 240px;
+  }
+  .tt b { font-size: 0.88rem; }
+  table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.83rem; }
+  caption { text-align: left; font-size: 0.9rem; font-weight: 650; padding-bottom: 6px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  th, td { padding: 7px 9px; border-bottom: 1px solid var(--grid); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .foot { color: var(--muted); font-size: 0.74rem; margin-top: 12px; }
+  .up { color: #006300; font-weight: 600; } .down { color: #d03b3b; font-weight: 600; }
+  @media (prefers-color-scheme: dark) { :root:where(:not([data-theme="light"])) .up { color: #0ca30c; } }
+  :root[data-theme="dark"] .up { color: #0ca30c; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <h1>Bolsas de Asia vs. Europa — dos historias distintas</h1>
+  <p class="subtitle">Asia vive un auge (y corrección) impulsado por la IA · Europa marca máximos históricos con paso firme · corte 16-jul-2026</p>
+
+  <div class="tiles">
+    <div class="tile">
+      <div class="k">KOSPI (Corea) — 2025</div>
+      <div class="v">+71,2 %</div>
+      <div class="d">mejor índice global de 2025</div>
+    </div>
+    <div class="tile">
+      <div class="k">IBEX 35 (España) — 2025</div>
+      <div class="v">+49,3 %</div>
+      <div class="d">su mejor año en tres décadas</div>
+    </div>
+    <div class="tile">
+      <div class="k">KOSPI desde su pico (19-jun-2026)</div>
+      <div class="v">−22 %</div>
+      <div class="d">corrección de la euforia IA en curso</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Rendimiento 2025 por índice</h2>
+    <p class="note">Variación anual del año calendario 2025. Datos verificados por fuente en la tabla inferior.</p>
+    <div class="legend"><span><i class="sw asia"></i>Asia</span><span><i class="sw europa"></i>Europa</span></div>
+    <div class="chartwrap" id="w1"><svg id="c1" viewBox="0 0 820 300" role="img" aria-label="Barras del rendimiento de 2025: KOSPI 71 por ciento, IBEX 35 49 por ciento, Hang Seng 29, Nikkei 26, DAX 23 y FTSE 100 22 por ciento"></svg><div class="tt" id="t1"></div></div>
+  </div>
+
+  <div class="card">
+    <h2>2026 acumulado (1-ene → 15/16-jul)</h2>
+    <p class="note">Valores aproximados (≈): calculados a partir del rendimiento 2025 verificado y el nivel actual verificado de cada índice — ver ficha de análisis.</p>
+    <div class="legend"><span><i class="sw asia"></i>Asia</span><span><i class="sw europa"></i>Europa</span></div>
+    <div class="chartwrap" id="w2"><svg id="c2" viewBox="0 0 820 260" role="img" aria-label="Barras del acumulado de 2026: KOSPI aproximadamente 77 por ciento, Nikkei 36, IBEX 14, DAX 5 y Hang Seng menos 1 por ciento"></svg><div class="tt" id="t2"></div></div>
+  </div>
+
+  <div class="card">
+    <table>
+      <caption>Vista de datos — niveles e hitos verificados</caption>
+      <thead><tr><th>Índice</th><th>Región</th><th class="num">2025</th><th class="num">Nivel actual</th><th class="num">Máximo 2026</th><th class="num">Desde el máximo</th></tr></thead>
+      <tbody>
+        <tr><td>KOSPI (Corea del Sur)</td><td>Asia</td><td class="num up">+71,2 %</td><td class="num">7.284 (15-jul)</td><td class="num">9.385,59 (19-jun)</td><td class="num down">−22,4 %</td></tr>
+        <tr><td>Nikkei 225 (Japón)</td><td>Asia</td><td class="num up">+26 %</td><td class="num">68.585 (16-jul)</td><td class="num">72.831,73 (22-jun)</td><td class="num down">−5,8 %</td></tr>
+        <tr><td>Hang Seng (Hong Kong)</td><td>Asia</td><td class="num up">+28,7 %</td><td class="num">≈ 25.450 (jul)</td><td class="num">n/d</td><td class="num">n/d</td></tr>
+        <tr><td>IBEX 35 (España)</td><td>Europa</td><td class="num up">+49,3 %</td><td class="num">&gt; 19.800 (3-jul)</td><td class="num">19.800+ (récord)</td><td class="num">en máximos</td></tr>
+        <tr><td>DAX (Alemania)</td><td>Europa</td><td class="num up">+23 %</td><td class="num">25.605 (jul)</td><td class="num">récord en jul-2026</td><td class="num">en máximos</td></tr>
+        <tr><td>FTSE 100 (R. Unido)</td><td>Europa</td><td class="num up">+22 %</td><td class="num">n/d</td><td class="num">n/d</td><td class="num">n/d</td></tr>
+        <tr><td>Euro Stoxx 50</td><td>Europa</td><td class="num">—</td><td class="num">&gt; 6.400 (jul)</td><td class="num">6.400+ (récord)</td><td class="num">en máximos</td></tr>
+      </tbody>
+    </table>
+    <p class="foot">Fuentes: Investing.com, Yahoo Finance/Trading Economics, Bloomberg Línea, prensa financiera europea (jul-2026); detalle y fechas en la ficha <code>2026-07-16-asia-vs-europa-oportunidades.md</code>. Documento educativo — no constituye asesoría financiera.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const panels = [
+    { svg: "c1", wrap: "w1", tip: "t1", H: 300, min: 0, max: 80,
+      rows: [
+        { n: "KOSPI", r: "asia",   v: 71.2, note: "Mejor índice global de 2025; auge de semiconductores e IA" },
+        { n: "IBEX 35", r: "europa", v: 49.3, note: "Mejor año en tres décadas: banca, defensa, utilities y turismo" },
+        { n: "Hang Seng", r: "asia", v: 28.7, note: "Tercer mejor índice global de 2025" },
+        { n: "Nikkei 225", r: "asia", v: 26, note: "Tercer gran año seguido: +28 % (2023), +19 % (2024), +26 % (2025)" },
+        { n: "DAX", r: "europa", v: 23, note: "Impulsado por defensa e industria" },
+        { n: "FTSE 100", r: "europa", v: 22, note: "Año sólido del mercado británico" }
+      ] },
+    { svg: "c2", wrap: "w2", tip: "t2", H: 260, min: -10, max: 85,
+      rows: [
+        { n: "KOSPI", r: "asia",   v: 77, ap: true, note: "Euforia IA: pico de 9.385 el 19-jun y corrección de −22 % desde entonces" },
+        { n: "Nikkei 225", r: "asia", v: 36, ap: true, note: "Récord de 72.831 el 22-jun; −5,8 % desde el pico" },
+        { n: "IBEX 35", r: "europa", v: 14, ap: true, note: "En máximos históricos (>19.800 el 3-jul)" },
+        { n: "DAX", r: "europa", v: 5, ap: true, note: "25.605 puntos; récords en julio" },
+        { n: "Hang Seng", r: "asia", v: -1, ap: true, note: "Rezagada en 2026 tras el buen 2025" }
+      ] }
+  ];
+  const NS = "http://www.w3.org/2000/svg", W = 820, mL = 110, mR = 64, mT = 14, mB = 30;
+  panels.forEach(p => {
+    const svg = document.getElementById(p.svg), tip = document.getElementById(p.tip), wrap = document.getElementById(p.wrap);
+    const el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+    const iw = W - mL - mR, ih = p.H - mT - mB;
+    const X = v => mL + (v - p.min) / (p.max - p.min) * iw;
+    const rowH = ih / p.rows.length, barH = Math.min(26, rowH - 8);
+    // gridlines cada 20 puntos
+    for (let g = Math.ceil(p.min / 20) * 20; g <= p.max; g += 20) {
+      el("line", { x1: X(g), x2: X(g), y1: mT, y2: p.H - mB, class: g === 0 ? "zero" : "gridline" });
+      const t = el("text", { x: X(g), y: p.H - mB + 16, "text-anchor": "middle", class: "tick" });
+      t.textContent = (g > 0 ? "+" : "") + g + " %";
+    }
+    p.rows.forEach((d, i) => {
+      const y = mT + i * rowH + (rowH - barH) / 2;
+      const x0 = X(0), x1 = X(d.v), r = 4;
+      const left = Math.min(x0, x1), right = Math.max(x0, x1);
+      const path = d.v >= 0
+        ? `M ${x0} ${y} L ${right - r} ${y} Q ${right} ${y} ${right} ${y + r} L ${right} ${y + barH - r} Q ${right} ${y + barH} ${right - r} ${y + barH} L ${x0} ${y + barH} Z`
+        : `M ${x0} ${y} L ${left + r} ${y} Q ${left} ${y} ${left} ${y + r} L ${left} ${y + barH - r} Q ${left} ${y + barH} ${left + r} ${y + barH} L ${x0} ${y + barH} Z`;
+      el("path", { d: path, class: "bar-" + d.r });
+      const nm = el("text", { x: mL - 10, y: y + barH / 2 + 4, "text-anchor": "end", class: "ylab" });
+      nm.textContent = d.n;
+      const vl = el("text", {
+        x: d.v >= 0 ? right + 7 : left - 7, y: y + barH / 2 + 4,
+        "text-anchor": d.v >= 0 ? "start" : "end", class: "vlab"
+      });
+      vl.textContent = (d.ap ? "≈ " : "") + (d.v > 0 ? "+" : "") + String(d.v).replace(".", ",") + " %";
+      const hit = el("rect", { x: 0, y: mT + i * rowH, width: W, height: rowH, class: "hit" });
+      hit.addEventListener("mouseenter", () => {
+        tip.innerHTML = "<b>" + d.n + "</b> · " + (d.v > 0 ? "+" : "") + String(d.v).replace(".", ",") + " %<br><span style='color:var(--ink-2)'>" + d.note + "</span>";
+        tip.style.visibility = "visible";
+        const rc = wrap.getBoundingClientRect(), sy = rc.height / p.H;
+        let lx = (right + 12) * (rc.width / W), ly = (mT + i * rowH) * sy - 4;
+        tip.style.left = "0px"; tip.style.top = "0px";
+        if (lx + tip.offsetWidth > rc.width - 4) lx = rc.width - tip.offsetWidth - 4;
+        tip.style.left = lx + "px"; tip.style.top = Math.max(2, ly) + "px";
+      });
+      hit.addEventListener("mouseleave", () => { tip.style.visibility = "hidden"; });
+    });
+  });
+})();
+</script>
+</body>
+</html>
