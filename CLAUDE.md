@@ -4,13 +4,15 @@ Este archivo define las **reglas claras y obligatorias** para todo trabajo reali
 
 ## 1. Propósito del repositorio
 
-Registrar y analizar las actividades financieras de 4 bolsas de valores (Colombia, Estados Unidos, Asia y Europa), incluyendo investigación de activos, oportunidades de inversión e historia de los instrumentos de los últimos 5 años, con atención especial al impacto de la geopolítica en la economía local y global.
+Registrar y analizar las actividades financieras de 4 bolsas de valores (Colombia, Estados Unidos, Asia y Europa) y del mercado de criptomonedas, incluyendo investigación de activos, oportunidades de inversión e historia de los instrumentos de los últimos 5 años, con atención especial al impacto de la geopolítica en la economía local y global.
+
+**Criptomonedas:** categoría adicional que cubre exclusivamente las 10 criptomonedas más importantes del mundo por capitalización de mercado, más **Worldcoin (WLD)** de forma obligatoria como posición 11 si no aparece de forma natural en ese top 10.
 
 Antes de cualquier análisis, lee [`PERFIL.md`](PERFIL.md) para entender el contexto y los intereses del analista.
 
 ## 2. Reglas de organización
 
-1. **Cada bolsa tiene su carpeta** bajo `bolsas/` y NO se mezcla contenido entre bolsas. Un análisis comparativo entre mercados se guarda en la carpeta de la bolsa protagonista, con enlaces a las demás.
+1. **Cada bolsa tiene su carpeta** bajo `bolsas/` y NO se mezcla contenido entre bolsas. Un análisis comparativo entre mercados se guarda en la carpeta de la bolsa protagonista, con enlaces a las demás. El mercado de criptomonedas, aunque no es una bolsa de valores tradicional, se organiza bajo el mismo esquema en `bolsas/criptomonedas/` por consistencia.
 2. **Toda entrada va en la subcarpeta correcta**:
    - `investigacion-activos/` → fichas de análisis de un activo concreto.
    - `oportunidades-inversion/` → tesis de inversión con escenarios y riesgos.
@@ -26,6 +28,7 @@ Antes de cualquier análisis, lee [`PERFIL.md`](PERFIL.md) para entender el cont
    - `bolsa-eeuu` → NYSE y Nasdaq.
    - `bolsa-asia` → Tokio, Hong Kong, Shanghái, Shenzhen, Seúl, Singapur.
    - `bolsa-europa` → Euronext, LSE, Deutsche Börse, BME, SIX.
+   - `criptomonedas` → top 10 de criptomonedas por capitalización de mercado + Worldcoin (WLD) obligatorio en posición 11 si no está en dicho top 10.
 2. Los sub-agentes buscan información **únicamente en las fuentes de confianza** listadas en su propia ficha. Si una fuente no está en la lista, no se usa sin aprobación explícita del dueño del repositorio.
 3. Un sub-agente **no escribe** en la carpeta de otra bolsa.
 4. Si una tarea abarca varias bolsas, se invoca a cada sub-agente por separado y se consolida el resultado indicando qué agente aportó cada sección.
@@ -35,7 +38,7 @@ Antes de cualquier análisis, lee [`PERFIL.md`](PERFIL.md) para entender el cont
 1. **Toda cifra lleva fuente y fecha.** Formato: `(Fuente: nombre, AAAA-MM-DD)`. Sin fuente, el dato no entra al repositorio.
 2. **Prohibido inventar datos.** Si un dato no se pudo verificar, se escribe explícitamente "dato no verificado" o se omite.
 3. **Distinguir hecho de opinión.** Los hechos se redactan en indicativo con su fuente; las opiniones y proyecciones se marcan claramente como tales (sección "Opinión del analista" o "Escenarios").
-4. **Ventana histórica mínima de 5 años** para todo análisis de instrumentos en `historia-instrumentos/`.
+4. **Ventana histórica mínima de 5 años** para todo análisis de instrumentos en `historia-instrumentos/`. Excepción: activos cripto más jóvenes que 5 años se documentan desde su lanzamiento, indicándolo explícitamente.
 5. **Contexto geopolítico obligatorio**: toda tesis de inversión debe incluir una sección sobre riesgos y catalizadores geopolíticos.
 6. **Actualidad**: indicar siempre la fecha de corte de los datos. Un análisis sin fecha de corte se considera incompleto.
 
