@@ -12,7 +12,7 @@ Este documento describe el perfil del dueño de este repositorio. Todo agente o 
 
 - En su tiempo libre le encanta **analizar los mercados financieros**.
 - Interés especial en **cómo impacta la geopolítica en la economía local y global**: decisiones de bancos centrales, conflictos internacionales, política comercial, elecciones, precios de materias primas.
-- Sigue de cerca los mercados de **Colombia, Estados Unidos, Asia y Europa** (las 4 categorías de este repositorio).
+- Sigue de cerca los mercados de **Colombia, Estados Unidos, Asia, Europa y criptomonedas** (las 5 categorías de este repositorio).
 
 ## Implicaciones para los análisis
 
