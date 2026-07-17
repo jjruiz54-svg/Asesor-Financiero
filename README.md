@@ -34,16 +34,17 @@ Asesor-Financiero/
 │   ├── bolsa-asia.md
 │   ├── bolsa-europa.md
 │   └── criptomonedas.md
-└── bolsas/
-    ├── colombia/
-    ├── estados-unidos/
-    ├── asia/
-    ├── europa/
-    └── criptomonedas/
-        ├── investigacion-activos/      ← fichas de análisis por activo
-        ├── oportunidades-inversion/    ← tesis de inversión documentadas
-        ├── historia-instrumentos/      ← histórico de 5 años por instrumento (o desde su lanzamiento)
-        └── actividades/                ← bitácora de actividades del mercado
+├── bolsas/
+│   ├── colombia/
+│   ├── estados-unidos/
+│   ├── asia/
+│   ├── europa/
+│   └── criptomonedas/
+│       ├── investigacion-activos/      ← fichas de análisis por activo
+│       ├── oportunidades-inversion/    ← tesis de inversión documentadas
+│       ├── historia-instrumentos/      ← histórico de 5 años por instrumento (o desde su lanzamiento)
+│       └── actividades/                ← bitácora de actividades del mercado
+└── informes-mercados/          ← informes ad hoc que cruzan las 5 categorías (ver README propio)
 ```
 
 ## 🤖 Sub-agentes especializados
