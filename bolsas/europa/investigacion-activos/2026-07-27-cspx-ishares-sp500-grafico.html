@@ -1,0 +1,502 @@
+<title>CSPX — Histórico 4 años y pronóstico 6 meses (27-jul-2026)</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #f9f9f7;
+    color: #0b0b0b;
+    padding: 24px 16px 48px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) { color-scheme: dark; }
+    :root:where(:not([data-theme="light"])) body { background: #0d0d0d; color: #ffffff; }
+  }
+  :root[data-theme="dark"] body { background: #0d0d0d; color: #ffffff; }
+
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  .subtitle { font-size: 0.85rem; color: #52514e; margin: 0 0 4px; max-width: 760px; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .subtitle { color: #c3c2b7; }
+  }
+  :root[data-theme="dark"] .subtitle { color: #c3c2b7; }
+
+  .disclaimer {
+    font-size: 0.78rem;
+    font-style: italic;
+    background: rgba(237, 161, 0, 0.12);
+    border: 1px solid rgba(237, 161, 0, 0.4);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 12px 0 28px;
+  }
+
+  .panel {
+    background: #fcfcfb;
+    border: 1px solid rgba(11,11,11,0.10);
+    border-radius: 10px;
+    padding: 20px 20px 8px;
+    margin-bottom: 32px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .panel { background: #1a1a19; border-color: rgba(255,255,255,0.10); }
+  }
+  :root[data-theme="dark"] .panel { background: #1a1a19; border-color: rgba(255,255,255,0.10); }
+
+  .panel h2 { font-size: 1.02rem; margin: 0 0 2px; }
+  .panel .note { font-size: 0.78rem; color: #898781; margin: 0 0 14px; }
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .gridline { stroke: #e1e0d9; stroke-width: 1; }
+  :root[data-theme="dark"] .gridline, @media (prefers-color-scheme: dark) { }
+  .axis-text { fill: #898781; font-size: 11px; }
+  .baseline { stroke: #c3c2b7; stroke-width: 1; }
+
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .gridline { stroke: #2c2c2a; }
+    :root:where(:not([data-theme="light"])) .baseline { stroke: #383835; }
+  }
+  :root[data-theme="dark"] .gridline { stroke: #2c2c2a; }
+  :root[data-theme="dark"] .baseline { stroke: #383835; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.8rem; margin: 6px 0 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+
+  .direct-label { font-size: 11px; font-weight: 600; fill: #0b0b0b; }
+  :root[data-theme="dark"] .direct-label { fill: #ffffff; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .direct-label { fill: #ffffff; }
+  }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: #0b0b0b;
+    color: #ffffff;
+    font-size: 0.78rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    white-space: nowrap;
+    z-index: 5;
+  }
+  :root[data-theme="dark"] .tooltip { background: #ffffff; color: #0b0b0b; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .tooltip { background: #ffffff; color: #0b0b0b; }
+  }
+
+  .chart-holder { position: relative; }
+  .hit { fill: transparent; cursor: crosshair; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin: 10px 0 18px;
+  }
+  table.data-table caption {
+    text-align: left;
+    font-size: 0.75rem;
+    color: #898781;
+    margin-bottom: 6px;
+  }
+  table.data-table th, table.data-table td {
+    text-align: right;
+    padding: 6px 10px;
+    border-bottom: 1px solid #e1e0d9;
+    font-variant-numeric: tabular-nums;
+  }
+  :root[data-theme="dark"] table.data-table th, :root[data-theme="dark"] table.data-table td { border-bottom-color: #2c2c2a; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) table.data-table th,
+    :root:where(:not([data-theme="light"])) table.data-table td { border-bottom-color: #2c2c2a; }
+  }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+  table.data-table thead th { color: #52514e; font-weight: 600; }
+  :root[data-theme="dark"] table.data-table thead th { color: #c3c2b7; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) table.data-table thead th { color: #c3c2b7; }
+  }
+  .pos { color: #006300; font-weight: 600; }
+  .neg { color: #d03b3b; font-weight: 600; }
+  :root[data-theme="dark"] .pos { color: #0ca30c; }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .pos { color: #0ca30c; }
+  }
+
+  footer { font-size: 0.75rem; color: #898781; margin-top: 8px; line-height: 1.5; }
+</style>
+
+<div class="wrap">
+  <h1>CSPX — iShares Core S&amp;P 500 UCITS ETF (Acc)</h1>
+  <p class="subtitle">Histórico de los últimos 4 años (2022–2026 parcial) y pronóstico de escenarios a 6 meses. Mercado: Europa (vehículo UCITS listado en bolsas europeas; subyacente S&amp;P 500, EE. UU.).</p>
+  <div class="disclaimer">Informe educativo — no constituye asesoría financiera profesional. Fecha de corte de datos: 2026-07-27.</div>
+
+  <!-- ============ PANEL 1: PRECIO / NAV ============ -->
+  <section class="panel">
+    <h2>Precio / NAV de cierre aproximado (USD), 2022–2026</h2>
+    <p class="note">2022–2025: valor <strong>calculado</strong> de forma retroactiva a partir de rentabilidades anuales verificadas (no cotización de cierre exacta). 2026 (parcial): valor <strong>observado</strong> directamente. (Fuente: Yahoo Finance / Morningstar, 2026-07-24 y 2026-07-27.)</p>
+    <div class="chart-holder">
+      <svg id="chart-price" viewBox="0 0 760 300" role="img" aria-label="Evolución del precio de cierre aproximado de CSPX, de 384 USD en 2022 a 806.09 USD en 2026 (parcial)"></svg>
+      <div class="tooltip" id="tt-price"></div>
+    </div>
+    <table class="data-table">
+      <caption>Vista de datos alternativa — precio/NAV de cierre aproximado (USD)</caption>
+      <thead><tr><th>Año</th><th>Precio/NAV (USD)</th><th>Naturaleza del dato</th></tr></thead>
+      <tbody id="table-price"></tbody>
+    </table>
+  </section>
+
+  <!-- ============ PANEL 2: RENTABILIDAD ANUAL ============ -->
+  <section class="panel">
+    <h2>Rentabilidad anual (%), 2022–2026 (parcial)</h2>
+    <p class="note">Total return en USD, dividendos reinvertidos (clase Acc). 2026 se muestra como rango observado (+8.9% a +12.8%) por inconsistencia entre proveedores en distintas fechas de julio de 2026. (Fuente: Yahoo Finance / Morningstar / PortfoliosLab, 2026-07-24 y 2026-07-27.)</p>
+    <div class="legend" id="legend-returns"></div>
+    <div class="chart-holder">
+      <svg id="chart-returns" viewBox="0 0 760 300" role="img" aria-label="Rentabilidad anual de CSPX: -19.32% en 2022, +26.12% en 2023, +25.73% en 2024, +18.05% en 2025, entre +8.9% y +12.8% en 2026 parcial"></svg>
+      <div class="tooltip" id="tt-returns"></div>
+    </div>
+    <table class="data-table">
+      <caption>Vista de datos alternativa — rentabilidad anual (%)</caption>
+      <thead><tr><th>Año</th><th>Rentabilidad anual</th></tr></thead>
+      <tbody id="table-returns"></tbody>
+    </table>
+  </section>
+
+  <!-- ============ PANEL 3: ESCENARIOS ============ -->
+  <section class="panel">
+    <h2>Escenarios de proyección a 6 meses (27-jul-2026 a ~27-ene-2027)</h2>
+    <p class="note"><strong>Opinión / proyección educativa, no un hecho ni una recomendación de inversión.</strong> Rango estimado de rentabilidad en USD, sin efecto de tipo de cambio EUR/USD, GBP/USD o USD/CHF. (Fuente: análisis propio del agente bolsa-europa, ver ficha .md.)</p>
+    <div class="legend" id="legend-scenarios"></div>
+    <div class="chart-holder">
+      <svg id="chart-scenarios" viewBox="0 0 760 300" role="img" aria-label="Escenario alcista de +8% a +15%, base de 0% a +8%, bajista de -15% a -3%"></svg>
+      <div class="tooltip" id="tt-scenarios"></div>
+    </div>
+    <table class="data-table">
+      <caption>Vista de datos alternativa — rango de rentabilidad estimada a 6 meses (%)</caption>
+      <thead><tr><th>Escenario</th><th>Mínimo</th><th>Máximo</th></tr></thead>
+      <tbody id="table-scenarios"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    Fuente: ver ficha <code>2026-07-27-cspx-ishares-sp500-analisis.md</code> (Yahoo Finance, justETF, BlackRock, PortfoliosLab, Trading Economics, CNBC, Bloomberg — consultado 2026-07-27). Repositorio Asesor Financiero — análisis educativo, no asesoría financiera profesional.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  function isDarkMode() {
+    var root = document.documentElement;
+    if (root.getAttribute("data-theme") === "dark") return true;
+    if (root.getAttribute("data-theme") === "light") return false;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  var COLORS = {
+    europe: { light: "#eda100", dark: "#c98500" },
+    good:   { light: "#0ca30c", dark: "#0ca30c" },
+    critical: { light: "#d03b3b", dark: "#e66767" },
+    warning: { light: "#fab219", dark: "#fab219" },
+    grid: { light: "#e1e0d9", dark: "#2c2c2a" },
+    baseline: { light: "#c3c2b7", dark: "#383835" },
+    axisText: "#898781",
+    ink: { light: "#0b0b0b", dark: "#ffffff" }
+  };
+  function c(role) { return COLORS[role][isDarkMode() ? "dark" : "light"]; }
+
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function fmtPct(v) { return (v >= 0 ? "+" : "") + v.toFixed(1) + "%"; }
+  function signed(v) { return (v >= 0 ? "+" : "") + v; }
+  function fmtUSD(v) { return "$" + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+  // ---------------- Panel 1: price line ----------------
+  var priceData = [
+    { year: "2022", value: 384,    kind: "Calculado" },
+    { year: "2023", value: 484,    kind: "Calculado" },
+    { year: "2024", value: 608,    kind: "Calculado" },
+    { year: "2025", value: 718,    kind: "Calculado" },
+    { year: "2026 (parcial)", value: 806.09, kind: "Observado (27-jul-2026)" }
+  ];
+
+  function drawPriceChart() {
+    var svg = document.getElementById("chart-price");
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var W = 760, H = 300, ML = 56, MR = 24, MT = 20, MB = 40;
+    var plotW = W - ML - MR, plotH = H - MT - MB;
+    var maxV = 900, minV = 0;
+    var n = priceData.length;
+
+    function x(i) { return ML + (i / (n - 1)) * plotW; }
+    function y(v) { return MT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+
+    // gridlines + axis labels
+    var steps = [0, 200, 400, 600, 800];
+    steps.forEach(function (v) {
+      var gy = y(v);
+      svg.appendChild(el("line", { x1: ML, x2: W - MR, y1: gy, y2: gy, class: "gridline" }));
+      var t = el("text", { x: ML - 10, y: gy + 4, class: "axis-text", "text-anchor": "end" });
+      t.textContent = "$" + v;
+      svg.appendChild(t);
+    });
+    svg.appendChild(el("line", { x1: ML, x2: W - MR, y1: y(minV), y2: y(minV), class: "baseline" }));
+
+    // year labels
+    priceData.forEach(function (d, i) {
+      var t = el("text", { x: x(i), y: H - 10, class: "axis-text", "text-anchor": "middle" });
+      t.textContent = d.year;
+      svg.appendChild(t);
+    });
+
+    // line path
+    var pathD = priceData.map(function (d, i) { return (i === 0 ? "M" : "L") + x(i) + "," + y(d.value); }).join(" ");
+    svg.appendChild(el("path", { d: pathD, fill: "none", stroke: c("europe"), "stroke-width": 2.5 }));
+
+    // markers + direct labels (selective: first and last only)
+    priceData.forEach(function (d, i) {
+      svg.appendChild(el("circle", { cx: x(i), cy: y(d.value), r: 5, fill: c("europe") }));
+      if (i === 0 || i === n - 1) {
+        var lbl = el("text", {
+          x: x(i), y: y(d.value) - 14, class: "direct-label",
+          "text-anchor": i === 0 ? "start" : "end"
+        });
+        lbl.textContent = fmtUSD(d.value);
+        svg.appendChild(lbl);
+      }
+    });
+
+    // hit areas for tooltip
+    var tooltip = document.getElementById("tt-price");
+    priceData.forEach(function (d, i) {
+      var hit = el("circle", { cx: x(i), cy: y(d.value), r: 14, class: "hit" });
+      hit.addEventListener("mousemove", function (evt) {
+        var holder = svg.parentElement.getBoundingClientRect();
+        tooltip.style.left = (evt.clientX - holder.left + 12) + "px";
+        tooltip.style.top = (evt.clientY - holder.top - 30) + "px";
+        tooltip.textContent = d.year + " — " + fmtUSD(d.value) + " (" + d.kind + ")";
+        tooltip.style.opacity = 1;
+      });
+      hit.addEventListener("mouseleave", function () { tooltip.style.opacity = 0; });
+      svg.appendChild(hit);
+    });
+  }
+
+  var tablePrice = document.getElementById("table-price");
+  priceData.forEach(function (d) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.year + "</td><td>" + fmtUSD(d.value) + "</td><td>" + d.kind + "</td>";
+    tablePrice.appendChild(tr);
+  });
+
+  // ---------------- Panel 2: annual returns bars ----------------
+  var returnsData = [
+    { year: "2022", lo: -19.32, hi: -19.32 },
+    { year: "2023", lo: 26.12, hi: 26.12 },
+    { year: "2024", lo: 25.73, hi: 25.73 },
+    { year: "2025", lo: 18.05, hi: 18.05 },
+    { year: "2026 (parcial)", lo: 8.9, hi: 12.8 }
+  ];
+
+  function drawReturnsChart() {
+    var svg = document.getElementById("chart-returns");
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var W = 760, H = 300, ML = 56, MR = 24, MT = 20, MB = 40;
+    var plotW = W - ML - MR, plotH = H - MT - MB;
+    var minV = -30, maxV = 30;
+    var n = returnsData.length;
+    var bandW = plotW / n;
+
+    function y(v) { return MT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+    function xC(i) { return ML + bandW * (i + 0.5); }
+
+    [-30, -20, -10, 0, 10, 20, 30].forEach(function (v) {
+      var gy = y(v);
+      svg.appendChild(el("line", { x1: ML, x2: W - MR, y1: gy, y2: gy, class: "gridline" }));
+      var t = el("text", { x: ML - 10, y: gy + 4, class: "axis-text", "text-anchor": "end" });
+      t.textContent = v + "%";
+      svg.appendChild(t);
+    });
+    svg.appendChild(el("line", { x1: ML, x2: W - MR, y1: y(0), y2: y(0), class: "baseline" }));
+
+    var tooltip = document.getElementById("tt-returns");
+    returnsData.forEach(function (d, i) {
+      var isRange = d.lo !== d.hi;
+      var barW = bandW * 0.5;
+      var color = d.hi < 0 ? c("critical") : c("good");
+      if (isRange) {
+        var yTop = y(d.hi), yBot = y(d.lo);
+        var rect = el("rect", {
+          x: xC(i) - barW / 2, y: yTop, width: barW, height: Math.max(2, yBot - yTop),
+          fill: color, rx: 4
+        });
+        svg.appendChild(rect);
+      } else {
+        var yTop2 = d.hi >= 0 ? y(d.hi) : y(0);
+        var yBot2 = d.hi >= 0 ? y(0) : y(d.hi);
+        var rect2 = el("rect", {
+          x: xC(i) - barW / 2, y: yTop2, width: barW, height: Math.max(2, yBot2 - yTop2),
+          fill: color, rx: 4
+        });
+        svg.appendChild(rect2);
+      }
+      var label = el("text", {
+        x: xC(i), y: (d.hi >= 0 ? y(d.hi) - 8 : y(d.lo) + 16), class: "direct-label", "text-anchor": "middle"
+      });
+      label.textContent = isRange ? ("+" + d.lo.toFixed(1) + "% a +" + d.hi.toFixed(1) + "%") : fmtPct(d.hi);
+      svg.appendChild(label);
+
+      var t2 = el("text", { x: xC(i), y: H - 10, class: "axis-text", "text-anchor": "middle" });
+      t2.textContent = d.year;
+      svg.appendChild(t2);
+
+      var hit = el("rect", { x: xC(i) - bandW / 2, y: MT, width: bandW, height: plotH, class: "hit" });
+      hit.addEventListener("mousemove", function (evt) {
+        var holder = svg.parentElement.getBoundingClientRect();
+        tooltip.style.left = (evt.clientX - holder.left + 12) + "px";
+        tooltip.style.top = (evt.clientY - holder.top - 30) + "px";
+        tooltip.textContent = d.year + " — " + (isRange ? ("entre +" + d.lo.toFixed(1) + "% y +" + d.hi.toFixed(1) + "%") : fmtPct(d.hi));
+        tooltip.style.opacity = 1;
+      });
+      hit.addEventListener("mouseleave", function () { tooltip.style.opacity = 0; });
+      svg.appendChild(hit);
+    });
+  }
+
+  var legendReturns = document.getElementById("legend-returns");
+  function buildLegend(container, items) {
+    container.innerHTML = "";
+    items.forEach(function (it) {
+      var div = document.createElement("div");
+      div.className = "legend-item";
+      var sw = document.createElement("span");
+      sw.className = "swatch";
+      sw.style.background = it.color;
+      div.appendChild(sw);
+      var span = document.createElement("span");
+      span.textContent = it.label;
+      div.appendChild(span);
+      container.appendChild(div);
+    });
+  }
+  buildLegend(legendReturns, [
+    { color: c("good"), label: "Rentabilidad positiva" },
+    { color: c("critical"), label: "Rentabilidad negativa" }
+  ]);
+
+  var tableReturns = document.getElementById("table-returns");
+  returnsData.forEach(function (d) {
+    var tr = document.createElement("tr");
+    var isRange = d.lo !== d.hi;
+    var cls = d.hi >= 0 ? "pos" : "neg";
+    var text = isRange ? ("+" + d.lo.toFixed(1) + "% a +" + d.hi.toFixed(1) + "%") : fmtPct(d.hi);
+    tr.innerHTML = "<td>" + d.year + "</td><td class=\"" + cls + "\">" + text + "</td>";
+    tableReturns.appendChild(tr);
+  });
+
+  // ---------------- Panel 3: scenarios ----------------
+  var scenarioData = [
+    { name: "Alcista", lo: 8, hi: 15, role: "good" },
+    { name: "Base", lo: 0, hi: 8, role: "warning" },
+    { name: "Bajista", lo: -15, hi: -3, role: "critical" }
+  ];
+
+  function drawScenariosChart() {
+    var svg = document.getElementById("chart-scenarios");
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var W = 760, H = 300, ML = 56, MR = 24, MT = 20, MB = 40;
+    var plotW = W - ML - MR, plotH = H - MT - MB;
+    var minV = -20, maxV = 20;
+    var n = scenarioData.length;
+    var bandW = plotW / n;
+
+    function y(v) { return MT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+    function xC(i) { return ML + bandW * (i + 0.5); }
+
+    [-20, -10, 0, 10, 20].forEach(function (v) {
+      var gy = y(v);
+      svg.appendChild(el("line", { x1: ML, x2: W - MR, y1: gy, y2: gy, class: "gridline" }));
+      var t = el("text", { x: ML - 10, y: gy + 4, class: "axis-text", "text-anchor": "end" });
+      t.textContent = v + "%";
+      svg.appendChild(t);
+    });
+    svg.appendChild(el("line", { x1: ML, x2: W - MR, y1: y(0), y2: y(0), class: "baseline" }));
+
+    var tooltip = document.getElementById("tt-scenarios");
+    scenarioData.forEach(function (d, i) {
+      var barW = bandW * 0.45;
+      var yTop = y(d.hi), yBot = y(d.lo);
+      var rect = el("rect", {
+        x: xC(i) - barW / 2, y: yTop, width: barW, height: Math.max(2, yBot - yTop),
+        fill: c(d.role), rx: 4
+      });
+      svg.appendChild(rect);
+
+      var label = el("text", { x: xC(i), y: yTop - 8, class: "direct-label", "text-anchor": "middle" });
+      label.textContent = signed(d.lo) + "% a " + signed(d.hi) + "%";
+      svg.appendChild(label);
+
+      var t2 = el("text", { x: xC(i), y: H - 10, class: "axis-text", "text-anchor": "middle" });
+      t2.textContent = d.name;
+      svg.appendChild(t2);
+
+      var hit = el("rect", { x: xC(i) - bandW / 2, y: MT, width: bandW, height: plotH, class: "hit" });
+      hit.addEventListener("mousemove", function (evt) {
+        var holder = svg.parentElement.getBoundingClientRect();
+        tooltip.style.left = (evt.clientX - holder.left + 12) + "px";
+        tooltip.style.top = (evt.clientY - holder.top - 30) + "px";
+        tooltip.textContent = d.name + " — de " + signed(d.lo) + "% a " + signed(d.hi) + "% (6 meses)";
+        tooltip.style.opacity = 1;
+      });
+      hit.addEventListener("mouseleave", function () { tooltip.style.opacity = 0; });
+      svg.appendChild(hit);
+    });
+  }
+
+  var legendScenarios = document.getElementById("legend-scenarios");
+  buildLegend(legendScenarios, [
+    { color: c("good"), label: "Alcista" },
+    { color: c("warning"), label: "Base" },
+    { color: c("critical"), label: "Bajista" }
+  ]);
+
+  var tableScenarios = document.getElementById("table-scenarios");
+  scenarioData.forEach(function (d) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.name + "</td><td>" + signed(d.lo) + "%</td><td>" + signed(d.hi) + "%</td>";
+    tableScenarios.appendChild(tr);
+  });
+
+  function renderAll() {
+    drawPriceChart();
+    drawReturnsChart();
+    drawScenariosChart();
+    buildLegend(legendReturns, [
+      { color: c("good"), label: "Rentabilidad positiva" },
+      { color: c("critical"), label: "Rentabilidad negativa" }
+    ]);
+    buildLegend(legendScenarios, [
+      { color: c("good"), label: "Alcista" },
+      { color: c("warning"), label: "Base" },
+      { color: c("critical"), label: "Bajista" }
+    ]);
+  }
+
+  renderAll();
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
+  }
+  var mo = new MutationObserver(renderAll);
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>
