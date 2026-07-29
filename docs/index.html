@@ -9,13 +9,20 @@
   :root { color-scheme: light dark; }
   :root {
     --surface-1:      #fcfcfb;
-    --page-plane:     #f9f9f7;
+    --surface-2:      #ffffff;
+    --page-plane:     #f4f3ee;
     --text-primary:   #0b0b0b;
     --text-secondary: #52514e;
     --text-muted:     #898781;
     --gridline:       #e1e0d9;
     --baseline:       #c3c2b7;
-    --border:         rgba(11,11,11,0.10);
+    --border:         rgba(11,11,11,0.08);
+    --shadow:         rgba(20,18,10,0.10);
+    --hero-ink:       #ffffff;
+    --hero-ink-soft:  rgba(255,255,255,0.82);
+    --hero-ink-mute:  rgba(255,255,255,0.62);
+    --hero-chip-bg:   rgba(255,255,255,0.14);
+    --hero-chip-brd:  rgba(255,255,255,0.28);
     --c-colombia: #2a78d6;
     --c-eeuu:     #008300;
     --c-asia:     #e87ba4;
@@ -26,38 +33,42 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
-      --surface-1:      #1a1a19;
-      --page-plane:     #0d0d0d;
+      --surface-1:      #171715;
+      --surface-2:      #1e1e1c;
+      --page-plane:     #0a0a09;
       --text-primary:   #ffffff;
       --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
+      --text-muted:     #8f8d86;
       --gridline:       #2c2c2a;
-      --baseline:       #383835;
-      --border:         rgba(255,255,255,0.10);
+      --baseline:       #3a3a37;
+      --border:         rgba(255,255,255,0.09);
+      --shadow:         rgba(0,0,0,0.45);
       --c-colombia: #3987e5;
-      --c-eeuu:     #008300;
+      --c-eeuu:     #16a34a;
       --c-asia:     #d55181;
       --c-europa:   #c98500;
       --c-cripto:   #9085e9;
-      --c-general:  #c3c2b7;
+      --c-general:  #a8a69e;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --surface-1:      #1a1a19;
-    --page-plane:     #0d0d0d;
+    --surface-1:      #171715;
+    --surface-2:      #1e1e1c;
+    --page-plane:     #0a0a09;
     --text-primary:   #ffffff;
     --text-secondary: #c3c2b7;
-    --text-muted:     #898781;
+    --text-muted:     #8f8d86;
     --gridline:       #2c2c2a;
-    --baseline:       #383835;
-    --border:         rgba(255,255,255,0.10);
+    --baseline:       #3a3a37;
+    --border:         rgba(255,255,255,0.09);
+    --shadow:         rgba(0,0,0,0.45);
     --c-colombia: #3987e5;
-    --c-eeuu:     #008300;
+    --c-eeuu:     #16a34a;
     --c-asia:     #d55181;
     --c-europa:   #c98500;
     --c-cripto:   #9085e9;
-    --c-general:  #c3c2b7;
+    --c-general:  #a8a69e;
     color-scheme: dark;
   }
 
@@ -68,72 +79,174 @@
     background: var(--page-plane);
     color: var(--text-primary);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    padding: 32px 16px 64px;
+    -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 980px; margin: 0 auto; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
 
-  header.hero { margin-bottom: 32px; }
-  h1 { font-size: 1.7rem; margin: 0 0 6px; }
-  .lede { color: var(--text-secondary); font-size: 0.98rem; margin: 0 0 4px; max-width: 640px; }
-  .disclaimer { color: var(--text-muted); font-size: 0.78rem; margin: 14px 0 0; line-height: 1.5; max-width: 680px; }
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 90% at 8% -10%, rgba(42,120,214,0.55), transparent 60%),
+      radial-gradient(55% 80% at 95% 0%, rgba(232,123,164,0.45), transparent 60%),
+      radial-gradient(70% 90% at 55% 120%, rgba(237,161,0,0.40), transparent 60%),
+      linear-gradient(135deg, #0f1120 0%, #171225 45%, #1c1030 100%);
+    color: var(--hero-ink);
+    padding: 64px 0 88px;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.5), transparent 75%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--hero-ink-soft);
+    background: var(--hero-chip-bg); border: 1px solid var(--hero-chip-brd);
+    border-radius: 999px; padding: 6px 14px; margin-bottom: 22px;
+  }
+  .eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,0.6); animation: pulse 2.2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.55);} 70% { box-shadow: 0 0 0 8px rgba(74,222,128,0);} 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0);} }
 
-  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; }
+  h1 {
+    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    line-height: 1.06; letter-spacing: -0.02em; font-weight: 800;
+    margin: 0 0 18px; max-width: 780px;
+  }
+  h1 .accent {
+    background: linear-gradient(90deg, #7dd3fc, #f9a8d4 50%, #fcd34d);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { color: var(--hero-ink-soft); font-size: 1.06rem; line-height: 1.6; margin: 0 0 30px; max-width: 620px; }
+
+  .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
+  .stat {
+    background: var(--hero-chip-bg); border: 1px solid var(--hero-chip-brd); border-radius: 14px;
+    padding: 12px 18px; min-width: 108px; backdrop-filter: blur(6px);
+  }
+  .stat b { display: block; font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+  .stat span { font-size: 0.72rem; color: var(--hero-ink-mute); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .disclaimer { color: var(--hero-ink-mute); font-size: 0.78rem; line-height: 1.6; max-width: 680px; margin: 0 0 28px; }
+  .disclaimer a { color: var(--hero-ink-soft); }
+
+  nav.toc { display: flex; flex-wrap: wrap; gap: 9px; }
   nav.toc a {
-    font-size: 0.8rem; text-decoration: none; color: var(--text-primary);
-    background: var(--surface-1); border: 1px solid var(--border); border-radius: 999px;
-    padding: 6px 12px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.83rem; font-weight: 600; text-decoration: none; color: var(--hero-ink);
+    background: rgba(255,255,255,0.08); border: 1px solid var(--hero-chip-brd); border-radius: 999px;
+    padding: 8px 16px 8px 12px; transition: background 0.15s, transform 0.15s;
   }
-  nav.toc a:hover { border-color: var(--baseline); }
+  nav.toc a:hover { background: rgba(255,255,255,0.20); transform: translateY(-1px); }
+  nav.toc .swatch { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 
-  section.market { margin-top: 40px; scroll-margin-top: 16px; }
-  .market-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
-  h2 { font-size: 1.15rem; margin: 0; }
-  .market-sub { color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0 16px; }
+  /* ---------- Body ---------- */
+  main { padding: 52px 0 20px; }
 
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  section.market { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .market-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+  .market-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px; font-size: 1.25rem; flex: none;
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-1));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  h2 { font-size: 1.32rem; margin: 0; font-weight: 800; letter-spacing: -0.01em; }
+  .count-pill {
+    font-size: 0.7rem; font-weight: 700; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface-1));
+    border-radius: 999px; padding: 3px 10px;
+  }
+  .market-sub { color: var(--text-secondary); font-size: 0.88rem; margin: 8px 0 22px 54px; }
+  .market-sub code { background: var(--surface-1); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; font-size: 0.82em; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; margin-left: 54px; }
   .card {
-    background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
-    padding: 14px 16px; border-top: 3px solid var(--accent, var(--baseline));
+    position: relative;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 1px 2px var(--shadow);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   }
-  .card-type { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 4px; }
-  .card-title { font-size: 0.95rem; font-weight: 600; margin: 0 0 6px; line-height: 1.35; }
-  .card-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
-  .card-links { display: flex; flex-wrap: wrap; gap: 6px; }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 3px; border-radius: 0 0 3px 3px;
+    background: var(--accent);
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -12px var(--shadow), 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  .card-type { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin: 6px 0 6px; }
+  .card-title { font-size: 1rem; font-weight: 700; margin: 0 0 8px; line-height: 1.35; letter-spacing: -0.005em; }
+  .card-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 14px; font-variant-numeric: tabular-nums; }
+  .card-links { display: flex; flex-wrap: wrap; gap: 7px; }
   .card-links a {
-    font-size: 0.76rem; text-decoration: none; color: var(--text-primary);
-    background: var(--page-plane); border: 1px solid var(--border); border-radius: 6px;
-    padding: 4px 8px;
+    font-size: 0.76rem; font-weight: 600; text-decoration: none; color: var(--text-primary);
+    background: var(--page-plane); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; transition: border-color 0.15s, background 0.15s;
   }
-  .card-links a:hover { border-color: var(--baseline); }
+  .card-links a:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--page-plane)); }
 
-  .empty-note { color: var(--text-muted); font-size: 0.85rem; font-style: italic; }
+  .empty-note {
+    margin-left: 54px; color: var(--text-muted); font-size: 0.88rem; font-style: italic;
+    border: 1px dashed var(--border); border-radius: 12px; padding: 14px 18px; max-width: 420px;
+  }
 
-  footer.sources { color: var(--text-muted); font-size: 0.75rem; margin-top: 56px; border-top: 1px solid var(--gridline); padding-top: 14px; line-height: 1.6; }
+  footer.sources {
+    color: var(--text-muted); font-size: 0.78rem; margin-top: 40px;
+    border-top: 1px solid var(--gridline); padding: 22px 0 48px; line-height: 1.7;
+  }
   footer.sources a { color: var(--text-secondary); }
+
+  @media (max-width: 640px) {
+    .market-sub, .card-grid, .empty-note { margin-left: 0; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="hero">
-    <h1>📊 Asesor Financiero — Índice de análisis</h1>
-    <p class="lede">Registro y análisis de las 4 principales bolsas de valores del mundo (Colombia, Estados Unidos, Asia, Europa) y del mercado de criptomonedas, con atención al impacto de la geopolítica en la economía local y global. Cada categoría la investiga un sub-agente especializado que solo usa fuentes de confianza listadas en su ficha.</p>
-    <p class="disclaimer">Todo el contenido es material de estudio y análisis personal, no asesoría financiera profesional. Toda cifra citada en las fichas lleva fuente y fecha. Repositorio: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero" style="color:inherit">github.com/jjruiz54-svg/Asesor-Financiero</a>.</p>
-    <nav class="toc">
-      <a href="#colombia">🇨🇴 Colombia</a>
-      <a href="#eeuu">🇺🇸 Estados Unidos</a>
-      <a href="#asia">🌏 Asia</a>
-      <a href="#europa">🇪🇺 Europa</a>
-      <a href="#cripto">🪙 Criptomonedas</a>
-      <a href="#general">🌐 Informes generales</a>
-    </nav>
-  </header>
+<div class="hero">
+  <div class="wrap hero-inner">
+    <span class="eyebrow"><span class="pulse"></span> Actualizado al cierre de datos más reciente</span>
+    <h1>Radar de mercados <span class="accent">Asesor Financiero</span></h1>
+    <p class="lede">Investigación y seguimiento de las 4 principales bolsas de valores del mundo — Colombia, Estados Unidos, Asia y Europa — más el mercado de criptomonedas, con foco en cómo la geopolítica mueve la economía local y global.</p>
 
-  <section class="market" id="colombia">
-    <div class="market-head"><span class="dot" style="background:var(--c-colombia)"></span><h2>🇨🇴 Bolsa de Valores de Colombia</h2></div>
+    <div class="stat-row">
+      <div class="stat"><b>5</b><span>Categorías</span></div>
+      <div class="stat"><b>9</b><span>Fichas publicadas</span></div>
+      <div class="stat"><b>5</b><span>Gráficos interactivos</span></div>
+      <div class="stat"><b>100%</b><span>Fuente y fecha</span></div>
+    </div>
+
+    <p class="disclaimer">Todo el contenido es material de estudio y análisis personal, no asesoría financiera profesional. Toda cifra citada en las fichas lleva fuente y fecha. Repositorio: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero">github.com/jjruiz54-svg/Asesor-Financiero</a>.</p>
+
+    <nav class="toc">
+      <a href="#colombia"><span class="swatch" style="background:var(--c-colombia)"></span>Colombia</a>
+      <a href="#eeuu"><span class="swatch" style="background:var(--c-eeuu)"></span>Estados Unidos</a>
+      <a href="#asia"><span class="swatch" style="background:var(--c-asia)"></span>Asia</a>
+      <a href="#europa"><span class="swatch" style="background:var(--c-europa)"></span>Europa</a>
+      <a href="#cripto"><span class="swatch" style="background:var(--c-cripto)"></span>Criptomonedas</a>
+      <a href="#general"><span class="swatch" style="background:var(--c-general)"></span>Informes generales</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="market" id="colombia" style="--accent:var(--c-colombia)">
+    <div class="market-head">
+      <span class="market-badge">🇨🇴</span>
+      <h2>Bolsa de Valores de Colombia</h2>
+      <span class="count-pill">2 fichas</span>
+    </div>
     <p class="market-sub">Sub-agente <code>bolsa-colombia</code> · MSCI COLCAP</p>
-    <div class="card-grid" style="--accent:var(--c-colombia)">
-      <div class="card" style="--accent:var(--c-colombia)">
+    <div class="card-grid">
+      <div class="card">
         <div class="card-type">Historia de instrumentos</div>
         <div class="card-title">USD/COP — Tasa de cambio peso colombiano frente al dólar</div>
         <div class="card-date">2026-07-15</div>
@@ -142,7 +255,7 @@
           <a href="graficos/2026-07-15-usd-cop-grafico.html">Gráfico interactivo</a>
         </div>
       </div>
-      <div class="card" style="--accent:var(--c-colombia)">
+      <div class="card">
         <div class="card-type">Investigación de activos</div>
         <div class="card-title">USD/COP — Proyecciones de los expertos e implicaciones económicas</div>
         <div class="card-date">2026-07-15</div>
@@ -153,17 +266,25 @@
     </div>
   </section>
 
-  <section class="market" id="eeuu">
-    <div class="market-head"><span class="dot" style="background:var(--c-eeuu)"></span><h2>🇺🇸 Bolsa de Valores Estadounidense</h2></div>
+  <section class="market" id="eeuu" style="--accent:var(--c-eeuu)">
+    <div class="market-head">
+      <span class="market-badge">🇺🇸</span>
+      <h2>Bolsa de Valores Estadounidense</h2>
+      <span class="count-pill">0 fichas</span>
+    </div>
     <p class="market-sub">Sub-agente <code>bolsa-eeuu</code> · NYSE, Nasdaq, S&amp;P 500, Dow Jones</p>
     <p class="empty-note">Aún no hay fichas publicadas en esta categoría.</p>
   </section>
 
-  <section class="market" id="asia">
-    <div class="market-head"><span class="dot" style="background:var(--c-asia)"></span><h2>🌏 Bolsas de Valores de Asia</h2></div>
+  <section class="market" id="asia" style="--accent:var(--c-asia)">
+    <div class="market-head">
+      <span class="market-badge">🌏</span>
+      <h2>Bolsas de Valores de Asia</h2>
+      <span class="count-pill">1 ficha</span>
+    </div>
     <p class="market-sub">Sub-agente <code>bolsa-asia</code> · Nikkei 225, Hang Seng, SSE, KOSPI</p>
-    <div class="card-grid" style="--accent:var(--c-asia)">
-      <div class="card" style="--accent:var(--c-asia)">
+    <div class="card-grid">
+      <div class="card">
         <div class="card-type">Oportunidades de inversión</div>
         <div class="card-title">Asia vs. Europa — Comparación de bolsas y oportunidades para el pequeño inversor</div>
         <div class="card-date">2026-07-16</div>
@@ -175,11 +296,15 @@
     </div>
   </section>
 
-  <section class="market" id="europa">
-    <div class="market-head"><span class="dot" style="background:var(--c-europa)"></span><h2>🇪🇺 Bolsas de Valores de Europa</h2></div>
+  <section class="market" id="europa" style="--accent:var(--c-europa)">
+    <div class="market-head">
+      <span class="market-badge">🇪🇺</span>
+      <h2>Bolsas de Valores de Europa</h2>
+      <span class="count-pill">3 fichas</span>
+    </div>
     <p class="market-sub">Sub-agente <code>bolsa-europa</code> · STOXX 600, DAX, FTSE 100, IBEX 35</p>
-    <div class="card-grid" style="--accent:var(--c-europa)">
-      <div class="card" style="--accent:var(--c-europa)">
+    <div class="card-grid">
+      <div class="card">
         <div class="card-type">Investigación de activos</div>
         <div class="card-title">CSPX — iShares Core S&amp;P 500 UCITS ETF (Acc)</div>
         <div class="card-date">2026-07-24</div>
@@ -189,7 +314,7 @@
           <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/bolsas/europa/investigacion-activos/2026-07-24-cspx-ishares-sp500-informe.xlsx">Informe .xlsx</a>
         </div>
       </div>
-      <div class="card" style="--accent:var(--c-europa)">
+      <div class="card">
         <div class="card-type">Oportunidades de inversión</div>
         <div class="card-title">CSPX — Tesis de inversión (escenarios y riesgos)</div>
         <div class="card-date">2026-07-29</div>
@@ -199,8 +324,8 @@
           <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/bolsas/europa/oportunidades-inversion/2026-07-29-cspx-informe.pdf">Informe .pdf</a>
         </div>
       </div>
-      <div class="card" style="--accent:var(--c-europa)">
-        <div class="card-type">Oportunidades de inversión (comparativo)</div>
+      <div class="card">
+        <div class="card-type">Oportunidades (comparativo)</div>
         <div class="card-title">Asia vs. Europa — Comparación de bolsas y oportunidades (referencia)</div>
         <div class="card-date">2026-07-16</div>
         <div class="card-links">
@@ -210,11 +335,15 @@
     </div>
   </section>
 
-  <section class="market" id="cripto">
-    <div class="market-head"><span class="dot" style="background:var(--c-cripto)"></span><h2>🪙 Criptomonedas</h2></div>
+  <section class="market" id="cripto" style="--accent:var(--c-cripto)">
+    <div class="market-head">
+      <span class="market-badge">🪙</span>
+      <h2>Criptomonedas</h2>
+      <span class="count-pill">1 ficha</span>
+    </div>
     <p class="market-sub">Sub-agente <code>criptomonedas</code> · Top 10 por capitalización de mercado + WLD obligatoria</p>
-    <div class="card-grid" style="--accent:var(--c-cripto)">
-      <div class="card" style="--accent:var(--c-cripto)">
+    <div class="card-grid">
+      <div class="card">
         <div class="card-type">Investigación de activos</div>
         <div class="card-title">WLD — Worldcoin</div>
         <div class="card-date">2026-07-17</div>
@@ -225,11 +354,15 @@
     </div>
   </section>
 
-  <section class="market" id="general">
-    <div class="market-head"><span class="dot" style="background:var(--c-general)"></span><h2>🌐 Informes generales de mercado</h2></div>
-    <p class="market-sub">Informes consolidados que cruzan varias categorías (<code>informes-mercados/</code>)</p>
-    <div class="card-grid" style="--accent:var(--c-general)">
-      <div class="card" style="--accent:var(--c-general)">
+  <section class="market" id="general" style="--accent:var(--c-general)">
+    <div class="market-head">
+      <span class="market-badge">🌐</span>
+      <h2>Informes generales de mercado</h2>
+      <span class="count-pill">2 fichas</span>
+    </div>
+    <p class="market-sub">Informes consolidados que cruzan varias categorías · <code>informes-mercados/</code></p>
+    <div class="card-grid">
+      <div class="card">
         <div class="card-type">Informe general</div>
         <div class="card-title">Informe General de Mercados — 17 de julio de 2026</div>
         <div class="card-date">2026-07-17</div>
@@ -238,7 +371,7 @@
           <a href="graficos/2026-07-17-informe-mercados-grafico.html">Gráfico interactivo</a>
         </div>
       </div>
-      <div class="card" style="--accent:var(--c-general)">
+      <div class="card">
         <div class="card-type">Oportunidades de inversión</div>
         <div class="card-title">Oportunidades de Inversión — 17 de julio de 2026</div>
         <div class="card-date">2026-07-17</div>
@@ -252,6 +385,6 @@
   <footer class="sources">
     Página generada a partir del contenido de <code>bolsas/</code> e <code>informes-mercados/</code> del repositorio. Los gráficos interactivos en <code>docs/graficos/</code> son copias de los originales (la fuente de verdad sigue siendo la carpeta de la ficha correspondiente); se actualizan cada vez que se publica un nuevo análisis. Reglas del repositorio: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/CLAUDE.md">CLAUDE.md</a>.
   </footer>
-</div>
+</main>
 </body>
 </html>
