@@ -5,6 +5,7 @@
 - **Fecha de corte de datos:** 2026-07-30 (TRM vigente: $3.206,18)
 - **Analista / agente:** `bolsa-colombia`
 - **Ficha de referencia (histórico completo 5 años):** [`2026-07-15-usd-cop-historia-5-anos.md`](../historia-instrumentos/2026-07-15-usd-cop-historia-5-anos.md)
+- **Gráfico interactivo:** [`2026-07-30-usd-cop-grafico.html`](2026-07-30-usd-cop-grafico.html)
 
 ## Resumen ejecutivo
 

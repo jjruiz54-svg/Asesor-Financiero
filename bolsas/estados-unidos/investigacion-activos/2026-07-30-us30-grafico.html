@@ -1,0 +1,289 @@
+<title>US30 / DJI — Dow Jones · Ficha 30.07.2026</title>
+<style>
+  :root { color-scheme: light dark; }
+  :root {
+    --surface-1: #fcfcfb; --surface-2: #ffffff; --page-plane: #f4f3ee;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
+    --gridline: #e1e0d9; --border: rgba(11,11,11,0.08); --shadow: rgba(20,18,10,0.10);
+    --hero-ink: #ffffff; --hero-ink-soft: rgba(255,255,255,0.82); --hero-ink-mute: rgba(255,255,255,0.62);
+    --hero-chip-bg: rgba(255,255,255,0.14); --hero-chip-brd: rgba(255,255,255,0.28);
+    --c-eeuu: #008300; --c-up: #008300; --c-down: #c0392b;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      --surface-1: #171715; --surface-2: #1e1e1c; --page-plane: #0a0a09;
+      --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8d86;
+      --gridline: #2c2c2a; --border: rgba(255,255,255,0.09); --shadow: rgba(0,0,0,0.45);
+      --c-eeuu: #16a34a; --c-up: #22c55e; --c-down: #f87171;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --surface-1: #171715; --surface-2: #1e1e1c; --page-plane: #0a0a09;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8d86;
+    --gridline: #2c2c2a; --border: rgba(255,255,255,0.09); --shadow: rgba(0,0,0,0.45);
+    --c-eeuu: #16a34a; --c-up: #22c55e; --c-down: #f87171;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  html { background: var(--page-plane); }
+  body { background: var(--page-plane); color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  a { color: inherit; }
+  .hero {
+    position: relative; overflow: hidden;
+    background: radial-gradient(60% 90% at 10% -10%, rgba(0,131,0,0.45), transparent 60%),
+      radial-gradient(55% 80% at 100% 10%, rgba(120,120,120,0.35), transparent 60%),
+      linear-gradient(135deg, #0f1120 0%, #14171a 50%, #0d1a12 100%);
+    color: var(--hero-ink); padding: 48px 0 36px;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--hero-ink-soft); background: var(--hero-chip-bg); border: 1px solid var(--hero-chip-brd); border-radius: 999px; padding: 6px 14px; margin-bottom: 18px; }
+  h1 { font-size: clamp(1.9rem, 5vw, 2.7rem); line-height: 1.06; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 8px; }
+  .ticker { color: var(--c-up); font-weight: 800; }
+  .lede { color: var(--hero-ink-soft); font-size: 0.98rem; line-height: 1.6; margin: 0 0 20px; max-width: 620px; }
+  main { padding: 36px 0 60px; }
+  section { margin-bottom: 36px; }
+  h2 { font-size: 1.2rem; margin: 0 0 14px; font-weight: 800; letter-spacing: -0.01em; }
+  .card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 1px 2px var(--shadow); padding: 22px 24px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 14px; margin-bottom: 4px; }
+  .stat-card { position: relative; background: var(--surface-2); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; box-shadow: 0 1px 2px var(--shadow); }
+  .stat-card::before { content:""; position:absolute; top:0; left:18px; right:18px; height:3px; border-radius:0 0 3px 3px; background:var(--c-eeuu); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--c-eeuu); margin-bottom: 8px; display: block; }
+  .stat-value { font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 16px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .chart-wide { width: 100%; height: auto; overflow: visible; }
+  .bar-cat-label { font-size: 12.5px; fill: var(--text-primary); font-weight: 700; }
+  .bar-val-label { font-size: 12.5px; font-weight: 800; fill: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .bar-nd-label { font-size: 11.5px; font-style: italic; fill: var(--text-muted); }
+  .zero-tick { font-size: 10px; fill: var(--text-muted); }
+  .bar-rect { transition: filter 0.15s ease; cursor: pointer; }
+  .bar-rect:hover { filter: brightness(1.1); }
+  .tooltip { position: fixed; pointer-events: none; background: var(--surface-2); color: var(--text-primary); font-size: 0.78rem; font-weight: 600; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 24px -8px var(--shadow), 0 0 0 1px var(--border); z-index: 50; white-space: nowrap; display: none; }
+  .tooltip .tt-sub { font-weight: 500; color: var(--text-muted); font-size: 0.72rem; margin-top: 2px; }
+  .table-scroll { overflow-x: auto; margin-top: 16px; border-radius: 14px; border: 1px solid var(--border); }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  table.data-table caption { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); padding: 10px 14px; background: var(--page-plane); }
+  table.data-table th, table.data-table td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--gridline); white-space: nowrap; }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+  table.data-table thead th { text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.03em; color: var(--text-muted); font-weight: 700; background: var(--page-plane); }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.data-table td.mono { font-variant-numeric: tabular-nums; }
+  table.data-table td.nd { color: var(--text-muted); font-style: italic; }
+  .footnote { font-size: 0.72rem; color: var(--text-muted); margin-top: 10px; }
+  footer.sources-foot { color: var(--text-muted); font-size: 0.78rem; margin-top: 30px; border-top: 1px solid var(--gridline); padding: 22px 0 10px; line-height: 1.7; }
+  footer.sources-foot .disclaimer-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+</style>
+
+<div class="hero">
+  <div class="wrap hero-inner">
+    <span class="eyebrow">● Ficha de análisis · 30 de julio de 2026</span>
+    <h1><span class="ticker">US30</span> / DJI — Dow Jones Industrial Average</h1>
+    <p class="lede">NYSE / Nasdaq (Estados Unidos). Índice ponderado por precio de 30 blue chips: cayó -2,19% el 29 de julio de 2026 (peor día desde abril de 2025) y rebotó el 30 de julio impulsado por Microsoft, cuyo alto precio nominal le dio un peso desproporcionado en el índice.</p>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section>
+    <h2>Datos clave</h2>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="stat-label">Cierre 29-07-26</span>
+        <div class="stat-value">51.594,14</div>
+        <div class="stat-sub">-2,19% (-1.153,18 pts), peor día desde abril 2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Intradía 30-07-26 (11:50am ET)</span>
+        <div class="stat-value">51.898,40</div>
+        <div class="stat-sub">+0,59%; cierre exacto: dato no verificado</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Cierre 2025</span>
+        <div class="stat-value">48.063,29</div>
+        <div class="stat-sub">31-12-2025</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Aporte de Microsoft al rebote</span>
+        <div class="stat-value">~356 pts</div>
+        <div class="stat-sub">Por su alto precio nominal (índice ponderado por precio)</div>
+      </div>
+    </div>
+    <p class="footnote">Fuentes: CNBC, HNGN, Washington Post (2026-07-29) · TS2.tech (2026-07-30).</p>
+  </section>
+
+  <section>
+    <h2>Rendimiento anual — últimos 5 años</h2>
+    <div class="card">
+      <div class="legend" id="legend"></div>
+      <svg id="returns-chart" class="chart-wide" role="img" aria-label="Gráfico de barras de rendimiento anual del Dow Jones de 2021 a 2026, con años sin dato verificado marcados explícitamente"></svg>
+      <div class="table-scroll">
+        <table class="data-table">
+          <caption>Rendimiento anual (año calendario)</caption>
+          <thead><tr><th>Año</th><th>Rendimiento</th><th>Evento relevante</th></tr></thead>
+          <tbody id="returns-table-body"></tbody>
+        </table>
+      </div>
+      <p class="footnote">Los rendimientos 2021-2024 quedaron marcados como "dato no verificado" en la ficha original — no se inventan cifras; se recomienda una actualización posterior con MacroTrends o SlickCharts. 2026 es YTD parcial al 29-30 de julio.</p>
+    </div>
+  </section>
+
+  <footer class="sources-foot">
+    <div class="disclaimer-card">
+      <strong>Disclaimer —</strong> Este gráfico es de carácter informativo, basado en fuentes públicas citadas en la ficha <code>2026-07-30-us30-analisis.md</code>. No constituye asesoría financiera personalizada ni recomendación de compra o venta.
+    </div>
+    Ficha completa: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/bolsas/estados-unidos/investigacion-activos/2026-07-30-us30-analisis.md">2026-07-30-us30-analisis.md</a>
+  </footer>
+
+</main>
+
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+
+<script>
+(function(){
+  var RETURNS = [
+    {year:"2021", r:null, event:"Dato no verificado en esta ficha"},
+    {year:"2022", r:null, event:"Dato no verificado — año de caída generalizada del mercado"},
+    {year:"2023", r:null, event:"Dato no verificado — año de recuperación"},
+    {year:"2024", r:null, event:"Dato no verificado"},
+    {year:"2025", r:12.97, event:"Toma de utilidades en la última sesión del año"},
+    {year:"2026 (YTD)", r:7.5, event:"Sell-off del 29-jul y rebote liderado por Microsoft"}
+  ];
+
+  function fmt(v){ return v == null ? "s/d" : (v>=0?"+":"") + v.toFixed(2).replace(".", ",") + "%"; }
+
+  function buildLegend(){
+    var legend = document.getElementById("legend");
+    legend.innerHTML = "";
+    [["Año positivo","--c-up"], ["Año negativo","--c-down"]].forEach(function(entry){
+      var item = document.createElement("span");
+      item.className = "legend-item";
+      var sw = document.createElement("span");
+      sw.className = "legend-swatch";
+      sw.style.background = getComputedStyle(document.documentElement).getPropertyValue(entry[1]).trim();
+      var txt = document.createElement("span");
+      txt.textContent = entry[0];
+      item.appendChild(sw); item.appendChild(txt);
+      legend.appendChild(item);
+    });
+    var ndItem = document.createElement("span");
+    ndItem.className = "legend-item";
+    ndItem.innerHTML = "<span style='font-style:italic;color:var(--text-muted);'>s/d = sin dato verificado</span>";
+    legend.appendChild(ndItem);
+  }
+
+  var tooltip = document.getElementById("tooltip");
+  function showTip(e, title, sub){
+    tooltip.innerHTML = "";
+    var t = document.createElement("div"); t.textContent = title;
+    var s = document.createElement("div"); s.className = "tt-sub"; s.textContent = sub;
+    tooltip.appendChild(t); tooltip.appendChild(s);
+    tooltip.style.display = "block"; moveTip(e);
+  }
+  function moveTip(e){ tooltip.style.left = (e.clientX + 16) + "px"; tooltip.style.top = (e.clientY + 16) + "px"; }
+  function hideTip(){ tooltip.style.display = "none"; }
+
+  function colorFor(v){ return getComputedStyle(document.documentElement).getPropertyValue(v >= 0 ? "--c-up" : "--c-down").trim(); }
+
+  function buildChart(){
+    var svg = document.getElementById("returns-chart");
+    svg.innerHTML = "";
+    var svgNS = "http://www.w3.org/2000/svg";
+    var n = RETURNS.length;
+    var W = 780, rowH = 36, padTop = 8, padBottom = 26, labelW = 100;
+    var H = padTop + padBottom + n*rowH;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+    var verified = RETURNS.filter(function(o){ return o.r != null; });
+    var maxAbs = Math.max.apply(null, verified.map(function(o){ return Math.abs(o.r); }));
+    var plotW = W - labelW - 70;
+    var zeroX = labelW + plotW/2;
+    var scale = (plotW/2 - 12) / maxAbs;
+    var gridColor = getComputedStyle(document.documentElement).getPropertyValue('--gridline').trim();
+
+    var zeroLine = document.createElementNS(svgNS, "line");
+    zeroLine.setAttribute("x1", zeroX); zeroLine.setAttribute("x2", zeroX);
+    zeroLine.setAttribute("y1", padTop); zeroLine.setAttribute("y2", H - padBottom);
+    zeroLine.setAttribute("stroke", gridColor);
+    zeroLine.setAttribute("stroke-width", "1.5");
+    svg.appendChild(zeroLine);
+
+    RETURNS.forEach(function(item, i){
+      var y = padTop + i*rowH;
+      var barH = rowH * 0.5;
+      var barY = y + (rowH - barH)/2;
+
+      var catLabel = document.createElementNS(svgNS, "text");
+      catLabel.setAttribute("x", labelW - 12);
+      catLabel.setAttribute("y", y + rowH/2 + 4);
+      catLabel.setAttribute("text-anchor", "end");
+      catLabel.setAttribute("class", "bar-cat-label");
+      catLabel.textContent = item.year;
+      svg.appendChild(catLabel);
+
+      if (item.r == null) {
+        var ndLabel = document.createElementNS(svgNS, "text");
+        ndLabel.setAttribute("x", zeroX);
+        ndLabel.setAttribute("y", y + rowH/2 + 4);
+        ndLabel.setAttribute("text-anchor", "middle");
+        ndLabel.setAttribute("class", "bar-nd-label");
+        ndLabel.textContent = "s/d";
+        svg.appendChild(ndLabel);
+        return;
+      }
+
+      var barW = Math.abs(item.r) * scale;
+      var x = item.r >= 0 ? zeroX : zeroX - barW;
+      var color = colorFor(item.r);
+
+      var rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("class", "bar-rect");
+      rect.setAttribute("x", x); rect.setAttribute("y", barY);
+      rect.setAttribute("width", Math.max(barW, 4)); rect.setAttribute("height", barH);
+      rect.setAttribute("rx", Math.min(barH/2, 6));
+      rect.setAttribute("fill", color);
+      rect.addEventListener("mouseenter", function(e){ showTip(e, item.year + " — " + fmt(item.r), item.event); });
+      rect.addEventListener("mousemove", moveTip);
+      rect.addEventListener("mouseleave", hideTip);
+      svg.appendChild(rect);
+
+      var valLabel = document.createElementNS(svgNS, "text");
+      valLabel.setAttribute("x", item.r >= 0 ? x + barW + 8 : x - 8);
+      valLabel.setAttribute("y", y + rowH/2 + 4);
+      valLabel.setAttribute("text-anchor", item.r >= 0 ? "start" : "end");
+      valLabel.setAttribute("class", "bar-val-label");
+      valLabel.textContent = fmt(item.r);
+      svg.appendChild(valLabel);
+    });
+
+    var axTick0 = document.createElementNS(svgNS, "text");
+    axTick0.setAttribute("x", zeroX);
+    axTick0.setAttribute("y", H - 6);
+    axTick0.setAttribute("text-anchor", "middle");
+    axTick0.setAttribute("class", "zero-tick");
+    axTick0.textContent = "0%";
+    svg.appendChild(axTick0);
+  }
+
+  function buildTable(){
+    var tbody = document.getElementById("returns-table-body");
+    tbody.innerHTML = "";
+    RETURNS.forEach(function(item){
+      var tr = document.createElement("tr");
+      var valCell = item.r == null ? "<td class='nd'>s/d</td>" : "<td class='mono'>" + fmt(item.r) + "</td>";
+      tr.innerHTML = "<td>" + item.year + "</td>" + valCell + "<td>" + item.event + "</td>";
+      tbody.appendChild(tr);
+    });
+  }
+
+  buildLegend();
+  buildChart();
+  buildTable();
+  window.addEventListener("resize", buildChart);
+})();
+</script>
