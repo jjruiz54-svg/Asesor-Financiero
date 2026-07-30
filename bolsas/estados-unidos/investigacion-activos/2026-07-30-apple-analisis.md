@@ -4,6 +4,7 @@
 - **Fecha de análisis:** 2026-07-30
 - **Fecha de corte de datos:** 2026-07-30
 - **Analista / agente:** bolsa-eeuu
+- **Gráfico interactivo:** [`2026-07-30-apple-grafico.html`](2026-07-30-apple-grafico.html)
 
 ## Resumen ejecutivo
 
