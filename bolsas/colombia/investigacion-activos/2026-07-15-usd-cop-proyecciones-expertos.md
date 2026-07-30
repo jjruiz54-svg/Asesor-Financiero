@@ -5,6 +5,7 @@
 - **Fecha de corte de datos:** 2026-07-15 (TRM vigente: $3.252,11; mínimo reciente: $3.241,75 el 10-jul-2026)
 - **Analista / agente:** `bolsa-colombia`
 - **Ficha relacionada:** [`../historia-instrumentos/2026-07-15-usd-cop-historia-5-anos.md`](../historia-instrumentos/2026-07-15-usd-cop-historia-5-anos.md)
+- **Gráfico interactivo:** [`2026-07-15-usd-cop-proyecciones-grafico.html`](2026-07-15-usd-cop-proyecciones-grafico.html)
 
 ## Resumen ejecutivo
 
