@@ -1,0 +1,274 @@
+<title>USD/COP — Proyecciones de expertos · Ficha 15.07.2026</title>
+<style>
+  :root { color-scheme: light dark; }
+  :root {
+    --surface-1: #fcfcfb; --surface-2: #ffffff; --page-plane: #f4f3ee;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
+    --gridline: #e1e0d9; --border: rgba(11,11,11,0.08); --shadow: rgba(20,18,10,0.10);
+    --hero-ink: #ffffff; --hero-ink-soft: rgba(255,255,255,0.82); --hero-ink-mute: rgba(255,255,255,0.62);
+    --hero-chip-bg: rgba(255,255,255,0.14); --hero-chip-brd: rgba(255,255,255,0.28);
+    --c-colombia: #2a78d6; --c-ref: #898781;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      --surface-1: #171715; --surface-2: #1e1e1c; --page-plane: #0a0a09;
+      --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8d86;
+      --gridline: #2c2c2a; --border: rgba(255,255,255,0.09); --shadow: rgba(0,0,0,0.45);
+      --c-colombia: #3987e5; --c-ref: #8f8d86;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --surface-1: #171715; --surface-2: #1e1e1c; --page-plane: #0a0a09;
+    --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8f8d86;
+    --gridline: #2c2c2a; --border: rgba(255,255,255,0.09); --shadow: rgba(0,0,0,0.45);
+    --c-colombia: #3987e5; --c-ref: #8f8d86;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  html { background: var(--page-plane); }
+  body { background: var(--page-plane); color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
+  a { color: inherit; }
+  .hero {
+    position: relative; overflow: hidden;
+    background: radial-gradient(60% 90% at 10% -10%, rgba(42,120,214,0.5), transparent 60%),
+      radial-gradient(55% 80% at 100% 10%, rgba(120,120,120,0.35), transparent 60%),
+      linear-gradient(135deg, #0f1120 0%, #14171a 50%, #0b1526 100%);
+    color: var(--hero-ink); padding: 48px 0 36px;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--hero-ink-soft); background: var(--hero-chip-bg); border: 1px solid var(--hero-chip-brd); border-radius: 999px; padding: 6px 14px; margin-bottom: 18px; }
+  h1 { font-size: clamp(1.7rem, 4.6vw, 2.4rem); line-height: 1.12; letter-spacing: -0.02em; font-weight: 800; margin: 0 0 8px; }
+  .ticker { color: #7fb6ff; font-weight: 800; }
+  .lede { color: var(--hero-ink-soft); font-size: 0.98rem; line-height: 1.6; margin: 0 0 20px; max-width: 660px; text-align: justify; hyphens: auto; }
+  main { padding: 36px 0 60px; }
+  section { margin-bottom: 36px; }
+  h2 { font-size: 1.2rem; margin: 0 0 14px; font-weight: 800; letter-spacing: -0.01em; }
+  .card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 1px 2px var(--shadow); padding: 22px 24px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 14px; margin-bottom: 4px; }
+  .stat-card { position: relative; background: var(--surface-2); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; box-shadow: 0 1px 2px var(--shadow); }
+  .stat-card::before { content:""; position:absolute; top:0; left:18px; right:18px; height:3px; border-radius:0 0 3px 3px; background:var(--c-colombia); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--c-colombia); margin-bottom: 8px; display: block; }
+  .stat-value { font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 16px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .legend-line { width: 16px; height: 0; border-top: 2px dashed var(--c-ref); flex: none; }
+  .chart-wide { width: 100%; height: auto; overflow: visible; }
+  .bar-cat-label { font-size: 12px; fill: var(--text-primary); font-weight: 700; }
+  .bar-sub-label { font-size: 10.5px; fill: var(--text-muted); }
+  .bar-val-label { font-size: 12.5px; font-weight: 800; fill: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .ref-tick { font-size: 10px; fill: var(--text-muted); font-weight: 700; }
+  .bar-rect { transition: filter 0.15s ease; cursor: pointer; }
+  .bar-rect:hover { filter: brightness(1.1); }
+  .tooltip { position: fixed; pointer-events: none; background: var(--surface-2); color: var(--text-primary); font-size: 0.78rem; font-weight: 600; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 24px -8px var(--shadow), 0 0 0 1px var(--border); z-index: 50; white-space: nowrap; display: none; }
+  .tooltip .tt-sub { font-weight: 500; color: var(--text-muted); font-size: 0.72rem; margin-top: 2px; }
+  .table-scroll { overflow-x: auto; margin-top: 16px; border-radius: 14px; border: 1px solid var(--border); }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  table.data-table caption { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); padding: 10px 14px; background: var(--page-plane); }
+  table.data-table th, table.data-table td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--gridline); white-space: nowrap; }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+  table.data-table thead th { text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.03em; color: var(--text-muted); font-weight: 700; background: var(--page-plane); }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.data-table td.mono { font-variant-numeric: tabular-nums; }
+  .footnote { font-size: 0.72rem; color: var(--text-muted); margin-top: 10px; }
+  footer.sources-foot { color: var(--text-muted); font-size: 0.78rem; margin-top: 30px; border-top: 1px solid var(--gridline); padding: 22px 0 10px; line-height: 1.7; }
+  footer.sources-foot .disclaimer-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
+</style>
+
+<div class="hero">
+  <div class="wrap hero-inner">
+    <span class="eyebrow">● Ficha de análisis · 15 de julio de 2026</span>
+    <h1><span class="ticker">USD/COP</span> — Proyecciones de los expertos</h1>
+    <p class="lede">Mercado cambiario colombiano. Consenso de bancos y encuestas sobre el rumbo del dólar: Goldman Sachs ve espacio para caer a $3.200 en 12 meses, pero la mayoría de encuestas (Citi, Fedesarrollo, EME Banrep) proyecta una corrección parcial hacia $3.629–$3.750 al cierre de 2026.</p>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section>
+    <h2>Datos clave</h2>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="stat-label">TRM vigente (15-07-26)</span>
+        <div class="stat-value">$3.252,11</div>
+        <div class="stat-sub">Mínimo reciente: $3.241,75 (10-jul)</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Rango consenso cierre 2026</span>
+        <div class="stat-value">$3.629–$3.750</div>
+        <div class="stat-sub">Citi, Fedesarrollo, EME Banrep</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Extremo bajista (12m)</span>
+        <div class="stat-value">$3.200</div>
+        <div class="stat-sub">Goldman Sachs</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Extremo "precio justo"</span>
+        <div class="stat-value">$3.880</div>
+        <div class="stat-sub">Techo del rango de Grupo Cibest</div>
+      </div>
+    </div>
+    <p class="footnote">Fuentes: Valora Analitik, Portafolio/Fedesarrollo (2026-06/07) · Banco de la República — Encuesta EME (2026-05).</p>
+  </section>
+
+  <section>
+    <h2>Proyecciones por entidad y horizonte</h2>
+    <div class="card">
+      <div class="legend">
+        <span class="legend-item"><span class="legend-swatch" style="background:var(--c-colombia)"></span>Nivel proyectado (TRM)</span>
+        <span class="legend-item"><span class="legend-line"></span>TRM vigente el 15-07-26 ($3.252,11)</span>
+      </div>
+      <svg id="proj-chart" class="chart-wide" role="img" aria-label="Gráfico de barras de las proyecciones de expertos sobre el USD/COP, con línea de referencia de la TRM vigente"></svg>
+      <div class="table-scroll">
+        <table class="data-table">
+          <caption>Proyecciones de los expertos — nivel y horizonte</caption>
+          <thead><tr><th>Entidad / encuesta</th><th>Proyección</th><th>Horizonte</th></tr></thead>
+          <tbody id="proj-table-body"></tbody>
+        </table>
+      </div>
+      <p class="footnote">Ningún pronosticador principal espera un regreso a $4.000+ en 12 meses, pero la mediana de escenarios apunta a una convergencia gradual hacia $3.500–$3.700. Fuente: ficha completa <code>2026-07-15-usd-cop-proyecciones-expertos.md</code>.</p>
+    </div>
+  </section>
+
+  <footer class="sources-foot">
+    <div class="disclaimer-card">
+      <strong>Disclaimer —</strong> Este gráfico es de carácter informativo, basado en fuentes públicas citadas en la ficha <code>2026-07-15-usd-cop-proyecciones-expertos.md</code>. No constituye asesoría financiera personalizada ni recomendación de inversión.
+    </div>
+    Ficha completa: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/bolsas/colombia/investigacion-activos/2026-07-15-usd-cop-proyecciones-expertos.md">2026-07-15-usd-cop-proyecciones-expertos.md</a> · Histórico 5 años: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/bolsas/colombia/historia-instrumentos/2026-07-15-usd-cop-historia-5-anos.md">2026-07-15-usd-cop-historia-5-anos.md</a>
+  </footer>
+
+</main>
+
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+
+<script>
+(function(){
+  var TRM_ACTUAL = 3252.11;
+  var PROJ = [
+    {name:"Goldman Sachs", level:3200, horizon:"12 meses", sub:"vía Valora Analitik"},
+    {name:"Goldman Sachs — equilibrio", level:3500, horizon:"estructural", sub:"valor de equilibrio"},
+    {name:"Rango esperado corto plazo", level:3450, horizon:"jun–jul 2026", sub:"Valora Analitik"},
+    {name:"Encuesta Citi", level:3629, horizon:"cierre 2026", sub:"promedio de analistas"},
+    {name:"Encuesta Fedesarrollo", level:3650, horizon:"cierre 2026", sub:"Portafolio/Fedesarrollo"},
+    {name:"Grupo Cibest — balance técnico", level:3710, horizon:"mediano plazo", sub:"rango $3.710–$3.880"},
+    {name:"EME Banco de la República", level:3750, horizon:"cierre 2026", sub:"encuesta de mayo"},
+    {name:"EME Banco de la República", level:3803, horizon:"mayo 2027", sub:"encuesta de mayo"}
+  ];
+
+  function fmt(v){ return "$" + v.toLocaleString("es-CO", {maximumFractionDigits:0}); }
+
+  var tooltip = document.getElementById("tooltip");
+  function showTip(e, title, sub){
+    tooltip.innerHTML = "";
+    var t = document.createElement("div"); t.textContent = title;
+    var s = document.createElement("div"); s.className = "tt-sub"; s.textContent = sub;
+    tooltip.appendChild(t); tooltip.appendChild(s);
+    tooltip.style.display = "block"; moveTip(e);
+  }
+  function moveTip(e){ tooltip.style.left = (e.clientX + 16) + "px"; tooltip.style.top = (e.clientY + 16) + "px"; }
+  function hideTip(){ tooltip.style.display = "none"; }
+
+  function buildChart(){
+    var svg = document.getElementById("proj-chart");
+    svg.innerHTML = "";
+    var svgNS = "http://www.w3.org/2000/svg";
+
+    var sorted = PROJ.slice().sort(function(a,b){ return a.level - b.level; });
+    var n = sorted.length;
+    var W = 820, rowH = 40, padTop = 10, padBottom = 8, labelW = 190;
+    var H = padTop + padBottom + n*rowH;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+    var minV = Math.min(TRM_ACTUAL, Math.min.apply(null, sorted.map(function(o){return o.level;})));
+    var maxV = Math.max(TRM_ACTUAL, Math.max.apply(null, sorted.map(function(o){return o.level;})));
+    var plotW = W - labelW - 80;
+    var pad = (maxV - minV) * 0.12;
+    var domainMin = minV - pad, domainMax = maxV + pad;
+    var scale = plotW / (domainMax - domainMin);
+    function xFor(v){ return labelW + (v - domainMin) * scale; }
+
+    var color = getComputedStyle(document.documentElement).getPropertyValue('--c-colombia').trim();
+    var refColor = getComputedStyle(document.documentElement).getPropertyValue('--c-ref').trim();
+
+    sorted.forEach(function(item, i){
+      var y = padTop + i*rowH;
+      var barH = rowH * 0.46;
+      var barY = y + (rowH - barH)/2 + 6;
+      var x0 = xFor(domainMin);
+      var x1 = xFor(item.level);
+
+      var catLabel = document.createElementNS(svgNS, "text");
+      catLabel.setAttribute("x", labelW - 12);
+      catLabel.setAttribute("y", y + rowH/2);
+      catLabel.setAttribute("text-anchor", "end");
+      catLabel.setAttribute("class", "bar-cat-label");
+      catLabel.textContent = item.name;
+      svg.appendChild(catLabel);
+
+      var subLabel = document.createElementNS(svgNS, "text");
+      subLabel.setAttribute("x", labelW - 12);
+      subLabel.setAttribute("y", y + rowH/2 + 13);
+      subLabel.setAttribute("text-anchor", "end");
+      subLabel.setAttribute("class", "bar-sub-label");
+      subLabel.textContent = item.horizon;
+      svg.appendChild(subLabel);
+
+      var rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("class", "bar-rect");
+      rect.setAttribute("x", x0); rect.setAttribute("y", barY);
+      rect.setAttribute("width", Math.max(x1-x0, 4)); rect.setAttribute("height", barH);
+      rect.setAttribute("rx", Math.min(barH/2, 6));
+      rect.setAttribute("fill", color);
+      rect.addEventListener("mouseenter", function(e){ showTip(e, item.name + " — " + fmt(item.level), item.horizon + " · " + item.sub); });
+      rect.addEventListener("mousemove", moveTip);
+      rect.addEventListener("mouseleave", hideTip);
+      svg.appendChild(rect);
+
+      var valLabel = document.createElementNS(svgNS, "text");
+      valLabel.setAttribute("x", x1 + 8);
+      valLabel.setAttribute("y", barY + barH/2 + 4);
+      valLabel.setAttribute("text-anchor", "start");
+      valLabel.setAttribute("class", "bar-val-label");
+      valLabel.textContent = fmt(item.level);
+      svg.appendChild(valLabel);
+    });
+
+    var refX = xFor(TRM_ACTUAL);
+    var refLine = document.createElementNS(svgNS, "line");
+    refLine.setAttribute("x1", refX); refLine.setAttribute("x2", refX);
+    refLine.setAttribute("y1", padTop - 2); refLine.setAttribute("y2", H - padBottom + 2);
+    refLine.setAttribute("stroke", refColor);
+    refLine.setAttribute("stroke-width", "2");
+    refLine.setAttribute("stroke-dasharray", "5,4");
+    svg.appendChild(refLine);
+
+    var refLabel = document.createElementNS(svgNS, "text");
+    refLabel.setAttribute("x", refX);
+    refLabel.setAttribute("y", H - 2);
+    refLabel.setAttribute("text-anchor", "middle");
+    refLabel.setAttribute("class", "ref-tick");
+    refLabel.textContent = "TRM actual: " + fmt(TRM_ACTUAL);
+    svg.appendChild(refLabel);
+  }
+
+  function buildTable(){
+    var tbody = document.getElementById("proj-table-body");
+    tbody.innerHTML = "";
+    PROJ.forEach(function(item){
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + item.name + "</td><td class='mono'>" + fmt(item.level) + "</td><td>" + item.horizon + "</td>";
+      tbody.appendChild(tr);
+    });
+  }
+
+  buildChart();
+  buildTable();
+  window.addEventListener("resize", buildChart);
+})();
+</script>
