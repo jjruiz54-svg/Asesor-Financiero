@@ -110,7 +110,7 @@
     background: linear-gradient(90deg, #7dd3fc, #f9a8d4 50%, #fcd34d);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .lede { color: var(--hero-ink-soft); font-size: 1.02rem; line-height: 1.6; margin: 0 0 26px; max-width: 640px; }
+  .lede { color: var(--hero-ink-soft); font-size: 1.02rem; line-height: 1.6; margin: 0 0 26px; max-width: 640px; text-align: justify; text-justify: inter-word; hyphens: auto; }
   .disclaimer { color: var(--hero-ink-mute); font-size: 0.78rem; line-height: 1.6; max-width: 680px; margin: 0 0 26px; }
   nav.toc { display: flex; flex-wrap: wrap; gap: 9px; }
   nav.toc a {
@@ -136,7 +136,7 @@
 
   /* ---------- Resumen ---------- */
   .resumen-text { max-width: 74ch; font-size: 0.98rem; color: var(--text-primary); }
-  .resumen-text p { margin: 0 0 12px; }
+  .resumen-text p { margin: 0 0 12px; text-align: justify; text-justify: inter-word; hyphens: auto; }
   .kpi-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 14px;
     margin-top: 20px;
@@ -204,7 +204,10 @@
   .market-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 22px; margin-top: 16px; }
   @media (max-width: 860px) { .market-body { grid-template-columns: 1fr; } }
   .qual-text { font-size: 0.94rem; color: var(--text-primary); }
-  .qual-text p { margin: 0 0 12px; }
+  .qual-text p { margin: 0 0 12px; text-align: justify; text-justify: inter-word; hyphens: auto; }
+  .mini-chart-wrap { margin-top: 16px; }
+  .mini-chart-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 8px; }
+  .mini-chart { width: 100%; height: auto; overflow: visible; }
   .highlights h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 8px; }
   .highlights ul { margin: 0 0 16px; padding-left: 18px; font-size: 0.88rem; }
   .highlights li { margin-bottom: 7px; }
@@ -316,6 +319,10 @@
               </tbody>
             </table>
           </div>
+          <div class="mini-chart-wrap">
+            <p class="mini-chart-title">Variación diaria (%)</p>
+            <svg id="chart-eeuu" class="mini-chart" role="img" aria-label="Gráfico de barras de variación diaria de los índices de EE. UU."></svg>
+          </div>
         </div>
         <div>
           <div class="qual-text">
@@ -357,6 +364,10 @@
             </table>
           </div>
           <p class="footnote">*YTD del COLCAP al 27-07-2026 (última fecha con dato verificado).</p>
+          <div class="mini-chart-wrap">
+            <p class="mini-chart-title">Variación diaria (%)</p>
+            <svg id="chart-colombia" class="mini-chart" role="img" aria-label="Gráfico de barras de variación diaria del COLCAP y Ecopetrol"></svg>
+          </div>
         </div>
         <div>
           <div class="qual-text">
@@ -396,6 +407,10 @@
                 <tr><td>FTSE 100 (Reino Unido)</td><td class="mono">10.921 pts</td><td class="mono">+0,11%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="mini-chart-wrap">
+            <p class="mini-chart-title">Variación diaria (%)</p>
+            <svg id="chart-europa" class="mini-chart" role="img" aria-label="Gráfico de barras de variación diaria de los índices europeos"></svg>
           </div>
         </div>
         <div>
@@ -437,6 +452,10 @@
                 <tr><td>KOSPI (Corea del Sur)</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="mini-chart-wrap">
+            <p class="mini-chart-title">Variación diaria (%)</p>
+            <svg id="chart-asia" class="mini-chart" role="img" aria-label="Gráfico de barras de variación diaria de los índices asiáticos"></svg>
           </div>
         </div>
         <div>
@@ -482,6 +501,10 @@
             </table>
           </div>
           <p class="footnote">WLD ocupa el puesto #63 por capitalización (CoinGecko); se incluye de forma obligatoria por directriz del repositorio. Cotiza -97,4% por debajo de su máximo histórico de US$11,74.</p>
+          <div class="mini-chart-wrap">
+            <p class="mini-chart-title">Variación diaria (%) — único activo con dato verificado</p>
+            <svg id="chart-cripto" class="mini-chart" role="img" aria-label="Gráfico de barras de variación diaria de Worldcoin, único activo cripto con variación diaria verificada"></svg>
+          </div>
         </div>
         <div>
           <div class="qual-text">
@@ -570,20 +593,23 @@
   function moveTip(e){ tooltip.style.left = (e.clientX + 16) + "px"; tooltip.style.top = (e.clientY + 16) + "px"; }
   function hideTip(){ tooltip.style.display = "none"; }
 
-  function buildOverviewChart(){
-    var svg = document.getElementById("overview-chart");
+  function buildBarChart(svgId, items, opts){
+    var svg = document.getElementById(svgId);
+    if (!svg || !items.length) return;
     svg.innerHTML = "";
     var svgNS = "http://www.w3.org/2000/svg";
+    opts = opts || {};
+    var singleColor = opts.singleColor || null;
 
-    var n = OVERVIEW.length;
-    var W = 900, rowH = 34, padTop = 8, padBottom = 26, labelW = 152;
+    var n = items.length;
+    var W = 900, rowH = opts.rowH || 34, padTop = 8, padBottom = 26, labelW = opts.labelW || 152;
     var H = padTop + padBottom + n*rowH;
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
 
-    var maxAbs = Math.max.apply(null, OVERVIEW.map(function(o){ return Math.abs(o.d); }));
+    var maxAbs = Math.max.apply(null, items.map(function(o){ return Math.abs(o.d); }));
     var plotW = W - labelW - 64;
     var zeroX = labelW + plotW/2;
-    var scale = (plotW/2 - 12) / maxAbs;
+    var scale = (plotW/2 - 58) / maxAbs;
 
     var gridColor = getComputedStyle(document.documentElement).getPropertyValue('--gridline').trim();
 
@@ -594,13 +620,13 @@
     zeroLine.setAttribute("stroke-width", "1.5");
     svg.appendChild(zeroLine);
 
-    OVERVIEW.forEach(function(item, i){
+    items.forEach(function(item, i){
       var y = padTop + i*rowH;
       var barH = rowH * 0.5;
       var barY = y + (rowH - barH)/2;
       var barW = Math.abs(item.d) * scale;
       var x = item.d >= 0 ? zeroX : zeroX - barW;
-      var color = colorFor(item.market);
+      var color = singleColor || colorFor(item.market);
       var rIcon = Math.min(barH/2, 6);
 
       var rowBg = document.createElementNS(svgNS, "rect");
@@ -649,6 +675,17 @@
     svg.appendChild(axTick0);
   }
 
+  function buildOverviewChart(){
+    buildBarChart("overview-chart", OVERVIEW, {labelW: 152, rowH: 34});
+  }
+
+  function buildMarketCharts(){
+    ["eeuu","colombia","europa","asia","cripto"].forEach(function(m){
+      var items = OVERVIEW.filter(function(o){ return o.market === m; });
+      buildBarChart("chart-" + m, items, {labelW: 120, rowH: 32, singleColor: colorFor(m)});
+    });
+  }
+
   function buildOverviewTable(){
     var tbody = document.getElementById("overview-table-body");
     tbody.innerHTML = "";
@@ -661,7 +698,8 @@
 
   buildLegend();
   buildOverviewChart();
+  buildMarketCharts();
   buildOverviewTable();
-  window.addEventListener("resize", buildOverviewChart);
+  window.addEventListener("resize", function(){ buildOverviewChart(); buildMarketCharts(); });
 })();
 </script>
