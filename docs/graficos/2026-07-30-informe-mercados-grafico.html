@@ -1,586 +1,514 @@
 <title>Informe de Mercados — 30.07.2026</title>
 <style>
-  :root{
-    --paper:#ffffff;
-    --paper-alt:#f1efe8;
-    --ink:#0a0a08;
-    --ink-soft:#4a4842;
-    --line:#0a0a08;
-    --c-eeuu:#008300;      --t-eeuu:#ffffff;
-    --c-colombia:#2a78d6;  --t-colombia:#0a0a08;
-    --c-europa:#eda100;    --t-europa:#0a0a08;
-    --c-asia:#e87ba4;      --t-asia:#0a0a08;
-    --c-cripto:#6d28d9;    --t-cripto:#ffffff;
-    --risk-low:#0f766e;
-    --risk-mid:#b45309;
-    --risk-high:#b91c1c;
-    --font-display: "Arial Black","Helvetica Neue",Helvetica,Arial,sans-serif;
-    --font-body: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    --font-mono: ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono","Courier New",monospace;
+  :root { color-scheme: light dark; }
+  :root {
+    --surface-1:      #fcfcfb;
+    --surface-2:      #ffffff;
+    --page-plane:     #f4f3ee;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.08);
+    --shadow:         rgba(20,18,10,0.10);
+    --hero-ink:       #ffffff;
+    --hero-ink-soft:  rgba(255,255,255,0.82);
+    --hero-ink-mute:  rgba(255,255,255,0.62);
+    --hero-chip-bg:   rgba(255,255,255,0.14);
+    --hero-chip-brd:  rgba(255,255,255,0.28);
+    --c-colombia: #2a78d6;
+    --c-eeuu:     #008300;
+    --c-asia:     #e87ba4;
+    --c-europa:   #eda100;
+    --c-cripto:   #6d28d9;
+    color-scheme: light;
   }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --paper:#111110;
-      --paper-alt:#1b1a17;
-      --ink:#f3f1ea;
-      --ink-soft:#b8b5ac;
-      --line:#f3f1ea;
-      --c-colombia:#3987e5; --t-colombia:#0a0a08;
-      --c-europa:#c98500;   --t-europa:#0a0a08;
-      --c-asia:#d55181;     --t-asia:#0a0a08;
-      --c-cripto:#8b5cf6;   --t-cripto:#0a0a08;
-      --risk-low:#2dd4bf;
-      --risk-mid:#fbbf24;
-      --risk-high:#f87171;
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      --surface-1:      #171715;
+      --surface-2:      #1e1e1c;
+      --page-plane:     #0a0a09;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #8f8d86;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.09);
+      --shadow:         rgba(0,0,0,0.45);
+      --c-colombia: #3987e5;
+      --c-eeuu:     #16a34a;
+      --c-asia:     #d55181;
+      --c-europa:   #c98500;
+      --c-cripto:   #8b5cf6;
+      color-scheme: dark;
     }
   }
-  :root[data-theme="dark"]{
-    --paper:#111110;
-    --paper-alt:#1b1a17;
-    --ink:#f3f1ea;
-    --ink-soft:#b8b5ac;
-    --line:#f3f1ea;
-    --c-colombia:#3987e5; --t-colombia:#0a0a08;
-    --c-europa:#c98500;   --t-europa:#0a0a08;
-    --c-asia:#d55181;     --t-asia:#0a0a08;
-    --c-cripto:#8b5cf6;   --t-cripto:#0a0a08;
-    --risk-low:#2dd4bf;
-    --risk-mid:#fbbf24;
-    --risk-high:#f87171;
-  }
-  :root[data-theme="light"]{
-    --paper:#ffffff;
-    --paper-alt:#f1efe8;
-    --ink:#0a0a08;
-    --ink-soft:#4a4842;
-    --line:#0a0a08;
-    --c-colombia:#2a78d6;  --t-colombia:#0a0a08;
-    --c-europa:#eda100;    --t-europa:#0a0a08;
-    --c-asia:#e87ba4;      --t-asia:#0a0a08;
-    --c-cripto:#6d28d9;    --t-cripto:#ffffff;
-    --risk-low:#0f766e;
-    --risk-mid:#b45309;
-    --risk-high:#b91c1c;
+  :root[data-theme="dark"] {
+    --surface-1:      #171715;
+    --surface-2:      #1e1e1c;
+    --page-plane:     #0a0a09;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #8f8d86;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.09);
+    --shadow:         rgba(0,0,0,0.45);
+    --c-colombia: #3987e5;
+    --c-eeuu:     #16a34a;
+    --c-asia:     #d55181;
+    --c-europa:   #c98500;
+    --c-cripto:   #8b5cf6;
+    color-scheme: dark;
   }
 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--font-body);
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  html { background: var(--page-plane); }
+  body {
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
   }
-  .page{max-width:1180px;margin:0 auto;padding:0 20px 80px;overflow-x:hidden;}
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  a { color: inherit; }
 
-  h1,h2,h3,h4{font-family:var(--font-display);text-transform:uppercase;letter-spacing:-0.02em;text-wrap:balance;margin:0;}
-  a{color:inherit;}
-  table{border-collapse:collapse;}
-  .mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 90% at 8% -10%, rgba(42,120,214,0.55), transparent 60%),
+      radial-gradient(55% 80% at 95% 0%, rgba(232,123,164,0.45), transparent 60%),
+      radial-gradient(70% 90% at 55% 120%, rgba(237,161,0,0.40), transparent 60%),
+      linear-gradient(135deg, #0f1120 0%, #171225 45%, #1c1030 100%);
+    color: var(--hero-ink);
+    padding: 56px 0 40px;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.5), transparent 75%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--hero-ink-soft);
+    background: var(--hero-chip-bg); border: 1px solid var(--hero-chip-brd);
+    border-radius: 999px; padding: 6px 14px; margin-bottom: 20px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    line-height: 1.06; letter-spacing: -0.02em; font-weight: 800;
+    margin: 0 0 14px; max-width: 780px;
+  }
+  h1 .accent {
+    background: linear-gradient(90deg, #7dd3fc, #f9a8d4 50%, #fcd34d);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { color: var(--hero-ink-soft); font-size: 1.02rem; line-height: 1.6; margin: 0 0 26px; max-width: 640px; }
+  .disclaimer { color: var(--hero-ink-mute); font-size: 0.78rem; line-height: 1.6; max-width: 680px; margin: 0 0 26px; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 9px; }
+  nav.toc a {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.83rem; font-weight: 600; text-decoration: none; color: var(--hero-ink);
+    background: rgba(255,255,255,0.08); border: 1px solid var(--hero-chip-brd); border-radius: 999px;
+    padding: 8px 16px 8px 12px; transition: background 0.15s, transform 0.15s;
+  }
+  nav.toc a:hover { background: rgba(255,255,255,0.20); transform: translateY(-1px); }
+  nav.toc .swatch { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 
-  /* ---------- HERO ---------- */
-  .hero{
-    border-bottom:5px solid var(--line);
-    padding:36px 0 22px;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:flex-end;
-    justify-content:space-between;
-    gap:16px;
-  }
-  .hero-title{font-size:clamp(2.6rem,7vw,5.2rem);line-height:0.92;}
-  .hero-meta{
-    font-family:var(--font-mono);
-    font-size:0.85rem;
-    text-align:right;
-    line-height:1.7;
-    border-left:3px solid var(--line);
-    padding-left:14px;
-    max-width:260px;
-  }
-  .hero-tag{
-    display:inline-block;
-    font-family:var(--font-mono);
-    font-size:0.72rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    background:var(--ink);
-    color:var(--paper);
-    padding:3px 8px;
-    margin-bottom:10px;
-  }
+  /* ---------- Body ---------- */
+  main { padding: 44px 0 20px; }
+  section { margin-bottom: 44px; scroll-margin-top: 20px; }
+  h2 { font-size: 1.4rem; margin: 0 0 6px; font-weight: 800; letter-spacing: -0.01em; }
+  .section-sub { color: var(--text-secondary); font-size: 0.9rem; margin: 0 0 20px; max-width: 70ch; }
 
-  /* ---------- JUMP NAV ---------- */
-  .jumpnav{
-    display:flex;
-    flex-wrap:wrap;
-    border-bottom:3px solid var(--line);
-    position:sticky;
-    top:0;
-    background:var(--paper);
-    z-index:5;
-  }
-  .jumpnav a{
-    font-family:var(--font-mono);
-    font-size:0.78rem;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-    text-decoration:none;
-    padding:12px 16px;
-    border-right:3px solid var(--line);
-    white-space:nowrap;
-  }
-  .jumpnav a:hover, .jumpnav a:focus-visible{background:var(--ink);color:var(--paper);outline:none;}
-  .jumpnav a span{opacity:0.55;margin-right:6px;}
-
-  /* ---------- SUMMARY ---------- */
-  .summary{padding:34px 0;border-bottom:5px solid var(--line);}
-  .summary h2{font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:16px;}
-  .summary p{max-width:70ch;font-size:1.02rem;}
-  .disclaimer-strip{
-    margin-top:18px;
-    font-family:var(--font-mono);
-    font-size:0.74rem;
-    color:var(--ink-soft);
-    border-left:3px solid var(--line);
-    padding-left:12px;
+  .card {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 18px;
+    box-shadow: 0 1px 2px var(--shadow);
+    padding: 22px 24px;
   }
 
-  .kpi-grid{
-    display:grid;
-    grid-template-columns:repeat(12,1fr);
-    gap:3px;
-    margin-top:26px;
+  /* ---------- Resumen ---------- */
+  .resumen-text { max-width: 74ch; font-size: 0.98rem; color: var(--text-primary); }
+  .resumen-text p { margin: 0 0 12px; }
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 14px;
+    margin-top: 20px;
   }
-  .kpi-card{
-    border:3px solid var(--line);
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    min-height:150px;
+  .kpi-card {
+    position: relative; background: var(--surface-2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 16px 18px; box-shadow: 0 1px 2px var(--shadow);
   }
-  .kpi-card:nth-child(1){grid-column:span 4;}
-  .kpi-card:nth-child(2){grid-column:span 3;}
-  .kpi-card:nth-child(3){grid-column:span 3;}
-  .kpi-card:nth-child(4){grid-column:span 2;}
-  .kpi-card:nth-child(5){grid-column:span 5;}
-  @media (max-width:820px){
-    .kpi-card:nth-child(1),.kpi-card:nth-child(2),.kpi-card:nth-child(3),.kpi-card:nth-child(4),.kpi-card:nth-child(5){grid-column:span 12;}
+  .kpi-card::before {
+    content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 3px; border-radius: 0 0 3px 3px;
+    background: var(--accent);
   }
-  .kpi-label{font-family:var(--font-mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;opacity:0.85;}
-  .kpi-value{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);line-height:1;}
-  .kpi-delta{font-family:var(--font-mono);font-size:0.95rem;}
-  .kpi-delta.up::before{content:"▲ ";}
-  .kpi-delta.down::before{content:"▼ ";}
+  .kpi-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 8px; display: block; }
+  .kpi-value { font-size: 1.5rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .kpi-delta { font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px; }
+  .kpi-delta.up { color: var(--c-eeuu); }
+  .kpi-delta.down { color: #c0392b; }
+  @media (prefers-color-scheme: dark) { .kpi-delta.down { color: #f87171; } }
+  :root[data-theme="dark"] .kpi-delta.down { color: #f87171; }
 
-  /* ---------- OVERVIEW CHART ---------- */
-  .overview{padding:34px 0;border-bottom:5px solid var(--line);}
-  .overview h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:6px;}
-  .overview-note{font-family:var(--font-mono);font-size:0.76rem;color:var(--ink-soft);max-width:75ch;margin-bottom:20px;}
-  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px;font-family:var(--font-mono);font-size:0.78rem;}
-  .legend-item{display:flex;align-items:center;gap:6px;}
-  .legend-swatch{width:12px;height:12px;border:2px solid var(--line);flex:none;}
-  .chart-wide{width:100%;height:auto;overflow:visible;}
-  .bar-cat-label{font-family:var(--font-mono);font-size:11px;fill:var(--ink);}
-  .bar-val-label{font-family:var(--font-mono);font-size:11px;font-weight:700;fill:var(--ink);}
-  .bar-axis-tick{font-family:var(--font-mono);font-size:9.5px;fill:var(--ink-soft);}
+  /* ---------- Comparativo chart ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 18px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .chart-wide { width: 100%; height: auto; overflow: visible; }
+  .bar-cat-label { font-size: 12px; fill: var(--text-primary); font-weight: 600; }
+  .bar-val-label { font-size: 12px; font-weight: 800; fill: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .zero-tick { font-size: 10px; fill: var(--text-muted); }
+  .bar-row-bg { fill: transparent; }
+  .bar-row-bg:hover { fill: var(--page-plane); }
+  .bar-rect { transition: filter 0.15s ease; cursor: pointer; }
+  .bar-rect:hover { filter: brightness(1.08); }
 
-  .data-table-wrap{overflow-x:auto;border:2px solid var(--line);margin-top:18px;}
-  table.data-table{width:100%;font-size:0.82rem;}
-  table.data-table caption{text-align:left;font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;padding:6px 10px;color:var(--ink-soft);border-bottom:2px solid var(--line);}
-  table.data-table th, table.data-table td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--paper-alt);white-space:nowrap;}
-  table.data-table th:first-child, table.data-table td:first-child{text-align:left;}
-  table.data-table thead th{font-family:var(--font-mono);text-transform:uppercase;font-size:0.68rem;border-bottom:2px solid var(--line);}
-  table.data-table td.mono{font-family:var(--font-mono);}
-  table.data-table td.nd{color:var(--ink-soft);font-style:italic;}
-
-  .tooltip{
-    position:fixed;
-    pointer-events:none;
-    background:var(--ink);
-    color:var(--paper);
-    font-family:var(--font-mono);
-    font-size:0.72rem;
-    padding:5px 8px;
-    border:2px solid var(--ink);
-    z-index:50;
-    white-space:nowrap;
-    display:none;
+  .tooltip {
+    position: fixed; pointer-events: none;
+    background: var(--surface-2); color: var(--text-primary);
+    font-size: 0.78rem; font-weight: 600;
+    padding: 8px 12px; border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px -8px var(--shadow), 0 0 0 1px var(--border);
+    z-index: 50; white-space: nowrap; display: none;
   }
+  .tooltip .tt-sub { font-weight: 500; color: var(--text-muted); font-size: 0.72rem; margin-top: 2px; }
 
-  /* ---------- MARKET SECTIONS ---------- */
-  .market{border-bottom:5px solid var(--line);}
-  .market-head{
-    display:flex;
-    align-items:baseline;
-    gap:16px;
-    padding:22px 0 14px;
-    border-bottom:3px solid var(--line);
-    background:var(--accent);
-    color:var(--accent-text);
-    padding-left:16px;
-    padding-right:16px;
+  /* ---------- Tables ---------- */
+  .table-scroll { overflow-x: auto; margin-top: 18px; border-radius: 14px; border: 1px solid var(--border); }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  table.data-table caption { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); padding: 10px 14px; background: var(--page-plane); }
+  table.data-table th, table.data-table td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--gridline); white-space: nowrap; }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+  table.data-table thead th { text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.03em; color: var(--text-muted); font-weight: 700; background: var(--page-plane); }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.data-table td.mono { font-variant-numeric: tabular-nums; }
+  table.data-table td.nd { color: var(--text-muted); font-style: italic; }
+
+  /* ---------- Market sections ---------- */
+  .market-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+  .market-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 11px; font-size: 1.1rem; flex: none;
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-1));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
   }
-  .market-num{font-family:var(--font-mono);font-size:1rem;opacity:0.75;}
-  .market-head h2{font-size:clamp(1.6rem,3.6vw,2.4rem);}
-  .market-sub{font-family:var(--font-mono);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.04em;}
+  .market-tag { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent); }
+  .market-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 22px; margin-top: 16px; }
+  @media (max-width: 860px) { .market-body { grid-template-columns: 1fr; } }
+  .qual-text { font-size: 0.94rem; color: var(--text-primary); }
+  .qual-text p { margin: 0 0 12px; }
+  .highlights h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin: 0 0 8px; }
+  .highlights ul { margin: 0 0 16px; padding-left: 18px; font-size: 0.88rem; }
+  .highlights li { margin-bottom: 7px; }
+  .sources { font-size: 0.76rem; color: var(--text-muted); border-top: 1px solid var(--gridline); padding-top: 10px; margin-top: 4px; }
+  .sources b { color: var(--text-secondary); }
+  .footnote { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; }
 
-  .market-body{display:grid;grid-template-columns:3fr 2fr;gap:0;}
-  @media (max-width:900px){.market-body{grid-template-columns:1fr;}}
-  .market-left{padding:24px 20px 24px 0;border-right:3px solid var(--line);}
-  @media (max-width:900px){.market-left{border-right:none;border-bottom:3px solid var(--line);padding:20px 0;}}
-  .market-right{padding:24px 0 24px 20px;}
-  @media (max-width:900px){.market-right{padding:20px 0;}}
-
-  .qual-text{max-width:60ch;font-size:0.97rem;margin-bottom:20px;}
-  .qual-text p{margin:0;}
-  .highlights h4{font-size:0.82rem;letter-spacing:0.03em;margin-bottom:8px;}
-  .highlights ul{margin:0 0 20px;padding-left:18px;font-size:0.9rem;}
-  .highlights li{margin-bottom:8px;}
-  .sources{font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-soft);border-top:2px solid var(--line);padding-top:10px;}
-  .sources b{color:var(--ink);}
-
-  /* ---------- OPPORTUNITIES ---------- */
-  .opps{padding:34px 0;border-bottom:5px solid var(--line);}
-  .opps h2{font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:6px;}
-  .opps-note{font-family:var(--font-mono);font-size:0.76rem;color:var(--ink-soft);max-width:70ch;margin-bottom:22px;}
-  .opp-list{display:flex;flex-direction:column;gap:3px;}
-  .opp{border:3px solid var(--line);display:grid;grid-template-columns:70px 1fr 140px;}
-  @media (max-width:700px){.opp{grid-template-columns:52px 1fr;}}
-  .opp-num{font-family:var(--font-display);font-size:2rem;display:flex;align-items:center;justify-content:center;border-right:3px solid var(--line);background:var(--paper-alt);}
-  .opp-body{padding:16px 18px;}
-  .opp-body h3{font-family:var(--font-body);font-weight:700;text-transform:none;font-size:1.05rem;letter-spacing:0;margin-bottom:6px;}
-  .opp-body p{margin:0;font-size:0.92rem;max-width:64ch;}
-  .opp-body .opp-risk-inline{margin-top:8px;font-size:0.85rem;}
-  .opp-risk{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-left:3px solid var(--line);
-    font-family:var(--font-mono);
-    font-size:0.72rem;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-    text-align:center;
-    padding:10px;
+  footer.sources-foot {
+    color: var(--text-muted); font-size: 0.78rem; margin-top: 30px;
+    border-top: 1px solid var(--gridline); padding: 22px 0 48px; line-height: 1.7;
   }
-  @media (max-width:700px){.opp-risk{grid-column:1 / -1;border-left:none;border-top:3px solid var(--line);justify-content:flex-start;padding:8px 18px;}}
-  .risk-badge{border:2px solid currentColor;padding:3px 8px;}
-  .risk-bajo{color:var(--risk-low);}
-  .risk-medio{color:var(--risk-mid);}
-  .risk-alto{color:var(--risk-high);}
+  footer.sources-foot .disclaimer-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 14px; }
 
-  /* ---------- FOOTER ---------- */
-  footer{padding:30px 0 0;}
-  .foot-disclaimer{
-    font-family:var(--font-mono);
-    font-size:0.78rem;
-    line-height:1.7;
-    border:3px solid var(--line);
-    padding:18px;
-    background:var(--paper-alt);
-  }
-  .foot-meta{margin-top:16px;font-family:var(--font-mono);font-size:0.7rem;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-
-  a:focus-visible, button:focus-visible{outline:3px solid var(--ink);outline-offset:2px;}
-
-  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+  @media (max-width: 640px) { .wrap { padding: 0 16px; } }
 </style>
 
-<div class="page">
+<div class="hero">
+  <div class="wrap hero-inner">
+    <span class="eyebrow"><span>●</span> Fecha de corte: 30 de julio de 2026</span>
+    <h1>Informe de <span class="accent">Mercados</span></h1>
+    <p class="lede">Corte transversal de las 5 categorías del repositorio — Colombia, Estados Unidos, Europa, Asia y criptomonedas — con foco en cómo la Fed, el BCE, el Banco de Japón y el Banco de la República mueven cada plaza esta semana.</p>
+    <p class="disclaimer">Carácter informativo, basado en fuentes públicas citadas en cada sección. No constituye asesoría financiera personalizada. Los datos marcados "s/d" no pudieron verificarse dentro del límite de búsquedas establecido.</p>
+    <nav class="toc">
+      <a href="#resumen">Resumen</a>
+      <a href="#comparativo"><span class="swatch" style="background:linear-gradient(90deg,var(--c-colombia),var(--c-eeuu),var(--c-asia))"></span>Comparativo</a>
+      <a href="#eeuu"><span class="swatch" style="background:var(--c-eeuu)"></span>EE. UU.</a>
+      <a href="#colombia"><span class="swatch" style="background:var(--c-colombia)"></span>Colombia</a>
+      <a href="#europa"><span class="swatch" style="background:var(--c-europa)"></span>Europa</a>
+      <a href="#asia"><span class="swatch" style="background:var(--c-asia)"></span>Asia</a>
+      <a href="#cripto"><span class="swatch" style="background:var(--c-cripto)"></span>Cripto</a>
+    </nav>
+  </div>
+</div>
 
-  <header class="hero">
-    <div>
-      <span class="hero-tag">Seguimiento de mercados · Uso interno</span>
-      <h1 class="hero-title">Informe<br>de Mercados</h1>
-    </div>
-    <div class="hero-meta">
-      FECHA DE CORTE<br>
-      <strong>30 · 07 · 2026</strong><br><br>
-      5 MERCADOS<br>
-      EEUU — COLOMBIA — EUROPA<br>
-      ASIA — CRIPTOMONEDAS<br><br>
-      CARÁCTER INFORMATIVO<br>
-      NO ES ASESORÍA PERSONALIZADA
-    </div>
-  </header>
+<main class="wrap">
 
-  <nav class="jumpnav" aria-label="Navegación rápida">
-    <a href="#resumen"><span>00</span>Resumen</a>
-    <a href="#comparativo"><span>01</span>Comparativo</a>
-    <a href="#eeuu"><span>02</span>EE. UU.</a>
-    <a href="#colombia"><span>03</span>Colombia</a>
-    <a href="#europa"><span>04</span>Europa</a>
-    <a href="#asia"><span>05</span>Asia</a>
-    <a href="#cripto"><span>06</span>Cripto</a>
-  </nav>
-
-  <section class="summary" id="resumen">
+  <section id="resumen">
     <h2>Resumen ejecutivo</h2>
-    <p>
-      El 30 de julio de 2026 los mercados digieren la decisión de la Reserva Federal del día anterior (mantiene tasas en 3,50%-3,75%, con tres disidentes que pedían subir tipos) tras un severo sell-off el 28 de julio (Dow -1.100 puntos) y un rebote fuerte el 29-30 de julio impulsado por resultados corporativos (Microsoft +9% por Azure, Meta -8% por decepción en IA).
-    </p>
-    <p style="margin-top:12px;">
-      En Asia el Nikkei resistió (+0,6%) mientras Shanghái cayó -1,2% por ventas en semiconductores, con el PIB chino desacelerando a +4,3% interanual. Europa se mueve mixta, lastrada por petróleo sobre US$100/barril y nuevos aranceles UE-EE.UU. Colombia es la nota positiva: el COLCAP acumula +10,39% YTD liderado por Ecopetrol, pese a una tasa del Banco de la República en 12%. En cripto, Bitcoin domina ~59% del mercado (~US$64.278) mientras Worldcoin (WLD) cae -19,5% semanal.
-    </p>
-    <div class="disclaimer-strip">
-      Este informe es de carácter informativo, basado en fuentes públicas citadas al pie de cada sección. No constituye asesoría financiera personalizada. Varios datos se marcan explícitamente como "s/d" (sin dato disponible) por no haberse podido verificar.
-    </div>
-
-    <div class="kpi-grid">
-      <div class="kpi-card" style="border-color:var(--c-eeuu);">
-        <span class="kpi-label" style="color:var(--c-eeuu);">■ EE. UU. — S&amp;P 500</span>
-        <span class="kpi-value mono">+0,88% día</span>
-        <span class="kpi-delta mono up">Nivel exacto s/d · 30-07-26</span>
+    <div class="card">
+      <div class="resumen-text">
+        <p>El 30 de julio de 2026 los mercados digieren la decisión de la Reserva Federal del día anterior (mantiene tasas en 3,50%-3,75%, con tres disidentes que pedían subir tipos) tras un severo sell-off el 28 de julio (Dow -1.100 puntos) y un rebote fuerte el 29-30 de julio impulsado por resultados corporativos (Microsoft +9% por Azure, Meta -8% por decepción en IA).</p>
+        <p>En Asia el Nikkei resistió (+0,6%) mientras Shanghái cayó -1,2% por ventas en semiconductores, con el PIB chino desacelerando a +4,3% interanual. Europa se mueve mixta, lastrada por petróleo sobre US$100/barril y nuevos aranceles UE-EE.UU. Colombia es la nota positiva: el COLCAP acumula +10,39% YTD liderado por Ecopetrol, pese a una tasa del Banco de la República en 12%. En cripto, Bitcoin domina ~59% del mercado (~US$64.278) mientras Worldcoin (WLD) cae -19,5% semanal.</p>
       </div>
-      <div class="kpi-card" style="border-color:var(--c-colombia);">
-        <span class="kpi-label" style="color:var(--c-colombia);">■ Colombia — COLCAP</span>
-        <span class="kpi-value mono">2.304,68</span>
-        <span class="kpi-delta mono up">+0,15% día · +10,39% YTD (27-07)</span>
-      </div>
-      <div class="kpi-card" style="border-color:var(--c-europa);">
-        <span class="kpi-label" style="color:var(--c-europa);">■ Europa — Euro Stoxx 50</span>
-        <span class="kpi-value mono">6.235,00</span>
-        <span class="kpi-delta mono down">-0,99% día · 29-07-26</span>
-      </div>
-      <div class="kpi-card" style="border-color:var(--c-asia);">
-        <span class="kpi-label" style="color:var(--c-asia);">■ Asia — Nikkei 225</span>
-        <span class="kpi-value mono">61.778,02</span>
-        <span class="kpi-delta mono up">+0,6% día · 30-07-26</span>
-      </div>
-      <div class="kpi-card" style="border-color:var(--c-cripto);">
-        <span class="kpi-label" style="color:var(--c-cripto);">■ Cripto — Bitcoin (BTC)</span>
-        <span class="kpi-value mono">US$64.278</span>
-        <span class="kpi-delta mono">Var. % s/d · dato del 29-07-26</span>
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--accent:var(--c-eeuu);">
+          <span class="kpi-label">EE. UU. — S&amp;P 500</span>
+          <div class="kpi-value">+0,88% día</div>
+          <div class="kpi-delta up">Nivel exacto s/d · 30-07-26</div>
+        </div>
+        <div class="kpi-card" style="--accent:var(--c-colombia);">
+          <span class="kpi-label">Colombia — COLCAP</span>
+          <div class="kpi-value">2.304,68</div>
+          <div class="kpi-delta up">+0,15% día · +10,39% YTD (27-07)</div>
+        </div>
+        <div class="kpi-card" style="--accent:var(--c-europa);">
+          <span class="kpi-label">Europa — Euro Stoxx 50</span>
+          <div class="kpi-value">6.235,00</div>
+          <div class="kpi-delta down">-0,99% día · 29-07-26</div>
+        </div>
+        <div class="kpi-card" style="--accent:var(--c-asia);">
+          <span class="kpi-label">Asia — Nikkei 225</span>
+          <div class="kpi-value">61.778,02</div>
+          <div class="kpi-delta up">+0,6% día · 30-07-26</div>
+        </div>
+        <div class="kpi-card" style="--accent:var(--c-cripto);">
+          <span class="kpi-label">Cripto — Bitcoin (BTC)</span>
+          <div class="kpi-value">US$64.278</div>
+          <div class="kpi-delta">Var. % s/d · dato del 29-07-26</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ COMPARATIVO ============ -->
-  <section class="overview" id="comparativo">
+  <section id="comparativo">
     <h2>Variación diaria por mercado (%)</h2>
-    <p class="overview-note">Único indicador comparable disponible para los 5 mercados en esta fecha de corte: la variación porcentual diaria (un solo eje). Instrumentos sin variación diaria verificada (Bitcoin, Ethereum, XRP, BNB, Solana) se omiten de este gráfico y quedan marcados como "s/d" en sus tablas de datos. Colores fijos por mercado, según las reglas de visualización del repositorio.</p>
-    <div class="legend" id="legend"></div>
-    <svg id="overview-chart" class="chart-wide" role="img" aria-label="Gráfico de barras horizontales de variación diaria en porcentaje por instrumento, coloreado por mercado"></svg>
-    <div class="data-table-wrap">
-      <table class="data-table">
-        <caption>Variación diaria (%) — todos los mercados, 30-07-2026 (o última fecha disponible)</caption>
-        <thead><tr><th>Instrumento</th><th>Mercado</th><th>Var. diaria</th><th>Fecha del dato</th></tr></thead>
-        <tbody id="overview-table-body"></tbody>
-      </table>
+    <p class="section-sub">Único indicador comparable disponible para los 5 mercados en esta fecha de corte: la variación porcentual diaria (un solo eje). Instrumentos sin variación diaria verificada (Bitcoin, Ethereum, XRP, BNB, Solana) se omiten de este gráfico y quedan marcados "s/d" en sus tablas. Color fijo por mercado.</p>
+    <div class="card">
+      <div class="legend" id="legend"></div>
+      <svg id="overview-chart" class="chart-wide" role="img" aria-label="Gráfico de barras horizontales de variación diaria en porcentaje por instrumento, coloreado por mercado"></svg>
+      <div class="table-scroll">
+        <table class="data-table">
+          <caption>Variación diaria (%) — todos los mercados, 30-07-2026 (o última fecha disponible)</caption>
+          <thead><tr><th>Instrumento</th><th>Mercado</th><th>Var. diaria</th><th>Fecha del dato</th></tr></thead>
+          <tbody id="overview-table-body"></tbody>
+        </table>
+      </div>
     </div>
   </section>
 
   <!-- ============ EEUU ============ -->
-  <section class="market" id="eeuu" style="--accent:var(--c-eeuu);--accent-text:var(--t-eeuu);">
+  <section id="eeuu">
     <div class="market-head">
-      <span class="market-num">02</span>
+      <span class="market-badge" style="--accent:var(--c-eeuu);color:var(--c-eeuu)">🇺🇸</span>
       <h2>Bolsa estadounidense</h2>
-      <span class="market-sub">NYSE / Nasdaq</span>
+      <span class="market-tag" style="--accent:var(--c-eeuu);color:var(--c-eeuu)">NYSE / Nasdaq</span>
     </div>
-    <div class="market-body">
-      <div class="market-left">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <caption>Datos clave — EE. UU.</caption>
-            <thead><tr><th>Índice</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
-            <tbody>
-              <tr><td>S&amp;P 500</td><td class="nd">s/d</td><td class="mono">+0,88%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>Nasdaq Composite</td><td class="nd">s/d</td><td class="mono">+1,60%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>Dow Jones</td><td class="nd">s/d</td><td class="mono">+0,53%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>Russell 2000</td><td class="nd">s/d</td><td class="mono">-1,61%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-            </tbody>
-          </table>
+    <div class="card">
+      <div class="market-body">
+        <div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <caption>Datos clave — EE. UU.</caption>
+              <thead><tr><th>Índice</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
+              <tbody>
+                <tr><td>S&amp;P 500</td><td class="nd">s/d</td><td class="mono">+0,88%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>Nasdaq Composite</td><td class="nd">s/d</td><td class="mono">+1,60%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>Dow Jones</td><td class="nd">s/d</td><td class="mono">+0,53%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>Russell 2000</td><td class="nd">s/d</td><td class="mono">-1,61%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="market-right">
-        <div class="qual-text">
-          <p>El mercado estadounidense atraviesa una semana de alta volatilidad marcada por la decisión de la Fed del 29 de julio de mantener tasas en 3,50%-3,75% con una división interna inusual: tres disidentes pedían subir tasas ante una inflación persistente por encima del objetivo del 2% durante más de cinco años. Esa postura generó el desplome del Dow del 28 de julio (peor día desde abril de 2025), seguido de un rebote fuerte el 29-30 de julio impulsado por resultados corporativos: Microsoft se disparó cerca de 9% tras superar expectativas (Azure superó los US$100.000 millones anuales), mientras Nvidia se recuperó. Meta cayó más de 8% tras decepcionar en utilidades y generar dudas sobre el retorno de su gasto en IA. Apple y Amazon reportaron resultados el 30 de julio, con Apple acumulando +25% YTD. El conflicto en Medio Oriente fue citado explícitamente por la Fed como fuente de incertidumbre.</p>
+        <div>
+          <div class="qual-text">
+            <p>El mercado estadounidense atraviesa una semana de alta volatilidad marcada por la decisión de la Fed del 29 de julio de mantener tasas en 3,50%-3,75% con una división interna inusual: tres disidentes pedían subir tasas ante una inflación persistente por encima del objetivo del 2% durante más de cinco años. Esa postura generó el desplome del Dow del 28 de julio (peor día desde abril de 2025), seguido de un rebote fuerte el 29-30 de julio impulsado por resultados corporativos: Microsoft se disparó cerca de 9% tras superar expectativas (Azure superó los US$100.000 millones anuales), mientras Nvidia se recuperó. Meta cayó más de 8% tras decepcionar en utilidades. Apple y Amazon reportaron resultados el 30 de julio, con Apple acumulando +25% YTD.</p>
+          </div>
+          <div class="highlights">
+            <h4>Movimientos destacados</h4>
+            <ul>
+              <li>Microsoft +9% tras superar estimados; Azure superó US$100.000M en ingresos anuales (Fuente: TheStreet, 2026-07-30).</li>
+              <li>Meta -8,1% tras resultados del 2T que decepcionaron y dudas sobre el gasto en IA (Fuente: TheStreet, 2026-07-30).</li>
+              <li>La Fed mantuvo tasas 9 a 3, con tres disidentes pidiendo subir 25 pb (Fuente: CNBC/Federal Reserve, 2026-07-29).</li>
+            </ul>
+          </div>
+          <div class="sources"><b>Fuentes:</b> CNBC · Reserva Federal (FOMC) · TheStreet · Washington Post. Consultadas 2026-07-30.</div>
         </div>
-        <div class="highlights">
-          <h4>Movimientos destacados</h4>
-          <ul>
-            <li>Microsoft +9% tras superar estimados; Azure superó US$100.000M en ingresos anuales (Fuente: TheStreet, 2026-07-30).</li>
-            <li>Meta -8,1% tras resultados del 2T que decepcionaron y dudas sobre el gasto en IA (Fuente: TheStreet, 2026-07-30).</li>
-            <li>La Fed mantuvo tasas 9 a 3, con tres disidentes pidiendo subir 25 pb (Fuente: CNBC/Federal Reserve, 2026-07-29).</li>
-          </ul>
-        </div>
-        <div class="sources"><b>Fuentes:</b> CNBC · Reserva Federal (FOMC) · TheStreet · Washington Post. Consultadas 2026-07-30.</div>
       </div>
     </div>
   </section>
 
   <!-- ============ COLOMBIA ============ -->
-  <section class="market" id="colombia" style="--accent:var(--c-colombia);--accent-text:var(--t-colombia);">
+  <section id="colombia">
     <div class="market-head">
-      <span class="market-num">03</span>
+      <span class="market-badge" style="--accent:var(--c-colombia);color:var(--c-colombia)">🇨🇴</span>
       <h2>Bolsa de Valores de Colombia</h2>
-      <span class="market-sub">BVC / COLCAP</span>
+      <span class="market-tag" style="--accent:var(--c-colombia);color:var(--c-colombia)">BVC / COLCAP</span>
     </div>
-    <div class="market-body">
-      <div class="market-left">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <caption>Datos clave — Colombia</caption>
-            <thead><tr><th>Índice/Activo</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
-            <tbody>
-              <tr><td>MSCI COLCAP</td><td class="mono">2.304,68 pts</td><td class="mono">+0,15%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">+10,39%*</td><td class="mono">30-07-26</td></tr>
-              <tr><td>USD/COP (TRM)</td><td class="mono">$3.206,18</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>Ecopetrol</td><td class="mono">2.590,0 COP</td><td class="mono">+2,51%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">27-07-26</td></tr>
-            </tbody>
-          </table>
+    <div class="card">
+      <div class="market-body">
+        <div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <caption>Datos clave — Colombia</caption>
+              <thead><tr><th>Índice/Activo</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
+              <tbody>
+                <tr><td>MSCI COLCAP</td><td class="mono">2.304,68 pts</td><td class="mono">+0,15%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">+10,39%*</td><td class="mono">30-07-26</td></tr>
+                <tr><td>USD/COP (TRM)</td><td class="mono">$3.206,18</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>Ecopetrol</td><td class="mono">2.590,0 COP</td><td class="mono">+2,51%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">27-07-26</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="footnote">*YTD del COLCAP al 27-07-2026 (última fecha con dato verificado).</p>
         </div>
-        <p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ink-soft);margin-top:6px;">*YTD del COLCAP al 27-07-2026 (última fecha con dato verificado).</p>
-      </div>
-      <div class="market-right">
-        <div class="qual-text">
-          <p>El mercado colombiano transita julio de 2026 bajo la sombra de una política monetaria marcadamente restrictiva: el Banco de la República elevó su tasa a 12% ante una inflación de 6,1%, en un contexto de fricción abierta con el Gobierno de Gustavo Petro. Esta combinación mantiene presionado el peso colombiano (TRM en $3.206,18). Pese a ello, el COLCAP muestra un desempeño positivo (YTD +10,39% a fines de julio), impulsado por Ecopetrol, que lidera valorización y volumen. El sector financiero, ahora bajo la marca Grupo Cibest (antes Bancolombia), también capta atención inversora junto a Grupo Sura, señalando que el mercado empieza a posicionarse ante el ciclo electoral 2026.</p>
+        <div>
+          <div class="qual-text">
+            <p>El mercado colombiano transita julio de 2026 bajo la sombra de una política monetaria marcadamente restrictiva: el Banco de la República elevó su tasa a 12% ante una inflación de 6,1%, en un contexto de fricción abierta con el Gobierno de Gustavo Petro. Esta combinación mantiene presionado el peso colombiano (TRM en $3.206,18). Pese a ello, el COLCAP muestra un desempeño positivo (YTD +10,39% a fines de julio), impulsado por Ecopetrol, que lidera valorización y volumen. El sector financiero, ahora bajo la marca Grupo Cibest (antes Bancolombia), también capta atención inversora junto a Grupo Sura.</p>
+          </div>
+          <div class="highlights">
+            <h4>Movimientos destacados</h4>
+            <ul>
+              <li>El COLCAP acumula +10,39% YTD al 27 de julio, liderado por Ecopetrol (Fuente: Valora Analitik, 2026-07-27).</li>
+              <li>Banco de la República: tasa en 12% desde julio de 2026; Petro expresó su desacuerdo público (Fuente: El Colombiano, 2026-07-14).</li>
+              <li>Credicorp Capital destaca a Ecopetrol, Grupo Cibest y Grupo Sura como mejor posicionadas ante el cambio político (Fuente: Valora Analitik).</li>
+            </ul>
+          </div>
+          <div class="sources"><b>Fuentes:</b> Valora Analitik · La República · Portafolio · El Colombiano · Banco de la República · El Espectador (TRM) · Investing.com. Consultadas 2026-07-30.</div>
         </div>
-        <div class="highlights">
-          <h4>Movimientos destacados</h4>
-          <ul>
-            <li>El COLCAP acumula +10,39% YTD al 27 de julio, liderado por Ecopetrol (Fuente: Valora Analitik, 2026-07-27).</li>
-            <li>Banco de la República: tasa en 12% desde julio de 2026; Petro expresó su desacuerdo público (Fuente: El Colombiano, 2026-07-14).</li>
-            <li>Credicorp Capital destaca a Ecopetrol, Grupo Cibest y Grupo Sura como mejor posicionadas ante el cambio político (Fuente: Valora Analitik).</li>
-          </ul>
-        </div>
-        <div class="sources"><b>Fuentes:</b> Valora Analitik · La República · Portafolio · El Colombiano · Banco de la República · El Espectador (TRM) · Investing.com. Consultadas 2026-07-30.</div>
       </div>
     </div>
   </section>
 
   <!-- ============ EUROPA ============ -->
-  <section class="market" id="europa" style="--accent:var(--c-europa);--accent-text:var(--t-europa);">
+  <section id="europa">
     <div class="market-head">
-      <span class="market-num">04</span>
+      <span class="market-badge" style="--accent:var(--c-europa);color:var(--c-europa)">🇪🇺</span>
       <h2>Bolsas europeas</h2>
-      <span class="market-sub">Euro Stoxx / DAX / FTSE</span>
+      <span class="market-tag" style="--accent:var(--c-europa);color:var(--c-europa)">Euro Stoxx / DAX / FTSE</span>
     </div>
-    <div class="market-body">
-      <div class="market-left">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <caption>Datos clave — Europa</caption>
-            <thead><tr><th>Índice</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
-            <tbody>
-              <tr><td>Euro Stoxx 50</td><td class="mono">6.235,00 pts</td><td class="mono">-0,99%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
-              <tr><td>DAX (Alemania)</td><td class="mono">25.418 pts</td><td class="mono">-0,16%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>FTSE 100 (Reino Unido)</td><td class="mono">10.921 pts</td><td class="mono">+0,11%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-            </tbody>
-          </table>
+    <div class="card">
+      <div class="market-body">
+        <div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <caption>Datos clave — Europa</caption>
+              <thead><tr><th>Índice</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
+              <tbody>
+                <tr><td>Euro Stoxx 50</td><td class="mono">6.235,00 pts</td><td class="mono">-0,99%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
+                <tr><td>DAX (Alemania)</td><td class="mono">25.418 pts</td><td class="mono">-0,16%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>FTSE 100 (Reino Unido)</td><td class="mono">10.921 pts</td><td class="mono">+0,11%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="market-right">
-        <div class="qual-text">
-          <p>Los principales índices europeos cerraron el 29-30 de julio con movimientos moderados y mixtos, reflejando un mercado que digiere presiones geopolíticas y financieras simultáneas. El repunte del petróleo por encima de US$100/barril, atribuido a tensiones en Oriente Medio, se combina con la reactivación de aranceles estadounidenses sobre importaciones europeas, lo que ha elevado los costos de financiamiento soberano de la eurozona a máximos de 15 años. El BCE optó por mantener tipos sin cambios en julio (reunión de bajo impacto informativo), mientras el mercado de bonos empieza a descontar nuevas subidas tanto del BCE como de la Fed.</p>
+        <div>
+          <div class="qual-text">
+            <p>Los principales índices europeos cerraron el 29-30 de julio con movimientos moderados y mixtos, reflejando un mercado que digiere presiones geopolíticas y financieras simultáneas. El repunte del petróleo por encima de US$100/barril, atribuido a tensiones en Oriente Medio, se combina con la reactivación de aranceles estadounidenses sobre importaciones europeas, lo que ha elevado los costos de financiamiento soberano de la eurozona a máximos de 15 años. El BCE optó por mantener tipos sin cambios en julio.</p>
+          </div>
+          <div class="highlights">
+            <h4>Movimientos destacados</h4>
+            <ul>
+              <li>Petróleo sobre US$100/barril y nuevos aranceles UE-EE.UU. presionan a exportadores europeos (Fuente: IndexBox, 2026-07-24).</li>
+              <li>Costos de financiamiento de la eurozona en máximos de 15 años (Fuente: IndexBox, 2026-07-24).</li>
+              <li>El BCE mantuvo tipos sin cambios en julio, reunión sin proyecciones actualizadas (Fuente: FXStreet, 2026-07-21).</li>
+            </ul>
+          </div>
+          <div class="sources"><b>Fuentes:</b> Investrade · IndexBox · Trading Economics · FXStreet · Investing.com. Consultadas 2026-07-30.</div>
         </div>
-        <div class="highlights">
-          <h4>Movimientos destacados</h4>
-          <ul>
-            <li>Petróleo sobre US$100/barril y nuevos aranceles UE-EE.UU. presionan a exportadores europeos (Fuente: IndexBox, 2026-07-24).</li>
-            <li>Costos de financiamiento de la eurozona en máximos de 15 años (Fuente: IndexBox, 2026-07-24).</li>
-            <li>El BCE mantuvo tipos sin cambios en julio, reunión sin proyecciones actualizadas (Fuente: FXStreet, 2026-07-21).</li>
-          </ul>
-        </div>
-        <div class="sources"><b>Fuentes:</b> Investrade · IndexBox · Trading Economics · FXStreet · Investing.com. Consultadas 2026-07-30.</div>
       </div>
     </div>
   </section>
 
   <!-- ============ ASIA ============ -->
-  <section class="market" id="asia" style="--accent:var(--c-asia);--accent-text:var(--t-asia);">
+  <section id="asia">
     <div class="market-head">
-      <span class="market-num">05</span>
+      <span class="market-badge" style="--accent:var(--c-asia);color:var(--c-asia)">🌏</span>
       <h2>Bolsas asiáticas</h2>
-      <span class="market-sub">Nikkei / Hang Seng / Shanghai</span>
+      <span class="market-tag" style="--accent:var(--c-asia);color:var(--c-asia)">Nikkei / Hang Seng / Shanghai</span>
     </div>
-    <div class="market-body">
-      <div class="market-left">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <caption>Datos clave — Asia</caption>
-            <thead><tr><th>Índice</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
-            <tbody>
-              <tr><td>Nikkei 225 (Japón)</td><td class="mono">61.778,02 pts</td><td class="mono">+0,6%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>Hang Seng (Hong Kong)</td><td class="mono">25.779,70 pts</td><td class="mono">-0,1%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>Shanghai Composite</td><td class="mono">3.784,55 pts</td><td class="mono">-1,2%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-              <tr><td>KOSPI (Corea del Sur)</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td></tr>
-            </tbody>
-          </table>
+    <div class="card">
+      <div class="market-body">
+        <div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <caption>Datos clave — Asia</caption>
+              <thead><tr><th>Índice</th><th>Nivel</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
+              <tbody>
+                <tr><td>Nikkei 225 (Japón)</td><td class="mono">61.778,02 pts</td><td class="mono">+0,6%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>Hang Seng (Hong Kong)</td><td class="mono">25.779,70 pts</td><td class="mono">-0,1%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>Shanghai Composite</td><td class="mono">3.784,55 pts</td><td class="mono">-1,2%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+                <tr><td>KOSPI (Corea del Sur)</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="market-right">
-        <div class="qual-text">
-          <p>La sesión del 30 de julio mostró un mercado asiático dividido: el Nikkei subió 0,6% resistiendo la ola de ventas regional en fabricantes de chips, mientras el Hang Seng cayó levemente y el Shanghai Composite retrocedió con fuerza (-1,2%). El trasfondo macro sigue dominado por la divergencia de políticas monetarias: el Banco de Japón sostiene su tasa en 1% tras la histórica subida de junio (la primera desde 1995), con un yen depreciado a mínimos de casi 40 años. En China, el PIB del 2T (+4,3% interanual) quedó por debajo del objetivo oficial por primera vez desde la pandemia. Se suma la fricción EE.UU.-China en semiconductores: nuevo régimen de licencias para TSMC, Samsung y SK Hynix, y aranceles adicionales anunciados para 2027.</p>
+        <div>
+          <div class="qual-text">
+            <p>La sesión del 30 de julio mostró un mercado asiático dividido: el Nikkei subió 0,6% resistiendo la ola de ventas regional en fabricantes de chips, mientras el Hang Seng cayó levemente y el Shanghai Composite retrocedió con fuerza (-1,2%). El trasfondo macro sigue dominado por la divergencia de políticas monetarias: el Banco de Japón sostiene su tasa en 1% tras la histórica subida de junio (la primera desde 1995), con un yen depreciado a mínimos de casi 40 años. En China, el PIB del 2T (+4,3% interanual) quedó por debajo del objetivo oficial por primera vez desde la pandemia.</p>
+          </div>
+          <div class="highlights">
+            <h4>Movimientos destacados</h4>
+            <ul>
+              <li>Ventas generalizadas en fabricantes de chips arrastraron al Hang Seng y Shanghai; el Nikkei fue la excepción (Fuente: WSLS/AP, 2026-07-30).</li>
+              <li>PIB de China +4,3% interanual en el 2T, el más lento en 3,5 años (Fuente: CNN Business, 2026-07-14).</li>
+              <li>Banco de Japón mantiene tasa en 1%, yen cerca de mínimos de 40 años (Fuente: Tech Times, 2026-07-27).</li>
+            </ul>
+          </div>
+          <div class="sources"><b>Fuentes:</b> WSLS/AP · Tech Times · CNBC · Banco de Japón · CNN Business · BigGo Finance · Tom's Hardware. Consultadas 2026-07-30. Sin verificación cruzada con Reuters/Nikkei Asia en esta ronda.</div>
         </div>
-        <div class="highlights">
-          <h4>Movimientos destacados</h4>
-          <ul>
-            <li>Ventas generalizadas en fabricantes de chips arrastraron al Hang Seng y Shanghai; el Nikkei fue la excepción (Fuente: WSLS/AP, 2026-07-30).</li>
-            <li>PIB de China +4,3% interanual en el 2T, el más lento en 3,5 años (Fuente: CNN Business, 2026-07-14).</li>
-            <li>Banco de Japón mantiene tasa en 1%, yen cerca de mínimos de 40 años (Fuente: Tech Times, 2026-07-27).</li>
-          </ul>
-        </div>
-        <div class="sources"><b>Fuentes:</b> WSLS/AP · Tech Times · CNBC · Banco de Japón · CNN Business · BigGo Finance · Tom's Hardware. Consultadas 2026-07-30. Sin verificación cruzada con Reuters/Nikkei Asia en esta ronda.</div>
       </div>
     </div>
   </section>
 
   <!-- ============ CRIPTO ============ -->
-  <section class="market" id="cripto" style="--accent:var(--c-cripto);--accent-text:var(--t-cripto);">
+  <section id="cripto">
     <div class="market-head">
-      <span class="market-num">06</span>
+      <span class="market-badge" style="--accent:var(--c-cripto);color:var(--c-cripto)">🪙</span>
       <h2>Mercado de criptomonedas</h2>
-      <span class="market-sub">Top 10 por capitalización + WLD</span>
+      <span class="market-tag" style="--accent:var(--c-cripto);color:var(--c-cripto)">Top 10 + WLD</span>
     </div>
-    <div class="market-body">
-      <div class="market-left">
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <caption>Datos clave — Cripto</caption>
-            <thead><tr><th>Activo</th><th>Precio (US$)</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
-            <tbody>
-              <tr><td>Bitcoin (BTC)</td><td class="mono">64.278,22</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
-              <tr><td>Ethereum (ETH)</td><td class="mono">1.880,63</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
-              <tr><td>BNB</td><td class="mono">609,80</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
-              <tr><td>XRP</td><td class="mono">1,14</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
-              <tr><td>Solana (SOL)</td><td class="mono">73,47</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
-              <tr><td>Worldcoin (WLD) — posición 11 obligatoria</td><td class="mono">0,3076</td><td class="mono">-0,50%</td><td class="mono">-19,50%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
-            </tbody>
-          </table>
+    <div class="card">
+      <div class="market-body">
+        <div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <caption>Datos clave — Cripto</caption>
+              <thead><tr><th>Activo</th><th>Precio (US$)</th><th>Día</th><th>Semana</th><th>Mes</th><th>YTD</th><th>Fecha</th></tr></thead>
+              <tbody>
+                <tr><td>Bitcoin (BTC)</td><td class="mono">64.278,22</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
+                <tr><td>Ethereum (ETH)</td><td class="mono">1.880,63</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
+                <tr><td>BNB</td><td class="mono">609,80</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
+                <tr><td>XRP</td><td class="mono">1,14</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
+                <tr><td>Solana (SOL)</td><td class="mono">73,47</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">29-07-26</td></tr>
+                <tr><td>Worldcoin (WLD) — posición 11 obligatoria</td><td class="mono">0,3076</td><td class="mono">-0,50%</td><td class="mono">-19,50%</td><td class="nd">s/d</td><td class="nd">s/d</td><td class="mono">30-07-26</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="footnote">WLD ocupa el puesto #63 por capitalización (CoinGecko); se incluye de forma obligatoria por directriz del repositorio. Cotiza -97,4% por debajo de su máximo histórico de US$11,74.</p>
         </div>
-        <p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--ink-soft);margin-top:6px;">WLD ocupa el puesto #63 por capitalización (CoinGecko); se incluye de forma obligatoria por directriz del repositorio. Cotiza -97,4% por debajo de su máximo histórico de US$11,74.</p>
-      </div>
-      <div class="market-right">
-        <div class="qual-text">
-          <p>Bitcoin domina cerca del 59% de la capitalización total del mercado cripto (hecho verificado, CoinMarketCap vía Forbes Advisor). Ethereum se mantiene como segundo, con XRP, BNB y Solana compitiendo por las posiciones siguientes del top 10. Un hecho regulatorio relevante es la retirada de la apelación de la SEC en el caso Ripple y la aprobación de nuevos ETFs de XRP; que esto sea un catalizador de confianza institucional es una interpretación de mercado, no un hecho verificado de forma independiente. Worldcoin (WLD), fuera del top 10 (puesto #63), cae -19,5% semanal y cotiza muy por debajo de su máximo histórico — su pérdida de interés especulativo es lectura de mercado, no hecho confirmado en esta investigación.</p>
+        <div>
+          <div class="qual-text">
+            <p>Bitcoin domina cerca del 59% de la capitalización total del mercado cripto (hecho verificado, CoinMarketCap vía Forbes Advisor). Ethereum se mantiene como segundo, con XRP, BNB y Solana compitiendo por las posiciones siguientes del top 10. Un hecho regulatorio relevante es la retirada de la apelación de la SEC en el caso Ripple y la aprobación de nuevos ETFs de XRP; que esto sea un catalizador de confianza institucional es interpretación de mercado, no hecho verificado de forma independiente. Worldcoin (WLD), fuera del top 10, cae -19,5% semanal.</p>
+          </div>
+          <div class="highlights">
+            <h4>Movimientos destacados</h4>
+            <ul>
+              <li>BTC, ETH, XRP, SOL y BNB subieron de forma conjunta el 29 de julio (Fuente: cryptoticker.io, 2026-07-29).</li>
+              <li>Retirada de la apelación de la SEC en el caso Ripple y nuevos ETFs de XRP aprobados (Fuente: cryptoticker.io, 2026-07-29).</li>
+              <li>WLD cae -19,5% semanal, cotizando -97,4% bajo su máximo histórico (Fuente: CoinGecko, 2026-07-30).</li>
+            </ul>
+          </div>
+          <div class="sources"><b>Fuentes:</b> Forbes Advisor (CoinMarketCap) · CoinGecko · KuCoin · cryptoticker.io · Statista · CoinDesk. Consultadas 2026-07-30.</div>
         </div>
-        <div class="highlights">
-          <h4>Movimientos destacados</h4>
-          <ul>
-            <li>BTC, ETH, XRP, SOL y BNB subieron de forma conjunta el 29 de julio (Fuente: cryptoticker.io, 2026-07-29).</li>
-            <li>Retirada de la apelación de la SEC en el caso Ripple y nuevos ETFs de XRP aprobados (Fuente: cryptoticker.io, 2026-07-29).</li>
-            <li>WLD cae -19,5% semanal, cotizando -97,4% bajo su máximo histórico (Fuente: CoinGecko, 2026-07-30).</li>
-          </ul>
-        </div>
-        <div class="sources"><b>Fuentes:</b> Forbes Advisor (CoinMarketCap) · CoinGecko · KuCoin · cryptoticker.io · Statista · CoinDesk. Consultadas 2026-07-30.</div>
       </div>
     </div>
   </section>
 
-  <footer>
-    <div class="foot-disclaimer">
-      <strong>DISCLAIMER —</strong> Este informe es de carácter informativo, basado en fuentes públicas citadas al pie de cada sección. No constituye asesoría financiera personalizada ni recomendación de compra o venta. Varios datos se marcan "s/d" (sin dato disponible) por no haberse podido verificar dentro del límite de búsquedas establecido; no deben asumirse ni inferirse. Verifique las cifras directamente con las fuentes citadas.
+  <footer class="sources-foot">
+    <div class="disclaimer-card">
+      <strong>Disclaimer —</strong> Este informe es de carácter informativo, basado en fuentes públicas citadas al pie de cada sección. No constituye asesoría financiera personalizada ni recomendación de compra o venta. Varios datos se marcan "s/d" (sin dato disponible) por no haberse podido verificar dentro del límite de búsquedas establecido; no deben asumirse ni inferirse. Verifique las cifras directamente con las fuentes citadas.
     </div>
-    <div class="foot-meta">
-      <span>Informe consolidado por 5 sub-agentes especializados (EE.UU. · Colombia · Europa · Asia · Cripto)</span>
-      <span>Fecha de corte: 30-07-2026</span>
-    </div>
+    Informe consolidado por 5 sub-agentes especializados (EE.UU. · Colombia · Europa · Asia · Cripto) · Fecha de corte: 30-07-2026 · Reglas del repositorio: <a href="https://github.com/jjruiz54-svg/Asesor-Financiero/blob/main/CLAUDE.md">CLAUDE.md</a>.
   </footer>
 
-</div>
+</main>
 
 <div class="tooltip" id="tooltip" role="tooltip"></div>
 
@@ -632,8 +560,14 @@
   }
 
   var tooltip = document.getElementById("tooltip");
-  function showTip(e, text){ tooltip.textContent = text; tooltip.style.display = "block"; moveTip(e); }
-  function moveTip(e){ tooltip.style.left = (e.clientX + 14) + "px"; tooltip.style.top = (e.clientY + 14) + "px"; }
+  function showTip(e, title, sub){
+    tooltip.innerHTML = "";
+    var t = document.createElement("div"); t.textContent = title;
+    var s = document.createElement("div"); s.className = "tt-sub"; s.textContent = sub;
+    tooltip.appendChild(t); tooltip.appendChild(s);
+    tooltip.style.display = "block"; moveTip(e);
+  }
+  function moveTip(e){ tooltip.style.left = (e.clientX + 16) + "px"; tooltip.style.top = (e.clientY + 16) + "px"; }
   function hideTip(){ tooltip.style.display = "none"; }
 
   function buildOverviewChart(){
@@ -642,53 +576,64 @@
     var svgNS = "http://www.w3.org/2000/svg";
 
     var n = OVERVIEW.length;
-    var W = 900, rowH = 30, padTop = 10, padBottom = 24, labelW = 150;
+    var W = 900, rowH = 34, padTop = 8, padBottom = 26, labelW = 152;
     var H = padTop + padBottom + n*rowH;
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
 
     var maxAbs = Math.max.apply(null, OVERVIEW.map(function(o){ return Math.abs(o.d); }));
-    var plotW = W - labelW - 60;
+    var plotW = W - labelW - 64;
     var zeroX = labelW + plotW/2;
-    var scale = (plotW/2 - 10) / maxAbs;
+    var scale = (plotW/2 - 12) / maxAbs;
+
+    var gridColor = getComputedStyle(document.documentElement).getPropertyValue('--gridline').trim();
 
     var zeroLine = document.createElementNS(svgNS, "line");
     zeroLine.setAttribute("x1", zeroX); zeroLine.setAttribute("x2", zeroX);
     zeroLine.setAttribute("y1", padTop); zeroLine.setAttribute("y2", H - padBottom);
-    zeroLine.setAttribute("stroke", "var(--ink-soft)");
-    zeroLine.setAttribute("stroke-width", "1");
+    zeroLine.setAttribute("stroke", gridColor);
+    zeroLine.setAttribute("stroke-width", "1.5");
     svg.appendChild(zeroLine);
 
     OVERVIEW.forEach(function(item, i){
       var y = padTop + i*rowH;
-      var barH = rowH * 0.55;
+      var barH = rowH * 0.5;
+      var barY = y + (rowH - barH)/2;
       var barW = Math.abs(item.d) * scale;
       var x = item.d >= 0 ? zeroX : zeroX - barW;
       var color = colorFor(item.market);
+      var rIcon = Math.min(barH/2, 6);
+
+      var rowBg = document.createElementNS(svgNS, "rect");
+      rowBg.setAttribute("class", "bar-row-bg");
+      rowBg.setAttribute("x", 0); rowBg.setAttribute("y", y);
+      rowBg.setAttribute("width", W); rowBg.setAttribute("height", rowH);
+      rowBg.setAttribute("rx", 8);
+      svg.appendChild(rowBg);
 
       var catLabel = document.createElementNS(svgNS, "text");
-      catLabel.setAttribute("x", labelW - 10);
-      catLabel.setAttribute("y", y + barH/2 + 4);
+      catLabel.setAttribute("x", labelW - 12);
+      catLabel.setAttribute("y", y + rowH/2 + 4);
       catLabel.setAttribute("text-anchor", "end");
       catLabel.setAttribute("class", "bar-cat-label");
       catLabel.textContent = item.name;
       svg.appendChild(catLabel);
 
       var rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("class", "bar-rect");
       rect.setAttribute("x", x);
-      rect.setAttribute("y", y);
-      rect.setAttribute("width", Math.max(barW, 1.5));
+      rect.setAttribute("y", barY);
+      rect.setAttribute("width", Math.max(barW, 4));
       rect.setAttribute("height", barH);
-      rect.setAttribute("rx", 2);
+      rect.setAttribute("rx", rIcon);
       rect.setAttribute("fill", color);
-      rect.style.cursor = "pointer";
-      rect.addEventListener("mouseenter", function(e){ showTip(e, item.name + " (" + item.label + ") — Var. diaria: " + fmt(item.d) + " — dato al " + item.date); });
+      rect.addEventListener("mouseenter", function(e){ showTip(e, item.name + " — " + fmt(item.d), item.label + " · dato al " + item.date); });
       rect.addEventListener("mousemove", moveTip);
       rect.addEventListener("mouseleave", hideTip);
       svg.appendChild(rect);
 
       var valLabel = document.createElementNS(svgNS, "text");
-      valLabel.setAttribute("x", item.d >= 0 ? x + barW + 6 : x - 6);
-      valLabel.setAttribute("y", y + barH/2 + 4);
+      valLabel.setAttribute("x", item.d >= 0 ? x + barW + 8 : x - 8);
+      valLabel.setAttribute("y", y + rowH/2 + 4);
       valLabel.setAttribute("text-anchor", item.d >= 0 ? "start" : "end");
       valLabel.setAttribute("class", "bar-val-label");
       valLabel.textContent = fmt(item.d);
@@ -699,7 +644,7 @@
     axTick0.setAttribute("x", zeroX);
     axTick0.setAttribute("y", H - 6);
     axTick0.setAttribute("text-anchor", "middle");
-    axTick0.setAttribute("class", "bar-axis-tick");
+    axTick0.setAttribute("class", "zero-tick");
     axTick0.textContent = "0%";
     svg.appendChild(axTick0);
   }
@@ -717,5 +662,6 @@
   buildLegend();
   buildOverviewChart();
   buildOverviewTable();
+  window.addEventListener("resize", buildOverviewChart);
 })();
 </script>
