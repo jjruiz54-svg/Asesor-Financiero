@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USD/COP — Evolución TRM, 30 jul – 6 ago 2026</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --subtext: #555555;
+    --grid: #e0e0e0;
+    --line-colombia: #2a78d6;
+    --point-fill: #ffffff;
+    --tooltip-bg: #ffffff;
+    --tooltip-border: #2a78d6;
+    --table-header: #f0f4fa;
+    --table-border: #d8d8d8;
+    --card-bg: #fafbfd;
+  }
+  [data-theme="dark"] {
+    --bg: #121417;
+    --text: #eaeaea;
+    --subtext: #b0b0b0;
+    --grid: #33373d;
+    --line-colombia: #3987e5;
+    --point-fill: #121417;
+    --tooltip-bg: #1e2126;
+    --tooltip-border: #3987e5;
+    --table-header: #1c2733;
+    --table-border: #34383e;
+    --card-bg: #191c20;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .container { max-width: 880px; margin: 0 auto; }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 4px 0; }
+  .subtitle { color: var(--subtext); font-size: 0.85rem; margin: 0 0 20px 0; line-height: 1.4; }
+  button#theme-toggle {
+    background: var(--card-bg);
+    border: 1px solid var(--table-border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+  }
+  .legend-swatch {
+    width: 14px; height: 14px; border-radius: 3px;
+    background: var(--line-colombia);
+    display: inline-block;
+  }
+  .chart-wrap {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--table-border);
+    border-radius: 10px;
+    padding: 16px 8px 8px 8px;
+  }
+  svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .axis-label { fill: var(--subtext); font-size: 11px; }
+  .line-path { fill: none; stroke: var(--line-colombia); stroke-width: 2.5; }
+  .data-point { fill: var(--point-fill); stroke: var(--line-colombia); stroke-width: 2.5; cursor: pointer; }
+  .data-point:hover { fill: var(--line-colombia); }
+  .direct-label { fill: var(--text); font-size: 11.5px; font-weight: 600; }
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--tooltip-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--text);
+    opacity: 0;
+    transition: opacity 0.1s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    white-space: nowrap;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 0.82rem;
+  }
+  caption {
+    text-align: left;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: var(--subtext);
+  }
+  th, td {
+    border: 1px solid var(--table-border);
+    padding: 7px 10px;
+    text-align: right;
+  }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: var(--table-header); font-weight: 600; }
+  tbody tr:nth-child(even) { background: var(--card-bg); }
+  footer { margin-top: 20px; font-size: 0.75rem; color: var(--subtext); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>USD/COP — TRM oficial: contexto (15 jul) y semana del 30 de julio al 6 de agosto de 2026</h1>
+    </div>
+    <button id="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+  </header>
+  <p class="subtitle">
+    Tasa Representativa del Mercado (TRM) certificada por la Superintendencia Financiera / Banco de la República.
+    Todos los puntos son valores oficiales verificados con fuente y fecha (ver tabla y ficha asociada); no hay valores interpolados ni estimados.
+  </p>
+
+  <div class="legend">
+    <span class="legend-swatch"></span>
+    <span>Colombia — USD/COP (TRM oficial)</span>
+  </div>
+
+  <div class="chart-wrap">
+    <svg id="chart" viewBox="0 0 820 380" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="Gráfico de línea de la TRM oficial USD/COP entre el 15 de julio y el 6 de agosto de 2026, mostrando una caída general con un repunte puntual el 4 de agosto por tensión geopolítica.">
+    </svg>
+    <div id="tooltip" class="tooltip"></div>
+  </div>
+
+  <table id="data-table">
+    <caption>Tabla de datos — TRM oficial USD/COP (vista alternativa al gráfico)</caption>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>TRM (COP)</th>
+        <th>Variación vs. día anterior</th>
+        <th>Fuente</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+
+  <footer>
+    <p><strong>Fuentes:</strong> Superintendencia Financiera de Colombia / Banco de la República (TRM oficial); El Nuevo Siglo (2026-07-30); dolarhoy.co (2026-07-31, 2026-08-03, 2026-08-04); Noticias Caracol (2026-08-03, 2026-08-05, 2026-08-06); La República (2026-08-04); Portafolio (2026-08-06). Fecha de corte de datos: 2026-08-06.</p>
+    <p>Ver ficha completa: <code>2026-08-06-usd-cop-actualizacion.md</code> y ficha de referencia histórica de 5 años: <code>2026-07-15-usd-cop-historia-5-anos.md</code>.</p>
+  </footer>
+</div>
+
+<script>
+  const data = [
+    { fecha: "2026-07-15", label: "15 jul", trm: 3252.11, fuente: "Superfinanciera, 2026-07-15" },
+    { fecha: "2026-07-30", label: "30 jul", trm: 3206.18, fuente: "El Nuevo Siglo, 2026-07-30" },
+    { fecha: "2026-07-31", label: "31 jul", trm: 3132.42, fuente: "dolarhoy.co, 2026-07-31" },
+    { fecha: "2026-08-03", label: "3 ago",  trm: 3144.14, fuente: "Noticias Caracol, 2026-08-03" },
+    { fecha: "2026-08-04", label: "4 ago",  trm: 3230.44, fuente: "dolarhoy.co / La República, 2026-08-04" },
+    { fecha: "2026-08-05", label: "5 ago",  trm: 3204.51, fuente: "Noticias Caracol, 2026-08-05" },
+    { fecha: "2026-08-06", label: "6 ago",  trm: 3179.40, fuente: "Portafolio, 2026-08-06" }
+  ];
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("chart");
+  const tooltip = document.getElementById("tooltip");
+  const chartWrap = document.querySelector(".chart-wrap");
+
+  const marginL = 60, marginR = 30, marginT = 20, marginB = 40;
+  const W = 820, H = 380;
+  const plotW = W - marginL - marginR;
+  const plotH = H - marginT - marginB;
+
+  const values = data.map(d => d.trm);
+  const minV = Math.min(...values) - 20;
+  const maxV = Math.max(...values) + 20;
+
+  function xScale(i) { return marginL + (i / (data.length - 1)) * plotW; }
+  function yScale(v) { return marginT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+
+  function build() {
+    svg.innerHTML = "";
+    const rootStyle = getComputedStyle(document.body);
+    const gridColor = rootStyle.getPropertyValue("--grid").trim();
+    const axisColor = rootStyle.getPropertyValue("--subtext").trim();
+
+    // Y gridlines + labels
+    const steps = 5;
+    for (let s = 0; s <= steps; s++) {
+      const v = minV + (s / steps) * (maxV - minV);
+      const y = yScale(v);
+      const gline = document.createElementNS(svgNS, "line");
+      gline.setAttribute("x1", marginL);
+      gline.setAttribute("x2", W - marginR);
+      gline.setAttribute("y1", y);
+      gline.setAttribute("y2", y);
+      gline.setAttribute("class", "gridline");
+      svg.appendChild(gline);
+
+      const label = document.createElementNS(svgNS, "text");
+      label.setAttribute("x", marginL - 8);
+      label.setAttribute("y", y + 4);
+      label.setAttribute("text-anchor", "end");
+      label.setAttribute("class", "axis-label");
+      label.textContent = "$" + Math.round(v).toLocaleString("es-CO");
+      svg.appendChild(label);
+    }
+
+    // X labels
+    data.forEach((d, i) => {
+      const x = xScale(i);
+      const label = document.createElementNS(svgNS, "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", H - marginB + 18);
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("class", "axis-label");
+      label.textContent = d.label;
+      svg.appendChild(label);
+    });
+
+    // Line path
+    let pathD = "";
+    data.forEach((d, i) => {
+      const x = xScale(i);
+      const y = yScale(d.trm);
+      pathD += (i === 0 ? "M" : "L") + x + "," + y + " ";
+    });
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", pathD.trim());
+    path.setAttribute("class", "line-path");
+    svg.appendChild(path);
+
+    // Points + direct labels (selective: min, max, first, last)
+    const idxMin = values.indexOf(Math.min(...values));
+    const idxMax = values.indexOf(Math.max(...values));
+    const highlightIdx = new Set([0, data.length - 1, idxMin, idxMax]);
+
+    data.forEach((d, i) => {
+      const x = xScale(i);
+      const y = yScale(d.trm);
+
+      const circle = document.createElementNS(svgNS, "circle");
+      circle.setAttribute("cx", x);
+      circle.setAttribute("cy", y);
+      circle.setAttribute("r", 5);
+      circle.setAttribute("class", "data-point");
+      circle.addEventListener("mousemove", (e) => showTooltip(e, d));
+      circle.addEventListener("mouseleave", hideTooltip);
+      svg.appendChild(circle);
+
+      if (highlightIdx.has(i)) {
+        const label = document.createElementNS(svgNS, "text");
+        label.setAttribute("x", x);
+        label.setAttribute("y", y - 12);
+        label.setAttribute("text-anchor", "middle");
+        label.setAttribute("class", "direct-label");
+        label.textContent = "$" + d.trm.toLocaleString("es-CO", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        svg.appendChild(label);
+      }
+    });
+  }
+
+  function showTooltip(e, d) {
+    const rect = chartWrap.getBoundingClientRect();
+    tooltip.innerHTML = `<strong>${d.fecha}</strong><br>TRM: $${d.trm.toLocaleString("es-CO", {minimumFractionDigits:2, maximumFractionDigits:2})}<br>Fuente: ${d.fuente}`;
+    tooltip.style.left = (e.clientX - rect.left + 12) + "px";
+    tooltip.style.top = (e.clientY - rect.top - 10) + "px";
+    tooltip.style.opacity = 1;
+  }
+  function hideTooltip() { tooltip.style.opacity = 0; }
+
+  function buildTable() {
+    const tbody = document.getElementById("table-body");
+    tbody.innerHTML = "";
+    data.forEach((d, i) => {
+      const tr = document.createElement("tr");
+      let variacion = "—";
+      if (i > 0) {
+        const diff = d.trm - data[i - 1].trm;
+        const pct = (diff / data[i - 1].trm) * 100;
+        variacion = (diff >= 0 ? "+" : "") + diff.toFixed(2) + " (" + (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%)";
+      }
+      tr.innerHTML = `
+        <td>${d.fecha}</td>
+        <td>$${d.trm.toLocaleString("es-CO", {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+        <td>${variacion}</td>
+        <td>${d.fuente}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function toggleTheme() {
+    const current = document.body.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    if (next === "dark") {
+      document.body.setAttribute("data-theme", "dark");
+      document.getElementById("theme-toggle").textContent = "Modo claro";
+    } else {
+      document.body.removeAttribute("data-theme");
+      document.getElementById("theme-toggle").textContent = "Modo oscuro";
+    }
+    build();
+  }
+
+  // Respect system preference initially
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.body.setAttribute("data-theme", "dark");
+    document.getElementById("theme-toggle").textContent = "Modo claro";
+  }
+
+  build();
+  buildTable();
+</script>
+</body>
+</html>
