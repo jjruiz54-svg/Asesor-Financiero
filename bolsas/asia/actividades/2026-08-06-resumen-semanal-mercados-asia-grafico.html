@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercados de Asia — Semana 30-jul a 06-ago 2026 (indexado base 100)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --grid: #dddddd;
+    --card-bg: #f7f7f7;
+    --border: #cccccc;
+    --asia: #e87ba4;
+    --nikkei: #b5314f;
+    --kospi: #6a2c91;
+    --hsi: #1c6e8c;
+    --sse: #c2760c;
+  }
+  [data-theme="dark"] {
+    --bg: #14161a;
+    --fg: #eaeaea;
+    --grid: #383b40;
+    --card-bg: #1f2227;
+    --border: #3a3d42;
+    --asia: #d55181;
+    --nikkei: #ff8fae;
+    --kospi: #b98af0;
+    --hsi: #5fc4e8;
+    --sse: #f0a94e;
+  }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    margin: 0;
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; color: var(--fg); opacity: 0.75; margin-bottom: 18px; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button.theme-toggle {
+    background: var(--card-bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .chart-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .axis-label { font-size: 11px; fill: var(--fg); opacity: 0.8; }
+  .series-line { fill: none; stroke-width: 2.5; }
+  .series-dot { cursor: pointer; }
+  .direct-label { font-size: 11px; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 0.82rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+  .tooltip {
+    position: absolute;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    white-space: nowrap;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 24px;
+    font-size: 0.82rem;
+  }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: right;
+  }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: var(--card-bg); }
+  .pos { color: #1a7a3d; }
+  [data-theme="dark"] .pos { color: #5fd68a; }
+  .neg { color: #c02f2f; }
+  [data-theme="dark"] .neg { color: #ff8080; }
+  .container { max-width: 920px; margin: 0 auto; position: relative; }
+  .note { font-size: 0.75rem; opacity: 0.7; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="toolbar">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo claro/oscuro">Modo oscuro</button>
+  </div>
+  <h1>Mercados de Asia — Semana del 30 de julio al 6 de agosto de 2026</h1>
+  <p class="subtitle">Índices indexados a base 100 (cierre del 30-jul-2026 = 100) para comparar mercados de distinta escala en un solo eje Y. Datos diarios de cierre no interpolados; solo se grafican los cierres verificados de 30-jul y 06-ago (línea recta entre ambos puntos, sin implicar trayectoria intradía real). Fuente: ver ficha adjunta (Fuente: Yahoo Finance, Trading Economics, Seoul Economic Daily, BBNTimes, 2026-07-30 a 2026-08-06).</p>
+
+  <div class="chart-card">
+    <svg id="chart" viewBox="0 0 820 420" role="img" aria-label="Gráfico de líneas comparando la variación porcentual indexada de Nikkei 225, KOSPI, Hang Seng y SSE Composite entre el 30 de julio y el 6 de agosto de 2026">
+    </svg>
+    <div class="legend" id="legend"></div>
+    <p class="note">Color de mercado (Asia): #e87ba4 en modo claro / #d55181 en modo oscuro, según paleta fija del repositorio. Cada índice usa una variante tonal dentro de la familia Asia para diferenciarse, con etiquetas directas visibles por bajo contraste en modo claro.</p>
+  </div>
+
+  <table id="dataTable">
+    <caption>Tabla de datos — cierre semanal e indexado base 100</caption>
+    <thead>
+      <tr>
+        <th>Índice</th>
+        <th>Cierre 30-jul-2026</th>
+        <th>Cierre 06-ago-2026</th>
+        <th>Variación semanal</th>
+        <th>Indexado 30-jul</th>
+        <th>Indexado 06-ago</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <p class="note">Fuentes por índice: Nikkei 225 (BBN Times/BigGo Finance, Yahoo Finance, 2026-07-30 y 2026-08-06); KOSPI (Seoul Economic Daily, KSAT/AP, 2026-07-30 y 2026-08-06); Hang Seng (BigGo Finance/Xinhua, Yahoo Finance, 2026-07-30 y 2026-08-06); SSE Composite (BBNTimes, Trading Economics, 2026-07-30 y 2026-08-06). Detalle completo en <code>2026-08-06-resumen-semanal-mercados-asia.md</code>.</p>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+(function() {
+  var data = [
+    { name: "Nikkei 225 (Tokio)", color: "var(--nikkei)", start: 61867.43, end: 65683.26 },
+    { name: "KOSPI (Seúl)", color: "var(--kospi)", start: 5593.56, end: 6295.44 },
+    { name: "Hang Seng (Hong Kong)", color: "var(--hsi)", start: 25858.88, end: 25530.28 },
+    { name: "SSE Composite (Shanghái)", color: "var(--sse)", start: 3804.00, end: 3870.00 }
+  ];
+
+  data.forEach(function(d) {
+    d.pctChange = ((d.end - d.start) / d.start) * 100;
+    d.idxStart = 100;
+    d.idxEnd = 100 * (d.end / d.start);
+  });
+
+  var svgNS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("chart");
+  var W = 820, H = 420;
+  var marginLeft = 60, marginRight = 130, marginTop = 30, marginBottom = 50;
+  var plotW = W - marginLeft - marginRight;
+  var plotH = H - marginTop - marginBottom;
+
+  var allIdx = data.reduce(function(a, d) { return a.concat([d.idxStart, d.idxEnd]); }, []);
+  var yMin = Math.min.apply(null, allIdx) - 1.5;
+  var yMax = Math.max.apply(null, allIdx) + 1.5;
+
+  function yScale(v) {
+    return marginTop + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+  }
+  function xScale(t) {
+    return marginLeft + t * plotW; // t: 0 (30-jul) to 1 (06-ago)
+  }
+
+  function computedColor(varName) {
+    var el = document.documentElement;
+    return getComputedStyle(el).getPropertyValue(varName.replace("var(", "").replace(")", "")).trim();
+  }
+
+  function render() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    // gridlines (horizontal, single Y axis)
+    var steps = 5;
+    for (var i = 0; i <= steps; i++) {
+      var v = yMin + (i / steps) * (yMax - yMin);
+      var y = yScale(v);
+      var line = document.createElementNS(svgNS, "line");
+      line.setAttribute("x1", marginLeft);
+      line.setAttribute("x2", W - marginRight);
+      line.setAttribute("y1", y);
+      line.setAttribute("y2", y);
+      line.setAttribute("class", "gridline");
+      svg.appendChild(line);
+
+      var label = document.createElementNS(svgNS, "text");
+      label.setAttribute("x", marginLeft - 8);
+      label.setAttribute("y", y + 4);
+      label.setAttribute("text-anchor", "end");
+      label.setAttribute("class", "axis-label");
+      label.textContent = v.toFixed(1);
+      svg.appendChild(label);
+    }
+
+    // X axis labels
+    var xLabels = [["30-jul-2026", 0], ["06-ago-2026", 1]];
+    xLabels.forEach(function(pair) {
+      var x = xScale(pair[1]);
+      var label = document.createElementNS(svgNS, "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", H - marginBottom + 24);
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("class", "axis-label");
+      label.textContent = pair[0];
+      svg.appendChild(label);
+
+      var tick = document.createElementNS(svgNS, "line");
+      tick.setAttribute("x1", x);
+      tick.setAttribute("x2", x);
+      tick.setAttribute("y1", marginTop);
+      tick.setAttribute("y2", H - marginBottom);
+      tick.setAttribute("class", "gridline");
+      tick.setAttribute("stroke-dasharray", "3,3");
+      svg.appendChild(tick);
+    });
+
+    var yAxisTitle = document.createElementNS(svgNS, "text");
+    yAxisTitle.setAttribute("x", -H / 2 + marginTop);
+    yAxisTitle.setAttribute("y", 16);
+    yAxisTitle.setAttribute("transform", "rotate(-90)");
+    yAxisTitle.setAttribute("text-anchor", "middle");
+    yAxisTitle.setAttribute("class", "axis-label");
+    yAxisTitle.textContent = "Índice (base 100 = cierre 30-jul-2026)";
+    svg.appendChild(yAxisTitle);
+
+    var tooltip = document.getElementById("tooltip");
+
+    data.forEach(function(d, idx) {
+      var color = computedColor(d.color) || "#888";
+      var x1 = xScale(0), y1 = yScale(d.idxStart);
+      var x2 = xScale(1), y2 = yScale(d.idxEnd);
+
+      var line = document.createElementNS(svgNS, "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("class", "series-line");
+      line.setAttribute("stroke", color);
+      svg.appendChild(line);
+
+      [[x1, y1, d.idxStart, "30-jul-2026", d.start], [x2, y2, d.idxEnd, "06-ago-2026", d.end]].forEach(function(pt) {
+        var dot = document.createElementNS(svgNS, "circle");
+        dot.setAttribute("cx", pt[0]);
+        dot.setAttribute("cy", pt[1]);
+        dot.setAttribute("r", 4.5);
+        dot.setAttribute("fill", color);
+        dot.setAttribute("class", "series-dot");
+        dot.addEventListener("mousemove", function(e) {
+          tooltip.style.opacity = 1;
+          tooltip.style.left = (e.pageX + 14) + "px";
+          tooltip.style.top = (e.pageY - 30) + "px";
+          tooltip.innerHTML = "<strong>" + d.name + "</strong><br>" + pt[3] + ": " + pt[4].toLocaleString("es-CO", {maximumFractionDigits:2}) + " pts<br>Indexado: " + pt[2].toFixed(2);
+        });
+        dot.addEventListener("mouseleave", function() { tooltip.style.opacity = 0; });
+        svg.appendChild(dot);
+      });
+
+      // direct label at end point (obligatorio por bajo contraste en modo claro)
+      var dl = document.createElementNS(svgNS, "text");
+      dl.setAttribute("x", x2 + 10);
+      dl.setAttribute("y", y2 + 4);
+      dl.setAttribute("class", "direct-label");
+      dl.setAttribute("fill", color);
+      var sign = d.pctChange >= 0 ? "+" : "";
+      dl.textContent = d.name.split(" (")[0] + " " + sign + d.pctChange.toFixed(2) + "%";
+      svg.appendChild(dl);
+    });
+  }
+
+  render();
+
+  // legend
+  var legend = document.getElementById("legend");
+  data.forEach(function(d) {
+    var item = document.createElement("div");
+    item.className = "legend-item";
+    var sw = document.createElement("span");
+    sw.className = "legend-swatch";
+    sw.style.background = d.color;
+    var txt = document.createElement("span");
+    var sign = d.pctChange >= 0 ? "+" : "";
+    txt.textContent = d.name + " (" + sign + d.pctChange.toFixed(2) + "%)";
+    item.appendChild(sw);
+    item.appendChild(txt);
+    legend.appendChild(item);
+  });
+
+  // table
+  var tbody = document.getElementById("tableBody");
+  data.forEach(function(d) {
+    var tr = document.createElement("tr");
+    var cls = d.pctChange >= 0 ? "pos" : "neg";
+    var sign = d.pctChange >= 0 ? "+" : "";
+    tr.innerHTML =
+      "<td>" + d.name + "</td>" +
+      "<td>" + d.start.toLocaleString("es-CO", {maximumFractionDigits:2}) + "</td>" +
+      "<td>" + d.end.toLocaleString("es-CO", {maximumFractionDigits:2}) + "</td>" +
+      "<td class='" + cls + "'>" + sign + d.pctChange.toFixed(2) + "%</td>" +
+      "<td>100.00</td>" +
+      "<td>" + d.idxEnd.toFixed(2) + "</td>";
+    tbody.appendChild(tr);
+  });
+
+  // theme toggle
+  var btn = document.getElementById("themeToggle");
+  var root = document.documentElement;
+  function setTheme(mode) {
+    if (mode === "dark") {
+      root.setAttribute("data-theme", "dark");
+      btn.textContent = "Modo claro";
+    } else {
+      root.removeAttribute("data-theme");
+      btn.textContent = "Modo oscuro";
+    }
+    render();
+  }
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(prefersDark ? "dark" : "light");
+  btn.addEventListener("click", function() {
+    var isDark = root.getAttribute("data-theme") === "dark";
+    setTheme(isDark ? "light" : "dark");
+  });
+})();
+</script>
+</body>
+</html>
