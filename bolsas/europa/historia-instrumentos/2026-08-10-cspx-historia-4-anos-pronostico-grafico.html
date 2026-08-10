@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>CSPX — Historia 2021-2026 y pronóstico a 6 meses</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light dark; }
+  .viz-root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-europa:  #eda100;   /* mercado Europa — CLAUDE.md §7 */
+    --series-blue:    #2a78d6;
+    --status-good:    #0ca30c;
+    --status-critical:#d03b3b;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-europa:  #c98500;
+      --series-blue:    #3987e5;
+      --status-good:    #0ca30c;
+      --status-critical:#e66767;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --series-europa:  #c98500;
+    --series-blue:    #3987e5;
+    --status-good:    #0ca30c;
+    --status-critical:#e66767;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .viz-root {
+    background: var(--page-plane);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 24px 16px 48px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 1.35rem; margin: 0 0 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 0.9rem; margin: 0 0 4px; }
+  .disclaimer { color: var(--text-muted); font-size: 0.78rem; margin: 0 0 28px; line-height: 1.5; }
+
+  .theme-toggle {
+    display: inline-flex; gap: 6px; align-items: center;
+    font-size: 0.75rem; color: var(--text-secondary);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 4px 10px; cursor: pointer; margin-bottom: 18px;
+    background: var(--surface-1);
+  }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .kpi-tile {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .kpi-label { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 4px; }
+  .kpi-value { font-size: 1.25rem; font-weight: 600; font-variant-numeric: proportional-nums; }
+  .kpi-note { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
+
+  section { margin-bottom: 40px; }
+  h2 { font-size: 1.05rem; margin: 0 0 2px; }
+  .chart-sub { color: var(--text-secondary); font-size: 0.82rem; margin: 0 0 16px; }
+
+  .chart-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 20px 8px;
+  }
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .bar-europa { fill: var(--series-europa); }
+  .bar-europa-neg { fill: var(--series-europa); opacity: 0.75; }
+  .bar-blue { fill: var(--series-blue); }
+  .bar-europa:hover, .bar-europa-neg:hover, .bar-blue:hover { opacity: 0.85; cursor: pointer; }
+  .line-europa { fill: none; stroke: var(--series-europa); stroke-width: 2.5; }
+  .dot-europa { fill: var(--series-europa); stroke: var(--surface-1); stroke-width: 1.5; }
+  .dot-europa:hover { cursor: pointer; }
+  .bar-label { font-size: 11px; fill: var(--text-primary); font-weight: 600; text-anchor: middle; }
+  .axis-label { font-size: 11px; fill: var(--text-muted); }
+  .grid-line { stroke: var(--gridline); stroke-width: 1; }
+  .zero-line { stroke: var(--baseline); stroke-width: 1.5; }
+
+  .legend { display: flex; gap: 16px; align-items: center; margin-bottom: 10px; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--text-primary);
+    color: var(--surface-1);
+    font-size: 0.75rem;
+    padding: 6px 9px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .chart-wrap { position: relative; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin-top: 14px;
+  }
+  table.data-table caption {
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+  }
+  table.data-table th, table.data-table td {
+    text-align: right;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--gridline);
+    font-variant-numeric: tabular-nums;
+  }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+  table.data-table thead th { color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--baseline); }
+
+  footer.sources { color: var(--text-muted); font-size: 0.72rem; margin-top: 8px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="viz-root" id="vizRoot">
+  <div class="wrap">
+    <h1>CSPX — iShares Core S&amp;P 500 UCITS ETF (Acc) — Historia 2021-2026 y pronóstico a 6 meses</h1>
+    <p class="subtitle">Ventana histórica de 5 años (2021-2026, con detalle reforzado de los últimos 4 años, 2022-2026) y escenarios a 6 meses (10-ago-2026 → ~10-feb-2027) · Fecha de corte de datos: 10 de agosto de 2026</p>
+    <p class="disclaimer">Gráfico complementario de la ficha <code>2026-08-10-cspx-historia-4-anos-pronostico.md</code>. Todas las cifras citadas aquí están verificadas y fechadas en esa ficha. El índice acumulado (base 100 = cierre de 2020) es un <strong>cálculo propio derivado</strong> de las rentabilidades anuales por calendario verificadas, no una serie de precios de cierre real; el punto de 2026 es un año <strong>parcial (YTD a 4-ago-2026)</strong>, no un cierre de año. Los rangos de escenarios son una proyección educativa del analista, no una predicción garantizada ni asesoría de inversión.</p>
+
+    <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">Alternar modo claro / oscuro</button>
+
+    <div class="kpi-row">
+      <div class="kpi-tile">
+        <div class="kpi-label">Precio (LSE, USD)</div>
+        <div class="kpi-value">~835 USD</div>
+        <div class="kpi-note">Yahoo Finance, 2026-08-07/10</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Rango 52 semanas</div>
+        <div class="kpi-value">~665–839 USD</div>
+        <div class="kpi-note">Agregadores de mercado, 2026-08-10</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Rentabilidad YTD 2026</div>
+        <div class="kpi-value">~+13.62%</div>
+        <div class="kpi-note">Agregador de mercado, dato al 2026-08-04</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Tasa Fed (mantenida, voto 9-3)</div>
+        <div class="kpi-value">3.50%–3.75%</div>
+        <div class="kpi-note">Reserva Federal, 2026-07-29</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Tasa BCE (depósito)</div>
+        <div class="kpi-value">2.25%</div>
+        <div class="kpi-note">BCE; subida casi descontada el 2026-09-10</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Tasa Banco de Inglaterra</div>
+        <div class="kpi-value">3.75%</div>
+        <div class="kpi-note">Mantenida, 2026-07-30</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>Rentabilidad anual (total return, USD, clase Acc)</h2>
+      <p class="chart-sub">2021 se muestra como año de contexto/arranque de la ventana de 5 años; 2022-2026 es el periodo de detalle reforzado solicitado. 2026 es parcial (YTD al 4-ago-2026). Fuente: Yahoo Finance / Morningstar (2021-2025, reutilizado de fichas previas del repositorio), agregador de mercado (2026 YTD), consultado 2026-08-10.</p>
+      <div class="chart-card">
+        <div class="legend">
+          <div class="legend-item"><span class="swatch" style="background:var(--series-europa)"></span> CSPX — rentabilidad anual</div>
+        </div>
+        <div class="chart-wrap" id="barChartWrap">
+          <svg id="barChart" viewBox="0 0 900 320" role="img" aria-label="Rentabilidad anual de CSPX de 2021 a 2026 parcial"></svg>
+          <div class="tooltip" id="barTooltip"></div>
+        </div>
+        <table class="data-table">
+          <caption>Vista de datos — rentabilidad anual (%)</caption>
+          <thead><tr><th>Año</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026 YTD</th></tr></thead>
+          <tbody><tr><td>Rentabilidad</td><td>+29.84%</td><td>−19.32%</td><td>+26.12%</td><td>+25.73%</td><td>+18.05%</td><td>~+13.62%</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rentabilidad acumulada indexada (base 100 = cierre de 2020)</h2>
+      <p class="chart-sub">Cálculo propio derivado de las rentabilidades anuales verificadas de la tabla anterior; no representa precios de cierre reales del proveedor. El tramo 2025→2026 es un año parcial (interpolado hasta el dato YTD del 4-ago-2026), declarado explícitamente aquí como estimado. Un valor de 223 en 2026 significa que 100 unidades invertidas a fin de 2020 valdrían ~223 en dólares, sin efecto de divisa, en agosto de 2026.</p>
+      <div class="chart-card">
+        <div class="legend">
+          <div class="legend-item"><span class="swatch" style="background:var(--series-europa)"></span> Índice acumulado CSPX (base 100)</div>
+        </div>
+        <div class="chart-wrap" id="lineChartWrap">
+          <svg id="lineChart" viewBox="0 0 900 320" role="img" aria-label="Evolución del índice acumulado de CSPX de 2020 a 2026 parcial"></svg>
+          <div class="tooltip" id="lineTooltip"></div>
+        </div>
+        <table class="data-table">
+          <caption>Vista de datos — índice acumulado (base 100 = fin de 2020)</caption>
+          <thead><tr><th>Fin de año</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026 (YTD, parcial)</th></tr></thead>
+          <tbody><tr><td>Índice</td><td>100.00</td><td>129.84</td><td>104.75</td><td>132.10</td><td>166.09</td><td>196.07</td><td>222.77</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Escenarios a 6 meses (10-ago-2026 → ~10-feb-2027)</h2>
+      <p class="chart-sub">Proyección educativa del analista, no un hecho verificado ni una recomendación de inversión. Rango estimado de rentabilidad en USD, sin efecto de divisa (el inversor europeo debe sumar/restar el efecto EUR/USD, GBP/USD o USD/CHF). Ver ficha .md para los supuestos y catalizadores de cada escenario.</p>
+      <div class="chart-card">
+        <div class="chart-wrap" id="scenarioWrap">
+          <svg id="scenarioChart" viewBox="0 0 900 220" role="img" aria-label="Rango de rentabilidad estimado a 6 meses por escenario"></svg>
+          <div class="tooltip" id="scenarioTooltip"></div>
+        </div>
+        <table class="data-table">
+          <caption>Vista de datos — rango de rentabilidad estimado a 6 meses</caption>
+          <thead><tr><th>Escenario</th><th>Mínimo</th><th>Máximo</th></tr></thead>
+          <tbody>
+            <tr><td>Alcista</td><td>+8%</td><td>+14%</td></tr>
+            <tr><td>Base</td><td>0%</td><td>+7%</td></tr>
+            <tr><td>Bajista</td><td>−14%</td><td>−3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="sources">
+      Datos y fuentes completos: <code>bolsas/europa/historia-instrumentos/2026-08-10-cspx-historia-4-anos-pronostico.md</code>. Gráfico generado según la skill dataviz (forma → color por función → validación de paleta → marcas → interacción → accesibilidad). Color de serie fijo del mercado Europa (CLAUDE.md §7): <code>#eda100</code> claro / <code>#c98500</code> oscuro.
+    </footer>
+  </div>
+</div>
+
+<script>
+(function () {
+  var svgNS = "http://www.w3.org/2000/svg";
+
+  // ---- Theme toggle (manual override on top of prefers-color-scheme) ----
+  (function () {
+    var btn = document.getElementById("themeToggle");
+    var root = document.documentElement;
+    btn.addEventListener("click", function () {
+      var current = root.getAttribute("data-theme");
+      if (current === "dark") {
+        root.setAttribute("data-theme", "light");
+        btn.setAttribute("aria-pressed", "false");
+      } else if (current === "light") {
+        root.removeAttribute("data-theme");
+        btn.setAttribute("aria-pressed", "false");
+      } else {
+        root.setAttribute("data-theme", "dark");
+        btn.setAttribute("aria-pressed", "true");
+      }
+    });
+  })();
+
+  var years = ["2021","2022","2023","2024","2025","2026 YTD"];
+  var returns = [29.84, -19.32, 26.12, 25.73, 18.05, 13.62];
+
+  // ---- Bar chart: annual returns ----
+  (function () {
+    var svg = document.getElementById("barChart");
+    var W = 900, H = 320, padL = 46, padR = 20, padT = 20, padB = 40;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var maxAbs = 35;
+    var zeroY = padT + plotH * (maxAbs / (maxAbs * 2));
+    var scaleY = plotH / (maxAbs * 2);
+    var bw = plotW / years.length * 0.55;
+    var step = plotW / years.length;
+
+    [-30, -20, -10, 0, 10, 20, 30].forEach(function (v) {
+      var y = zeroY - v * scaleY;
+      var line = document.createElementNS(svgNS, "line");
+      line.setAttribute("x1", padL); line.setAttribute("x2", W - padR);
+      line.setAttribute("y1", y); line.setAttribute("y2", y);
+      line.setAttribute("class", v === 0 ? "zero-line" : "grid-line");
+      svg.appendChild(line);
+      var lbl = document.createElementNS(svgNS, "text");
+      lbl.setAttribute("x", padL - 8); lbl.setAttribute("y", y + 4);
+      lbl.setAttribute("text-anchor", "end"); lbl.setAttribute("class", "axis-label");
+      lbl.textContent = v + "%";
+      svg.appendChild(lbl);
+    });
+
+    var tooltip = document.getElementById("barTooltip");
+    var wrap = document.getElementById("barChartWrap");
+
+    returns.forEach(function (r, i) {
+      var x = padL + step * i + (step - bw) / 2;
+      var h = Math.abs(r) * scaleY;
+      var y = r >= 0 ? zeroY - h : zeroY;
+      var rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", x); rect.setAttribute("y", y);
+      rect.setAttribute("width", bw); rect.setAttribute("height", Math.max(h, 1));
+      rect.setAttribute("rx", 3);
+      rect.setAttribute("class", r >= 0 ? "bar-europa" : "bar-europa-neg");
+      rect.addEventListener("mousemove", function (e) {
+        var rectBox = wrap.getBoundingClientRect();
+        tooltip.style.opacity = 1;
+        tooltip.style.left = (e.clientX - rectBox.left + 12) + "px";
+        tooltip.style.top = (e.clientY - rectBox.top - 10) + "px";
+        tooltip.textContent = years[i] + ": " + (r >= 0 ? "+" : "") + r.toFixed(2) + "%";
+      });
+      rect.addEventListener("mouseleave", function () { tooltip.style.opacity = 0; });
+      svg.appendChild(rect);
+
+      // direct label (required: Europa color fails 3:1 contrast in light mode)
+      var lbl = document.createElementNS(svgNS, "text");
+      lbl.setAttribute("x", x + bw / 2);
+      lbl.setAttribute("y", r >= 0 ? y - 6 : y + h + 14);
+      lbl.setAttribute("class", "bar-label");
+      lbl.textContent = (r >= 0 ? "+" : "") + r.toFixed(1) + "%";
+      svg.appendChild(lbl);
+
+      var xlbl = document.createElementNS(svgNS, "text");
+      xlbl.setAttribute("x", x + bw / 2);
+      xlbl.setAttribute("y", H - padB + 18);
+      xlbl.setAttribute("text-anchor", "middle");
+      xlbl.setAttribute("class", "axis-label");
+      xlbl.textContent = years[i];
+      svg.appendChild(xlbl);
+    });
+  })();
+
+  // ---- Line chart: cumulative index (base 100 = end 2020) ----
+  (function () {
+    var svg = document.getElementById("lineChart");
+    var W = 900, H = 320, padL = 50, padR = 30, padT = 24, padB = 40;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var idxYears = ["2020","2021","2022","2023","2024","2025","2026 (YTD)"];
+    var idxValues = [100.00, 129.84, 104.75, 132.10, 166.09, 196.07, 222.77];
+    var minV = 80, maxV = 240;
+    var scaleY = plotH / (maxV - minV);
+    var step = plotW / (idxYears.length - 1);
+
+    [80, 120, 160, 200, 240].forEach(function (v) {
+      var y = padT + plotH - (v - minV) * scaleY;
+      var line = document.createElementNS(svgNS, "line");
+      line.setAttribute("x1", padL); line.setAttribute("x2", W - padR);
+      line.setAttribute("y1", y); line.setAttribute("y2", y);
+      line.setAttribute("class", v === 100 ? "zero-line" : "grid-line");
+      svg.appendChild(line);
+      var lbl = document.createElementNS(svgNS, "text");
+      lbl.setAttribute("x", padL - 8); lbl.setAttribute("y", y + 4);
+      lbl.setAttribute("text-anchor", "end"); lbl.setAttribute("class", "axis-label");
+      lbl.textContent = v;
+      svg.appendChild(lbl);
+    });
+
+    var points = idxValues.map(function (v, i) {
+      return [padL + step * i, padT + plotH - (v - minV) * scaleY];
+    });
+
+    var pathD = points.map(function (p, i) {
+      return (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1);
+    }).join(" ");
+    var path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", pathD);
+    path.setAttribute("class", "line-europa");
+    svg.appendChild(path);
+
+    var tooltip = document.getElementById("lineTooltip");
+    var wrap = document.getElementById("lineChartWrap");
+
+    points.forEach(function (p, i) {
+      var dot = document.createElementNS(svgNS, "circle");
+      dot.setAttribute("cx", p[0]); dot.setAttribute("cy", p[1]);
+      dot.setAttribute("r", 4.5);
+      dot.setAttribute("class", "dot-europa");
+      dot.addEventListener("mousemove", function (e) {
+        var rectBox = wrap.getBoundingClientRect();
+        tooltip.style.opacity = 1;
+        tooltip.style.left = (e.clientX - rectBox.left + 12) + "px";
+        tooltip.style.top = (e.clientY - rectBox.top - 10) + "px";
+        tooltip.textContent = idxYears[i] + ": " + idxValues[i].toFixed(2);
+      });
+      dot.addEventListener("mouseleave", function () { tooltip.style.opacity = 0; });
+      svg.appendChild(dot);
+
+      // selective direct labels: start, min (2022), and last point only
+      if (i === 0 || i === 2 || i === idxYears.length - 1) {
+        var lbl = document.createElementNS(svgNS, "text");
+        lbl.setAttribute("x", p[0]);
+        lbl.setAttribute("y", p[1] - 12);
+        lbl.setAttribute("class", "bar-label");
+        lbl.textContent = idxValues[i].toFixed(0);
+        svg.appendChild(lbl);
+      }
+
+      var xlbl = document.createElementNS(svgNS, "text");
+      xlbl.setAttribute("x", p[0]);
+      xlbl.setAttribute("y", H - padB + 18);
+      xlbl.setAttribute("text-anchor", "middle");
+      xlbl.setAttribute("class", "axis-label");
+      xlbl.textContent = idxYears[i];
+      svg.appendChild(xlbl);
+    });
+  })();
+
+  // ---- Scenario range chart ----
+  (function () {
+    var svg = document.getElementById("scenarioChart");
+    var W = 900, H = 220, padL = 90, padR = 30, padT = 20, padB = 30;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var scenarios = [
+      { label: "Alcista", min: 8, max: 14, color: "var(--status-good)" },
+      { label: "Base", min: 0, max: 7, color: "var(--series-blue)" },
+      { label: "Bajista", min: -14, max: -3, color: "var(--status-critical)" }
+    ];
+    var minAxis = -20, maxAxis = 20;
+    var scaleX = plotW / (maxAxis - minAxis);
+    var rowH = plotH / scenarios.length;
+
+    [-20, -10, 0, 10, 20].forEach(function (v) {
+      var x = padL + (v - minAxis) * scaleX;
+      var line = document.createElementNS(svgNS, "line");
+      line.setAttribute("x1", x); line.setAttribute("x2", x);
+      line.setAttribute("y1", padT); line.setAttribute("y2", H - padB);
+      line.setAttribute("class", v === 0 ? "zero-line" : "grid-line");
+      svg.appendChild(line);
+      var lbl = document.createElementNS(svgNS, "text");
+      lbl.setAttribute("x", x); lbl.setAttribute("y", H - padB + 18);
+      lbl.setAttribute("text-anchor", "middle"); lbl.setAttribute("class", "axis-label");
+      lbl.textContent = v + "%";
+      svg.appendChild(lbl);
+    });
+
+    var tooltip = document.getElementById("scenarioTooltip");
+    var wrap = document.getElementById("scenarioWrap");
+
+    scenarios.forEach(function (s, i) {
+      var y = padT + rowH * i + rowH * 0.3;
+      var barH = rowH * 0.4;
+      var x1 = padL + (s.min - minAxis) * scaleX;
+      var x2 = padL + (s.max - minAxis) * scaleX;
+      var rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", x1); rect.setAttribute("y", y);
+      rect.setAttribute("width", x2 - x1); rect.setAttribute("height", barH);
+      rect.setAttribute("rx", 6);
+      rect.setAttribute("fill", s.color);
+      rect.addEventListener("mousemove", function (e) {
+        var rectBox = wrap.getBoundingClientRect();
+        tooltip.style.opacity = 1;
+        tooltip.style.left = (e.clientX - rectBox.left + 12) + "px";
+        tooltip.style.top = (e.clientY - rectBox.top - 10) + "px";
+        tooltip.textContent = s.label + ": " + s.min + "% a +" + s.max + "%";
+      });
+      rect.addEventListener("mouseleave", function () { tooltip.style.opacity = 0; });
+      svg.appendChild(rect);
+
+      var lbl = document.createElementNS(svgNS, "text");
+      lbl.setAttribute("x", padL - 10); lbl.setAttribute("y", y + barH / 2 + 4);
+      lbl.setAttribute("text-anchor", "end"); lbl.setAttribute("class", "bar-label");
+      lbl.textContent = s.label;
+      svg.appendChild(lbl);
+
+      var vlbl = document.createElementNS(svgNS, "text");
+      vlbl.setAttribute("x", x2 + 8); vlbl.setAttribute("y", y + barH / 2 + 4);
+      vlbl.setAttribute("class", "bar-label");
+      vlbl.textContent = (s.min >= 0 ? "+" : "") + s.min + "% / " + (s.max >= 0 ? "+" : "") + s.max + "%";
+      svg.appendChild(vlbl);
+    });
+  })();
+})();
+</script>
+</body>
+</html>
