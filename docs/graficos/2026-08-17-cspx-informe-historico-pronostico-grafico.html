@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSPX — Histórico 2020-2026 y pronóstico a 6 meses</title>
+<style>
+  :root { color-scheme: light dark; }
+  .viz-root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f4f3ee;
+    --surface-2:      #ffffff;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-europa:  #eda100;
+    --series-blue:    #2a78d6;
+    --series-red:     #e34948;
+    --status-good:    #0ca30c;
+    --status-warning: #fab219;
+    --status-critical:#d03b3b;
+    --success-text:   #006300;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0a0a09;
+      --surface-2:      #232321;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #8f8d86;
+      --gridline:       #2c2c2a;
+      --baseline:       #3a3a37;
+      --border:         rgba(255,255,255,0.10);
+      --series-europa:  #c98500;
+      --series-blue:    #3987e5;
+      --series-red:     #e66767;
+      --status-good:    #0ca30c;
+      --status-warning: #fab219;
+      --status-critical:#d03b3b;
+      --success-text:   #0ca30c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    --surface-1:      #1a1a19;
+    --page-plane:     #0a0a09;
+    --surface-2:      #232321;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #8f8d86;
+    --gridline:       #2c2c2a;
+    --baseline:       #3a3a37;
+    --border:         rgba(255,255,255,0.10);
+    --series-europa:  #c98500;
+    --series-blue:    #3987e5;
+    --series-red:     #e66767;
+    --status-good:    #0ca30c;
+    --status-warning: #fab219;
+    --status-critical:#d03b3b;
+    --success-text:   #0ca30c;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page-plane);
+    color: var(--text-primary);
+  }
+  .viz-root { background: var(--page-plane); padding: 24px 16px 48px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  header.top { margin-bottom: 24px; }
+  header.top h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  header.top .subtitle { color: var(--text-secondary); font-size: 0.95rem; margin: 0 0 2px; }
+  header.top .cutoff { color: var(--text-muted); font-size: 0.82rem; }
+  .theme-btn {
+    float: right; font: inherit; font-size: 0.8rem; padding: 6px 12px;
+    border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2);
+    color: var(--text-secondary); cursor: pointer;
+  }
+
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px; margin-bottom: 32px;
+  }
+  .kpi-tile {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .kpi-label { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; }
+  .kpi-value { font-size: 1.35rem; font-weight: 600; color: var(--text-primary); }
+  .kpi-delta { font-size: 0.78rem; margin-top: 4px; }
+  .kpi-delta.up { color: var(--success-text); }
+  .kpi-delta.down { color: var(--series-red); }
+  .kpi-note { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+
+  section.chart-card {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 20px 8px; margin-bottom: 28px;
+  }
+  .chart-title { font-size: 1rem; font-weight: 600; margin: 0 0 2px; }
+  .chart-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin: 0 0 16px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+  .legend-swatch.dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .axis-label { fill: var(--text-muted); font-size: 11px; }
+  .gridline { stroke: var(--gridline); stroke-width: 1; }
+  .baseline { stroke: var(--baseline); stroke-width: 1; }
+  .bar { cursor: pointer; }
+  .bar:hover, .bar.hover { filter: brightness(1.08); }
+  .value-label { fill: var(--text-primary); font-size: 12px; font-weight: 600; }
+  .cat-label { fill: var(--text-secondary); font-size: 12px; }
+
+  .tooltip {
+    position: absolute; pointer-events: none; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    font-size: 0.78rem; box-shadow: 0 4px 16px rgba(0,0,0,0.18); opacity: 0;
+    transition: opacity 0.1s; z-index: 10; white-space: nowrap;
+  }
+  .tooltip.show { opacity: 1; }
+  .tooltip .t-val { font-weight: 700; color: var(--text-primary); }
+  .tooltip .t-lbl { color: var(--text-secondary); }
+  .chart-wrap { position: relative; }
+
+  table.data-table {
+    width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 4px 0 20px;
+  }
+  table.data-table caption {
+    text-align: left; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px; caption-side: top;
+  }
+  table.data-table th, table.data-table td {
+    text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--gridline);
+    font-variant-numeric: tabular-nums;
+  }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; font-variant-numeric: normal; }
+  table.data-table th { color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; }
+  table.data-table td.pos { color: var(--success-text); }
+  table.data-table td.neg { color: var(--series-red); }
+
+  .status-chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600;
+  }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+  footer.note {
+    font-size: 0.72rem; color: var(--text-muted); max-width: 980px; margin: 0 auto; line-height: 1.5;
+  }
+  a { color: inherit; }
+  @media (max-width: 560px) {
+    .kpi-value { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="wrap">
+    <header class="top">
+      <button class="theme-btn" id="themeToggle" type="button">Modo oscuro</button>
+      <h1>CSPX — iShares Core S&amp;P 500 UCITS ETF (Acc)</h1>
+      <p class="subtitle">Histórico 2021-2025 + YTD 2026 y pronóstico a 6 meses (17-ago-2026 → ~17-feb-2027)</p>
+      <p class="cutoff">Fecha de corte de datos: 12–17 de agosto de 2026 · Ficha completa: <code>2026-08-17-cspx-informe-historico-pronostico.md</code> · Datos verificados con fuente y fecha en esa ficha.</p>
+    </header>
+
+    <div class="kpi-grid">
+      <div class="kpi-tile">
+        <div class="kpi-label">Precio (CSPX, LSE, USD)</div>
+        <div class="kpi-value">838.69</div>
+        <div class="kpi-note">Yahoo Finance, 2026-08-14</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">AUM (patrimonio gestionado)</div>
+        <div class="kpi-value">~160.6 B</div>
+        <div class="kpi-note">USD · factsheet BlackRock/iShares, 2026-08-14</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">TER (comisión anual)</div>
+        <div class="kpi-value">0.07%</div>
+        <div class="kpi-note">justETF / BlackRock, 2026-08</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Rentabilidad YTD 2026</div>
+        <div class="kpi-value">+14.56%</div>
+        <div class="kpi-delta up">▲ NAV, total return</div>
+        <div class="kpi-note">2026-08-13/14</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Anualizada 5a (2021-2025)</div>
+        <div class="kpi-value">≈ +14.4%</div>
+        <div class="kpi-note">Cálculo propio por años calendario</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">Rango 52 semanas (USD)</div>
+        <div class="kpi-value">680–840</div>
+        <div class="kpi-note">Agregador de mercado, 2026-08-14</div>
+      </div>
+    </div>
+
+    <section class="chart-card">
+      <h2 class="chart-title">Rentabilidad anual (total return, USD, clase Acc)</h2>
+      <p class="chart-subtitle">2021–2025 (años calendario cerrados) + 2026 parcial (YTD al 13/14-ago-2026). Único año negativo del periodo: 2022.</p>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-swatch" style="background:var(--series-blue)"></span>Rentabilidad positiva</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:var(--series-red)"></span>Rentabilidad negativa</span>
+      </div>
+      <div class="chart-wrap">
+        <svg id="barChart" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="tooltip" id="barTooltip"></div>
+      </div>
+      <table class="data-table">
+        <caption>Tabla de datos — rentabilidad anual de CSPX (vista alternativa al gráfico)</caption>
+        <thead><tr><th>Año</th><th>Rentabilidad</th><th>Fuente</th></tr></thead>
+        <tbody id="barTableBody"></tbody>
+      </table>
+    </section>
+
+    <section class="chart-card">
+      <h2 class="chart-title">Precio / NAV estimado (USD, línea CSPX-LSE)</h2>
+      <p class="chart-subtitle">Serie <strong>calculada retroactivamente</strong> a partir de rentabilidades anuales verificadas sobre el precio observado en agosto de 2026 (~838.7 USD) — no son cierres de bolsa verificados directamente para 2020-2025. Ver ficha .md, sección "Precio/NAV de cierre de año".</p>
+      <div class="chart-wrap">
+        <svg id="lineChart" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="tooltip" id="lineTooltip"></div>
+      </div>
+      <table class="data-table">
+        <caption>Tabla de datos — precio/NAV aproximado de cierre de año (calculado, salvo 2026 que es observado)</caption>
+        <thead><tr><th>Año</th><th>Precio/NAV aprox. (USD)</th><th>Estado</th></tr></thead>
+        <tbody id="lineTableBody"></tbody>
+      </table>
+    </section>
+
+    <section class="chart-card">
+      <h2 class="chart-title">Pronóstico a 6 meses — 3 escenarios (opinión educativa, no asesoría)</h2>
+      <p class="chart-subtitle">Rangos de rentabilidad estimados en USD, sin efecto de conversión de divisa, del 17-ago-2026 al ~17-feb-2027. Ver ficha .md, sección "Escenarios", para los supuestos completos.</p>
+      <div class="chart-wrap">
+        <svg id="scenarioChart" viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="tooltip" id="scenarioTooltip"></div>
+      </div>
+      <table class="data-table">
+        <caption>Tabla de datos — escenarios de pronóstico a 6 meses</caption>
+        <thead><tr><th>Escenario</th><th>Rango estimado</th><th>Resumen del supuesto clave</th></tr></thead>
+        <tbody id="scenarioTableBody"></tbody>
+      </table>
+    </section>
+
+    <footer class="note">
+      Gráfico autocontenido (sin librerías externas), generado según la skill <em>dataviz</em> del repositorio. Todas las cifras provienen de la ficha <code>2026-08-17-cspx-informe-historico-pronostico.md</code>, donde cada dato lleva su fuente y fecha de verificación. Los escenarios de pronóstico son opinión/proyección educativa del analista, no una recomendación de inversión ni asesoría financiera profesional.
+    </footer>
+  </div>
+</div>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'dark') { root.setAttribute('data-theme', 'dark'); btn.textContent = 'Modo claro'; }
+    else { root.setAttribute('data-theme', 'light'); btn.textContent = 'Modo oscuro'; }
+  }
+  let current = null;
+  btn.addEventListener('click', function () {
+    current = current === 'dark' ? 'light' : 'dark';
+    applyTheme(current);
+  });
+
+  function cssVar(name) {
+    return getComputedStyle(document.querySelector('.viz-root')).getPropertyValue(name).trim();
+  }
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // ---------- Bar chart: annual returns ----------
+  const annual = [
+    { year: '2021', val: 29.84, source: 'Yahoo Finance / Morningstar, verificado 2026-07-24' },
+    { year: '2022', val: -19.32, source: 'Yahoo Finance / Morningstar, verificado 2026-07-24' },
+    { year: '2023', val: 26.12, source: 'Yahoo Finance / Morningstar, verificado 2026-07-24' },
+    { year: '2024', val: 25.73, source: 'Yahoo Finance / Morningstar, verificado 2026-07-24' },
+    { year: '2025', val: 18.05, source: 'Yahoo Finance / Morningstar, reconfirmado 2026-08-17' },
+    { year: '2026 YTD', val: 14.56, source: 'Factsheet BlackRock/iShares (vía agregador), 2026-08-13/14' }
+  ];
+
+  (function drawBarChart() {
+    const svg = document.getElementById('barChart');
+    const tooltip = document.getElementById('barTooltip');
+    const W = 900, H = 320, ML = 50, MR = 20, MT = 20, MB = 40;
+    const plotW = W - ML - MR, plotH = H - MT - MB;
+    const maxAbs = Math.max(...annual.map(d => Math.abs(d.val))) * 1.15;
+    const yScale = v => plotH / 2 - (v / maxAbs) * (plotH / 2);
+    const zeroY = MT + plotH / 2;
+
+    // gridlines
+    [maxAbs, maxAbs / 2, 0, -maxAbs / 2, -maxAbs].forEach(v => {
+      const y = MT + yScale(v);
+      svg.appendChild(el('line', { x1: ML, x2: W - MR, y1: y, y2: y, class: v === 0 ? 'baseline' : 'gridline' }));
+      const lbl = el('text', { x: ML - 8, y: y + 4, class: 'axis-label', 'text-anchor': 'end' });
+      lbl.textContent = (v > 0 ? '+' : '') + Math.round(v) + '%';
+      svg.appendChild(lbl);
+    });
+
+    const bandW = plotW / annual.length;
+    const barW = Math.min(48, bandW * 0.5);
+
+    annual.forEach((d, i) => {
+      const cx = ML + bandW * i + bandW / 2;
+      const y0 = MT + yScale(0);
+      const y1 = MT + yScale(d.val);
+      const top = Math.min(y0, y1);
+      const h = Math.max(Math.abs(y1 - y0), 1);
+      const color = d.val >= 0 ? cssVar('--series-blue') : cssVar('--series-red');
+      const rect = el('rect', {
+        x: cx - barW / 2, y: top, width: barW, height: h,
+        rx: 4, fill: color, class: 'bar'
+      });
+      svg.appendChild(rect);
+
+      const label = el('text', {
+        x: cx, y: d.val >= 0 ? top - 8 : top + h + 16,
+        class: 'value-label', 'text-anchor': 'middle'
+      });
+      label.textContent = (d.val > 0 ? '+' : '') + d.val.toFixed(2) + '%';
+      svg.appendChild(label);
+
+      const catLbl = el('text', { x: cx, y: H - 12, class: 'cat-label', 'text-anchor': 'middle' });
+      catLbl.textContent = d.year;
+      svg.appendChild(catLbl);
+
+      const hit = el('rect', { x: cx - bandW / 2, y: MT, width: bandW, height: plotH, fill: 'transparent' });
+      hit.addEventListener('pointerenter', () => { rect.classList.add('hover'); });
+      hit.addEventListener('pointerleave', () => { rect.classList.remove('hover'); tooltip.classList.remove('show'); });
+      hit.addEventListener('pointermove', (ev) => {
+        const box = svg.getBoundingClientRect();
+        tooltip.innerHTML = '<div class="t-lbl">' + d.year + '</div><div class="t-val">' + (d.val > 0 ? '+' : '') + d.val.toFixed(2) + '%</div><div class="t-lbl">' + d.source + '</div>';
+        tooltip.style.left = (ev.clientX - box.left + 12) + 'px';
+        tooltip.style.top = (ev.clientY - box.top - 10) + 'px';
+        tooltip.classList.add('show');
+      });
+      svg.appendChild(hit);
+    });
+
+    const tbody = document.getElementById('barTableBody');
+    annual.forEach(d => {
+      const tr = document.createElement('tr');
+      const tdY = document.createElement('td'); tdY.textContent = d.year;
+      const tdV = document.createElement('td'); tdV.textContent = (d.val > 0 ? '+' : '') + d.val.toFixed(2) + '%'; tdV.className = d.val >= 0 ? 'pos' : 'neg';
+      const tdS = document.createElement('td'); tdS.textContent = d.source; tdS.style.textAlign = 'left'; tdS.style.color = 'var(--text-muted)'; tdS.style.fontSize = '0.75rem';
+      tr.appendChild(tdY); tr.appendChild(tdV); tr.appendChild(tdS);
+      tbody.appendChild(tr);
+    });
+  })();
+
+  // ---------- Line chart: estimated price/NAV ----------
+  const priceSeries = [
+    { year: '2020', val: 374, estimated: true },
+    { year: '2021', val: 485, estimated: true },
+    { year: '2022', val: 391, estimated: true },
+    { year: '2023', val: 493, estimated: true },
+    { year: '2024', val: 620, estimated: true },
+    { year: '2025', val: 732, estimated: true },
+    { year: '2026', val: 838.7, estimated: false }
+  ];
+
+  (function drawLineChart() {
+    const svg = document.getElementById('lineChart');
+    const tooltip = document.getElementById('lineTooltip');
+    const W = 900, H = 300, ML = 50, MR = 20, MT = 20, MB = 36;
+    const plotW = W - ML - MR, plotH = H - MT - MB;
+    const minV = 0, maxV = Math.max(...priceSeries.map(d => d.val)) * 1.1;
+    const xScale = i => ML + (plotW / (priceSeries.length - 1)) * i;
+    const yScale = v => MT + plotH - (v - minV) / (maxV - minV) * plotH;
+
+    [0, 0.25, 0.5, 0.75, 1].forEach(t => {
+      const v = minV + t * (maxV - minV);
+      const y = yScale(v);
+      svg.appendChild(el('line', { x1: ML, x2: W - MR, y1: y, y2: y, class: 'gridline' }));
+      const lbl = el('text', { x: ML - 8, y: y + 4, class: 'axis-label', 'text-anchor': 'end' });
+      lbl.textContent = Math.round(v);
+      svg.appendChild(lbl);
+    });
+    svg.appendChild(el('line', { x1: ML, x2: W - MR, y1: MT + plotH, y2: MT + plotH, class: 'baseline' }));
+
+    const pts = priceSeries.map((d, i) => [xScale(i), yScale(d.val)]);
+    const areaColor = cssVar('--series-europa');
+
+    let areaPath = 'M ' + pts[0][0] + ' ' + (MT + plotH);
+    pts.forEach(p => { areaPath += ' L ' + p[0] + ' ' + p[1]; });
+    areaPath += ' L ' + pts[pts.length - 1][0] + ' ' + (MT + plotH) + ' Z';
+    svg.appendChild(el('path', { d: areaPath, fill: areaColor, opacity: 0.10, stroke: 'none' }));
+
+    let linePath = 'M ' + pts.map(p => p.join(' ')).join(' L ');
+    svg.appendChild(el('path', { d: linePath, fill: 'none', stroke: areaColor, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+
+    priceSeries.forEach((d, i) => {
+      const [x, y] = pts[i];
+      const dot = el('circle', { cx: x, cy: y, r: 5, fill: areaColor, stroke: cssVar('--surface-1'), 'stroke-width': 2 });
+      svg.appendChild(dot);
+
+      const catLbl = el('text', { x: x, y: H - 8, class: 'cat-label', 'text-anchor': 'middle' });
+      catLbl.textContent = d.year;
+      svg.appendChild(catLbl);
+
+      if (i === priceSeries.length - 1) {
+        const lbl = el('text', { x: x, y: y - 14, class: 'value-label', 'text-anchor': 'middle' });
+        lbl.textContent = '$' + d.val.toFixed(1);
+        svg.appendChild(lbl);
+      }
+
+      const hit = el('circle', { cx: x, cy: y, r: 16, fill: 'transparent' });
+      hit.addEventListener('pointerenter', () => { dot.setAttribute('r', 7); });
+      hit.addEventListener('pointerleave', () => { dot.setAttribute('r', 5); tooltip.classList.remove('show'); });
+      hit.addEventListener('pointermove', (ev) => {
+        const box = svg.getBoundingClientRect();
+        tooltip.innerHTML = '<div class="t-lbl">' + d.year + (d.estimated ? ' (calculado)' : ' (observado)') + '</div><div class="t-val">$' + d.val.toFixed(2) + '</div>';
+        tooltip.style.left = (ev.clientX - box.left + 12) + 'px';
+        tooltip.style.top = (ev.clientY - box.top - 10) + 'px';
+        tooltip.classList.add('show');
+      });
+      svg.appendChild(hit);
+    });
+
+    const tbody = document.getElementById('lineTableBody');
+    priceSeries.forEach(d => {
+      const tr = document.createElement('tr');
+      const tdY = document.createElement('td'); tdY.textContent = d.year;
+      const tdV = document.createElement('td'); tdV.textContent = '$' + d.val.toFixed(2);
+      const tdE = document.createElement('td'); tdE.textContent = d.estimated ? 'Calculado (retroactivo)' : 'Observado';
+      tr.appendChild(tdY); tr.appendChild(tdV); tr.appendChild(tdE);
+      tbody.appendChild(tr);
+    });
+  })();
+
+  // ---------- Scenario range chart ----------
+  const scenarios = [
+    { name: 'Alcista', low: 8, high: 15, status: 'good', summary: 'Fed retoma recortes; conflicto con Irán se congela; tregua UE-EE.UU. se consolida.' },
+    { name: 'Base', low: 0, high: 8, status: 'warning', summary: 'Fed estable en 3.50%-3.75%; desinflación gradual; conflicto persiste sin escalar.' },
+    { name: 'Bajista', low: -15, high: -3, status: 'critical', summary: 'Repunte inflacionario fuerza posible subida de tasas; escalada arancelaria o en Irán; corrección en IA.' }
+  ];
+
+  (function drawScenarioChart() {
+    const svg = document.getElementById('scenarioChart');
+    const tooltip = document.getElementById('scenarioTooltip');
+    const W = 900, H = 220, ML = 90, MR = 30, MT = 16, MB = 30;
+    const plotW = W - ML - MR, plotH = H - MT - MB;
+    const minV = -18, maxV = 18;
+    const xScale = v => ML + (v - minV) / (maxV - minV) * plotW;
+    const rowH = plotH / scenarios.length;
+
+    [-15, -10, -5, 0, 5, 10, 15].forEach(v => {
+      const x = xScale(v);
+      svg.appendChild(el('line', { x1: x, x2: x, y1: MT, y2: MT + plotH, class: v === 0 ? 'baseline' : 'gridline' }));
+      const lbl = el('text', { x: x, y: H - 10, class: 'axis-label', 'text-anchor': 'middle' });
+      lbl.textContent = (v > 0 ? '+' : '') + v + '%';
+      svg.appendChild(lbl);
+    });
+
+    const statusColorVar = { good: '--status-good', warning: '--status-warning', critical: '--status-critical' };
+
+    scenarios.forEach((s, i) => {
+      const cy = MT + rowH * i + rowH / 2;
+      const barH = 22;
+      const x1 = xScale(s.low), x2 = xScale(s.high);
+      const color = cssVar(statusColorVar[s.status]);
+
+      const nameLbl = el('text', { x: ML - 12, y: cy + 4, class: 'cat-label', 'text-anchor': 'end' });
+      nameLbl.textContent = s.name;
+      svg.appendChild(nameLbl);
+
+      const dot = el('circle', { cx: ML - 70, cy: cy, r: 5, fill: color });
+      svg.appendChild(dot);
+
+      const bar = el('rect', {
+        x: x1, y: cy - barH / 2, width: Math.max(x2 - x1, 2), height: barH,
+        rx: 4, fill: color, opacity: 0.85, class: 'bar'
+      });
+      svg.appendChild(bar);
+
+      const lowLbl = el('text', { x: x1 - 8, y: cy + 4, class: 'value-label', 'text-anchor': 'end' });
+      lowLbl.textContent = (s.low > 0 ? '+' : '') + s.low + '%';
+      svg.appendChild(lowLbl);
+      const highLbl = el('text', { x: x2 + 8, y: cy + 4, class: 'value-label', 'text-anchor': 'start' });
+      highLbl.textContent = (s.high > 0 ? '+' : '') + s.high + '%';
+      svg.appendChild(highLbl);
+
+      const hit = el('rect', { x: ML, y: cy - rowH / 2, width: plotW, height: rowH, fill: 'transparent' });
+      hit.addEventListener('pointerenter', () => { bar.setAttribute('opacity', '1'); });
+      hit.addEventListener('pointerleave', () => { bar.setAttribute('opacity', '0.85'); tooltip.classList.remove('show'); });
+      hit.addEventListener('pointermove', (ev) => {
+        const box = svg.getBoundingClientRect();
+        tooltip.innerHTML = '<div class="t-lbl">' + s.name + '</div><div class="t-val">' + (s.low > 0 ? '+' : '') + s.low + '% a ' + (s.high > 0 ? '+' : '') + s.high + '%</div><div class="t-lbl" style="max-width:260px;white-space:normal">' + s.summary + '</div>';
+        tooltip.style.left = (ev.clientX - box.left + 12) + 'px';
+        tooltip.style.top = (ev.clientY - box.top - 10) + 'px';
+        tooltip.classList.add('show');
+      });
+      svg.appendChild(hit);
+    });
+
+    const tbody = document.getElementById('scenarioTableBody');
+    scenarios.forEach(s => {
+      const tr = document.createElement('tr');
+      const tdN = document.createElement('td');
+      tdN.innerHTML = '';
+      const chip = document.createElement('span'); chip.className = 'status-chip';
+      const sdot = document.createElement('span'); sdot.className = 'status-dot';
+      sdot.style.background = 'var(' + statusColorVar[s.status] + ')';
+      chip.appendChild(sdot);
+      chip.appendChild(document.createTextNode(s.name));
+      tdN.appendChild(chip);
+      const tdV = document.createElement('td'); tdV.textContent = (s.low > 0 ? '+' : '') + s.low + '% a ' + (s.high > 0 ? '+' : '') + s.high + '%';
+      const tdS = document.createElement('td'); tdS.textContent = s.summary; tdS.style.textAlign = 'left'; tdS.style.color = 'var(--text-muted)'; tdS.style.fontSize = '0.75rem';
+      tr.appendChild(tdN); tr.appendChild(tdV); tr.appendChild(tdS);
+      tbody.appendChild(tr);
+    });
+  })();
+})();
+</script>
+</body>
+</html>
