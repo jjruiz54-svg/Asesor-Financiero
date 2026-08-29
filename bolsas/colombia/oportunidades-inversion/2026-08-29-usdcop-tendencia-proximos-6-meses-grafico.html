@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USD/COP — Tendencia histórica y proyección a 6 meses</title>
+<style>
+  :root{
+    --bg:#ffffff; --fg:#1a1a1a; --muted:#5a5a5a; --card:#f7f8fa; --border:#d9dde3;
+    --co-line:#2a78d6; --co-fill:rgba(42,120,214,0.12);
+    --band-fill:rgba(42,120,214,0.10);
+    --alcista:#1f8a4c; --bajista:#c0392b; --base:#7a5cc0;
+    --grid:#e3e6ea;
+  }
+  [data-theme="dark"]{
+    --bg:#12151a; --fg:#eef1f4; --muted:#a8b0ba; --card:#1b1f26; --border:#2c323b;
+    --co-line:#3987e5; --co-fill:rgba(57,135,229,0.16);
+    --band-fill:rgba(57,135,229,0.14);
+    --alcista:#3fbf78; --bajista:#e5695a; --base:#a48ef0;
+    --grid:#2a2f37;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--fg); transition:background .2s, color .2s;
+  }
+  header{padding:24px 28px 8px;}
+  h1{font-size:1.4rem; margin:0 0 4px;}
+  .subtitle{color:var(--muted); font-size:0.92rem; margin:0 0 4px; max-width:900px;}
+  .disclaimer{
+    background:var(--card); border:1px solid var(--border); border-left:4px solid var(--base);
+    padding:10px 14px; border-radius:6px; font-size:0.85rem; color:var(--muted); margin:14px 28px;
+  }
+  .toolbar{display:flex; justify-content:flex-end; padding:0 28px; gap:8px;}
+  button.theme-toggle{
+    background:var(--card); color:var(--fg); border:1px solid var(--border); border-radius:6px;
+    padding:6px 12px; cursor:pointer; font-size:0.85rem;
+  }
+  main{padding:0 28px 40px;}
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:16px 18px; margin-top:18px;
+  }
+  .chart-wrap{position:relative;}
+  svg{width:100%; height:auto; display:block; overflow:visible;}
+  .legend{display:flex; flex-wrap:wrap; gap:16px; margin-top:10px; font-size:0.82rem;}
+  .legend-item{display:flex; align-items:center; gap:6px;}
+  .swatch{width:14px; height:14px; border-radius:3px; display:inline-block;}
+  .tooltip{
+    position:absolute; pointer-events:none; background:var(--fg); color:var(--bg);
+    padding:6px 9px; border-radius:6px; font-size:0.78rem; opacity:0; transition:opacity .1s;
+    white-space:nowrap; z-index:10;
+  }
+  table{width:100%; border-collapse:collapse; margin-top:10px; font-size:0.82rem;}
+  caption{text-align:left; color:var(--muted); font-size:0.8rem; margin-bottom:6px;}
+  th, td{border:1px solid var(--border); padding:6px 8px; text-align:right;}
+  th:first-child, td:first-child{text-align:left;}
+  thead th{background:var(--bg);}
+  .est-row td{color:var(--muted); font-style:italic;}
+  .fuente{font-size:0.72rem; color:var(--muted); margin-top:8px;}
+  h2{font-size:1.05rem; margin:0 0 4px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:760px){ .grid2{grid-template-columns:1fr;} }
+  .bar-row{display:flex; align-items:center; gap:8px; margin:6px 0; font-size:0.82rem;}
+  .bar-label{width:150px; flex-shrink:0;}
+  .bar-track{flex:1; background:var(--bg); border:1px solid var(--border); border-radius:4px; height:16px; position:relative; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:4px;}
+  .bar-value{width:130px; text-align:left; color:var(--muted);}
+</style>
+</head>
+<body data-theme="light">
+<header>
+  <h1>USD/COP — Tendencia histórica (2020-2026) y proyección a 6 meses (sep 2026 - feb 2027)</h1>
+  <p class="subtitle">Bolsa de Valores de Colombia / mercado cambiario colombiano. Fecha de corte de datos: 2026-08-29. Ficha de análisis asociada: 2026-08-29-usdcop-tendencia-proximos-6-meses.md</p>
+</header>
+<div class="toolbar">
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo claro/oscuro">Modo oscuro</button>
+</div>
+
+<div class="disclaimer">
+  <strong>Aviso:</strong> Los puntos históricos marcados están citados con fuente y fecha en la ficha .md asociada. Los valores del tramo "proyección" (sep-2026 a feb-2027) son <strong>estimaciones de bancos/brokers, no datos reales</strong> — están marcados visualmente con línea punteada y banda sombreada. Este documento es educativo y no constituye asesoría financiera.
+</div>
+
+<main>
+  <section class="card">
+    <h2>1. Línea de tendencia histórica del USD/COP (2020-2026) + proyección 6 meses</h2>
+    <p class="subtitle">Serie de puntos verificados (círculos sólidos) y proyección de escenarios (línea punteada desde ago-2026). Un solo eje Y (COP por USD).</p>
+    <div class="chart-wrap" id="chartWrap">
+      <svg id="mainChart" viewBox="0 0 980 460" role="img" aria-label="Gráfico de línea del tipo de cambio USD/COP histórico y proyectado"></svg>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <table id="dataTable">
+      <caption>Tabla de datos — vista alternativa al gráfico. "Est." = estimado/proyectado (no real).</caption>
+      <thead><tr><th>Fecha / periodo</th><th>Valor (COP/USD)</th><th>Tipo</th><th>Fuente</th></tr></thead>
+      <tbody id="dataTableBody"></tbody>
+    </table>
+    <p class="fuente">Fuentes: Banco de la República, Superintendencia Financiera de Colombia, La República, Wilkinsonpc TRM histórico, actualicese.com, Bloomberg Línea, BBVA Research (ver ficha .md para el detalle de fecha por dato).</p>
+  </section>
+
+  <section class="card">
+    <h2>2. Escenarios proyectados para los próximos 6 meses (sep-2026 a feb-2027)</h2>
+    <p class="subtitle">Estimado / proyectado — opinión de bancos y brokers, no dato real. Rango en COP por USD.</p>
+    <div id="scenarioBars"></div>
+    <table>
+      <caption>Rangos de escenario citados por fuente</caption>
+      <thead><tr><th>Escenario</th><th>Rango COP/USD</th><th>Fuente / comentario</th></tr></thead>
+      <tbody>
+        <tr><td>Alcista para el peso</td><td>~3.300 – 3.450</td><td>JP Morgan (revisión jul-2026), vía Bloomberg Línea</td></tr>
+        <tr><td>Base</td><td>~3.300 – 3.800</td><td>Rango de dispersión de mercado, opinión del analista</td></tr>
+        <tr><td>Bajista para el peso</td><td>~4.020 – 4.085</td><td>BBVA Research (cierre 2026 y dic-2027)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>3. Resumen de lo que dicen los expertos</h2>
+    <div class="grid2">
+      <div>
+        <h3 style="font-size:0.95rem;">Factores que favorecen un peso más fuerte</h3>
+        <ul style="font-size:0.85rem; color:var(--muted);">
+          <li>Diferencial de tasas: Banrep en 12,00% (jul-2026) vs. tasas de la Fed en EE. UU. atrae capital extranjero (carry trade)</li>
+          <li>Brent elevado (~US$96,70 en 2T-2026) por tensiones en Medio Oriente</li>
+          <li>Revisión a la baja de proyecciones de bancos/brokers en julio de 2026</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:0.95rem;">Factores que presionan hacia un dólar más caro</h3>
+        <ul style="font-size:0.85rem; color:var(--muted);">
+          <li>Rebajas de calificación soberana: Fitch a BB, S&amp;P a BB- (dic-2025)</li>
+          <li>Incertidumbre fiscal poselectoral (gobierno electo De la Espriella-Restrepo, jun-2026)</li>
+          <li>Riesgo de caída del Brent hacia el punto de equilibrio de Ecopetrol (~US$50)</li>
+          <li>BBVA Research proyecta $4.020 (2026) y $4.085 (dic-2027)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  // ---- Historical verified points (Fuente y fecha en tabla / ficha .md) ----
+  const historical = [
+    {date:"2020-03-20", value:4153, label:"Pico COVID-19", type:"Histórico", source:"La República, 2020-03-20"},
+    {date:"2021-12-31", value:3981, label:"Cierre 2021 (dato reportado)", type:"Histórico", source:"Wilkinsonpc, 2021"},
+    {date:"2022-11-05", value:5061, label:"Máximo histórico TRM", type:"Histórico", source:"La República, 2022-11-05"},
+    {date:"2024-11-14", value:4478, label:"Máximo 2024", type:"Histórico", source:"Wilkinsonpc, 2024-11-14"},
+    {date:"2025-12-31", value:4053, label:"Promedio 2025", type:"Histórico (promedio anual)", source:"actualicese.com, 2025"},
+    {date:"2026-08-29", value:3203, label:"TRM vigente", type:"Histórico (actual)", source:"Superfinanciera / dolarhoy.co, 2026-08-29"}
+  ];
+
+  // ---- Projection scenarios (estimado, no real) ----
+  const lastReal = {date:"2026-08-29", value:3203};
+  const projection = {
+    alcista: [{date:"2026-08-29", value:3203},{date:"2026-11-30", value:3350},{date:"2027-02-28", value:3400}],
+    base:    [{date:"2026-08-29", value:3203},{date:"2026-11-30", value:3550},{date:"2027-02-28", value:3650}],
+    bajista: [{date:"2026-08-29", value:3203},{date:"2026-11-30", value:3850},{date:"2027-02-28", value:4020}]
+  };
+
+  const W=980,H=460,ML=70,MR=30,MT=30,MB=50;
+  const plotW=W-ML-MR, plotH=H-MT-MB;
+
+  const allDates = historical.map(d=>d.date).concat(projection.bajista.map(d=>d.date));
+  const t0 = new Date("2020-01-01").getTime();
+  const t1 = new Date("2027-02-28").getTime();
+  function x(dateStr){
+    const t = new Date(dateStr).getTime();
+    return ML + (t-t0)/(t1-t0)*plotW;
+  }
+  const minV = 2900, maxV = 5200;
+  function y(v){ return MT + plotH - (v-minV)/(maxV-minV)*plotH; }
+
+  const svg = document.getElementById('mainChart');
+  const ns = "http://www.w3.org/2000/svg";
+  function el(tag, attrs){
+    const e = document.createElementNS(ns, tag);
+    for(const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // grid + axis labels
+  const gridVals = [3000,3500,4000,4500,5000];
+  gridVals.forEach(v=>{
+    svg.appendChild(el('line',{x1:ML,x2:W-MR,y1:y(v),y2:y(v),stroke:'var(--grid)','stroke-width':1}));
+    const t = el('text',{x:ML-10,y:y(v)+4,'text-anchor':'end','font-size':11,fill:'var(--muted)'});
+    t.textContent = v.toLocaleString('es-CO');
+    svg.appendChild(t);
+  });
+  const yearTicks = ["2020-01-01","2021-01-01","2022-01-01","2023-01-01","2024-01-01","2025-01-01","2026-01-01","2027-01-01"];
+  yearTicks.forEach(dt=>{
+    const xx = x(dt);
+    svg.appendChild(el('line',{x1:xx,x2:xx,y1:MT,y2:H-MB,stroke:'var(--grid)','stroke-width':1}));
+    const t = el('text',{x:xx,y:H-MB+18,'text-anchor':'middle','font-size':11,fill:'var(--muted)'});
+    t.textContent = dt.slice(0,4);
+    svg.appendChild(t);
+  });
+
+  // band for projection range (bajista fill down to alcista) - single hue, opacity denotes uncertainty
+  const bandPoints = projection.bajista.map(d=>`${x(d.date)},${y(d.value)}`).join(' L ')
+    + ' L ' + projection.alcista.slice().reverse().map(d=>`${x(d.date)},${y(d.value)}`).join(' L ');
+  svg.appendChild(el('path',{d:`M ${bandPoints} Z`, fill:'var(--band-fill)', stroke:'none'}));
+
+  // historical solid line (Colombia = fixed color)
+  let hpath = historical.map((d,i)=> (i===0?'M':'L') + x(d.date) + ' ' + y(d.value)).join(' ');
+  svg.appendChild(el('path',{d:hpath, fill:'none', stroke:'var(--co-line)', 'stroke-width':2.5}));
+
+  historical.forEach(d=>{
+    const c = el('circle',{cx:x(d.date), cy:y(d.value), r:5, fill:'var(--co-line)', stroke:'var(--bg)', 'stroke-width':1.5, class:'pt'});
+    c.dataset.tip = `${d.label}: $${d.value.toLocaleString('es-CO')} COP/USD — ${d.date} (${d.source})`;
+    svg.appendChild(c);
+  });
+  // selective direct labels: max, min, current
+  const maxPt = historical.reduce((a,b)=>a.value>b.value?a:b);
+  const curPt = historical[historical.length-1];
+  [maxPt, curPt].forEach(d=>{
+    const t = el('text',{x:x(d.date), y:y(d.value)-12, 'text-anchor':'middle','font-size':11,fill:'var(--fg)','font-weight':'600'});
+    t.textContent = `$${d.value.toLocaleString('es-CO')}`;
+    svg.appendChild(t);
+  });
+
+  // projection dashed lines
+  const scenarioColors = {alcista:'var(--alcista)', base:'var(--base)', bajista:'var(--bajista)'};
+  const scenarioNames = {alcista:'Escenario alcista (peso fuerte)', base:'Escenario base', bajista:'Escenario bajista (peso débil)'};
+  Object.keys(projection).forEach(key=>{
+    const pts = projection[key];
+    let dpath = pts.map((d,i)=> (i===0?'M':'L') + x(d.date) + ' ' + y(d.value)).join(' ');
+    svg.appendChild(el('path',{d:dpath, fill:'none', stroke:scenarioColors[key], 'stroke-width':2.2, 'stroke-dasharray':'6,5'}));
+    pts.forEach((d,i)=>{
+      const c = el('circle',{cx:x(d.date), cy:y(d.value), r:4, fill:scenarioColors[key], stroke:'var(--bg)','stroke-width':1, class:'pt'});
+      c.dataset.tip = `${scenarioNames[key]} (estimado): $${d.value.toLocaleString('es-CO')} COP/USD — ${d.date}`;
+      svg.appendChild(c);
+    });
+    const last = pts[pts.length-1];
+    const lbl = el('text',{x:x(last.date)+6, y:y(last.value)+4, 'font-size':10, fill:scenarioColors[key], 'font-weight':'600'});
+    lbl.textContent = `$${last.value.toLocaleString('es-CO')} (est.)`;
+    svg.appendChild(lbl);
+  });
+
+  // divider marking "today" boundary between real and estimated
+  svg.appendChild(el('line',{x1:x(lastReal.date), x2:x(lastReal.date), y1:MT, y2:H-MB, stroke:'var(--fg)', 'stroke-width':1, 'stroke-dasharray':'2,3', opacity:'0.5'}));
+  const todayLbl = el('text',{x:x(lastReal.date), y:MT-10, 'text-anchor':'middle','font-size':10, fill:'var(--muted)'});
+  todayLbl.textContent = 'Corte de datos (2026-08-29) →';
+  svg.appendChild(todayLbl);
+
+  // tooltip interactivity
+  const tooltip = document.getElementById('tooltip');
+  const wrap = document.getElementById('chartWrap');
+  svg.querySelectorAll('.pt').forEach(pt=>{
+    pt.addEventListener('mousemove', (e)=>{
+      const rect = wrap.getBoundingClientRect();
+      tooltip.textContent = pt.dataset.tip;
+      tooltip.style.left = (e.clientX-rect.left+12)+'px';
+      tooltip.style.top = (e.clientY-rect.top-10)+'px';
+      tooltip.style.opacity = '1';
+    });
+    pt.addEventListener('mouseleave', ()=>{ tooltip.style.opacity='0'; });
+  });
+
+  // legend
+  const legend = document.getElementById('legend');
+  const legendItems = [
+    {c:'var(--co-line)', l:'USD/COP histórico verificado (Colombia)'},
+    {c:'var(--alcista)', l:'Proyección alcista (peso fuerte) — estimado'},
+    {c:'var(--base)', l:'Proyección base — estimado'},
+    {c:'var(--bajista)', l:'Proyección bajista (peso débil) — estimado'}
+  ];
+  legendItems.forEach(it=>{
+    const div = document.createElement('div'); div.className='legend-item';
+    div.innerHTML = `<span class="swatch" style="background:${it.c}"></span>${it.l}`;
+    legend.appendChild(div);
+  });
+
+  // data table
+  const tbody = document.getElementById('dataTableBody');
+  historical.forEach(d=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.date} — ${d.label}</td><td>$${d.value.toLocaleString('es-CO')}</td><td>${d.type}</td><td>${d.source}</td>`;
+    tbody.appendChild(tr);
+  });
+  Object.keys(projection).forEach(key=>{
+    projection[key].slice(1).forEach(d=>{
+      const tr = document.createElement('tr'); tr.className='est-row';
+      tr.innerHTML = `<td>${d.date} — ${scenarioNames[key]}</td><td>$${d.value.toLocaleString('es-CO')}</td><td>Estimado (proyección)</td><td>Ver ficha .md (Bloomberg Línea / BBVA Research)</td>`;
+      tbody.appendChild(tr);
+    });
+  });
+
+  // scenario bars section
+  const barsEl = document.getElementById('scenarioBars');
+  const barData = [
+    {name:'Alcista (peso fuerte)', min:3300, max:3450, color:'var(--alcista)'},
+    {name:'Base', min:3300, max:3800, color:'var(--base)'},
+    {name:'Bajista (peso débil)', min:4020, max:4085, color:'var(--bajista)'}
+  ];
+  const scaleMin=3000, scaleMax=4200;
+  barData.forEach(b=>{
+    const row = document.createElement('div'); row.className='bar-row';
+    const leftPct = (b.min-scaleMin)/(scaleMax-scaleMin)*100;
+    const widthPct = (b.max-b.min)/(scaleMax-scaleMin)*100;
+    row.innerHTML = `<div class="bar-label">${b.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="margin-left:${leftPct}%; width:${widthPct}%; background:${b.color};"></div></div>
+      <div class="bar-value">$${b.min.toLocaleString('es-CO')} – $${b.max.toLocaleString('es-CO')}</div>`;
+    barsEl.appendChild(row);
+  });
+
+  // theme toggle
+  const btn = document.getElementById('themeToggle');
+  btn.addEventListener('click', ()=>{
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    btn.textContent = isDark ? 'Modo oscuro' : 'Modo claro';
+  });
+})();
+</script>
+</body>
+</html>
