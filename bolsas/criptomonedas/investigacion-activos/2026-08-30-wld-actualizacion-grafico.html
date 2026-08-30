@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WLD — Precio y capitalización de mercado (mayo–agosto 2026)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --muted: #555555;
+    --grid: #e0e0e0;
+    --card: #f7f7f8;
+    --border: #d5d5d8;
+    --line-price: #6b3fa0;
+    --line-price-dark: #b389e0;
+    --dot: #6b3fa0;
+    --tooltip-bg: #1a1a1a;
+    --tooltip-text: #ffffff;
+  }
+  [data-theme="dark"] {
+    --bg: #14141a;
+    --text: #f0f0f2;
+    --muted: #b5b5c0;
+    --grid: #33333d;
+    --card: #1e1e26;
+    --border: #3a3a45;
+    --line-price: #b389e0;
+    --dot: #b389e0;
+    --tooltip-bg: #f0f0f2;
+    --tooltip-text: #14141a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button#themeToggle {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  button#themeToggle:hover { opacity: 0.85; }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    position: relative;
+  }
+  svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .price-line { fill: none; stroke: var(--line-price); stroke-width: 2.5; }
+  .price-dot { fill: var(--dot); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .price-dot:hover { r: 6; }
+  .direct-label { font-size: 11px; fill: var(--text); font-weight: 600; }
+  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 0.8rem; color: var(--text); align-items: center; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 14px; height: 3px; background: var(--line-price); border-radius: 2px; }
+  .tooltip {
+    position: absolute;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.82rem;
+  }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  th, td {
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; }
+  .note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  .footer-src { font-size: 0.72rem; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <h1>WLD (Worldcoin) — Evolución aproximada de precio, mayo–agosto 2026</h1>
+  <p class="subtitle">
+    Precio spot aproximado en USD. Puntos estimados/interpolados entre fechas de referencia documentadas (ver nota metodológica y tabla de datos).
+    Fecha de corte del gráfico: 2026-08-30. Fuente de cada punto indicada en la tabla inferior.
+  </p>
+
+  <div class="toolbar">
+    <button id="themeToggle" onclick="toggleTheme()">Cambiar a modo oscuro</button>
+  </div>
+
+  <div class="chart-card">
+    <svg id="chart" viewBox="0 0 820 380" role="img" aria-label="Gráfico de línea del precio de WLD en dólares entre mayo y agosto de 2026, con un único eje vertical de precio.">
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch"></span> Precio WLD (USD)</div>
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <table id="dataTable">
+    <caption>Tabla de datos — vista alternativa del gráfico</caption>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Precio aprox. (USD)</th>
+        <th>Evento / referencia</th>
+        <th>Fuente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2026-05-18</td><td>0,228 – 0,230</td><td>Mínimo histórico (ATL)</td><td>Agregadores de precio citando CoinGecko/CoinMarketCap</td></tr>
+      <tr><td>2026-07-15</td><td>0,41</td><td>Precio de referencia, ficha base</td><td>MetaMask/CoinGecko, 2026-07-15</td></tr>
+      <tr><td>2026-07-24</td><td>0,41 (estimado, interpolado)</td><td>Entra en vigor el recorte del 43% en emisión diaria</td><td>Cobertura de mercado citando World Foundation, jul. 2026</td></tr>
+      <tr><td>2026-08-14</td><td>0,34</td><td>Punto intermedio de agosto</td><td>Búsqueda web agregada (metamask.io), 2026-08-14</td></tr>
+      <tr><td>2026-08-27</td><td>0,412</td><td>Precio CoinGecko</td><td>CoinGecko, 2026-08-27</td></tr>
+      <tr><td>2026-08-30</td><td>0,378</td><td>Precio CoinMarketCap (fecha de corte)</td><td>CoinMarketCap, 2026-08-30</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">
+    <strong>Nota de integridad de datos:</strong> el punto del 24-jul-2026 se marca como estimado/interpolado porque no se dispone de una cotización puntual verificada exacta para esa fecha; se usa como referencia del evento de recorte de emisión, no como dato de precio confirmado. El resto de los puntos corresponde a cifras citadas textualmente por las fuentes indicadas, recuperadas por búsqueda web ante el bloqueo de acceso directo a CoinMarketCap.com y CoinGecko.com durante esta investigación (ver ficha <code>2026-08-30-wld-actualizacion.md</code> para el detalle metodológico completo). No se grafican capitalización de mercado y precio en el mismo eje: este gráfico usa un único eje Y de precio en USD; la capitalización de mercado se documenta solo en la tabla y en la ficha de análisis.
+  </p>
+
+  <p class="footer-src">
+    Fuentes: CoinMarketCap (coinmarketcap.com), CoinGecko (coingecko.com), MetaMask Price (metamask.io/price/worldcoin-wld), World Foundation (world.org). Ficha de análisis asociada: <code>bolsas/criptomonedas/investigacion-activos/2026-08-30-wld-actualizacion.md</code>.
+  </p>
+</div>
+
+<script>
+  const data = [
+    { date: "2026-05-18", price: 0.229, label: "Mínimo histórico", note: "ATL: US$0,228–0,230 (18-may-2026)" },
+    { date: "2026-07-15", price: 0.41, label: "Ref. jul.", note: "Precio de referencia ficha base (15-jul-2026)" },
+    { date: "2026-07-24", price: 0.41, label: null, note: "Estimado — entra en vigor recorte de emisión 43% (24-jul-2026)", estimated: true },
+    { date: "2026-08-14", price: 0.34, label: null, note: "Punto intermedio de agosto (14-ago-2026)" },
+    { date: "2026-08-27", price: 0.412, label: null, note: "CoinGecko (27-ago-2026)" },
+    { date: "2026-08-30", price: 0.378, label: "Corte 30-ago", note: "CoinMarketCap, fecha de corte (30-ago-2026)" }
+  ];
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("chart");
+  const W = 820, H = 380;
+  const marginL = 55, marginR = 30, marginT = 20, marginB = 50;
+  const plotW = W - marginL - marginR;
+  const plotH = H - marginT - marginB;
+
+  const dates = data.map(d => new Date(d.date).getTime());
+  const minT = Math.min(...dates);
+  const maxT = Math.max(...dates);
+  const prices = data.map(d => d.price);
+  const minP = 0;
+  const maxP = Math.max(...prices) * 1.25;
+
+  function x(t) { return marginL + ((t - minT) / (maxT - minT)) * plotW; }
+  function y(p) { return marginT + plotH - ((p - minP) / (maxP - minP)) * plotH; }
+
+  function el(tag, attrs, text) {
+    const e = document.createElementNS(svgNS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  // Grid lines + Y axis labels
+  const ySteps = 5;
+  for (let i = 0; i <= ySteps; i++) {
+    const p = minP + (maxP - minP) * (i / ySteps);
+    const yy = y(p);
+    svg.appendChild(el("line", { class: "grid-line", x1: marginL, x2: W - marginR, y1: yy, y2: yy }));
+    svg.appendChild(el("text", { class: "axis-label", x: marginL - 10, y: yy + 4, "text-anchor": "end" }, "US$" + p.toFixed(2)));
+  }
+
+  // X axis labels
+  data.forEach(d => {
+    const t = new Date(d.date).getTime();
+    const xx = x(t);
+    svg.appendChild(el("line", { class: "grid-line", x1: xx, x2: xx, y1: marginT, y2: H - marginB }));
+    const [yr, mo, da] = d.date.split("-");
+    svg.appendChild(el("text", { class: "axis-label", x: xx, y: H - marginB + 18, "text-anchor": "middle" }, `${da}/${mo}`));
+  });
+
+  // Price line
+  const pathD = data.map((d, i) => {
+    const xx = x(new Date(d.date).getTime());
+    const yy = y(d.price);
+    return (i === 0 ? "M" : "L") + xx + "," + yy;
+  }).join(" ");
+  svg.appendChild(el("path", { class: "price-line", d: pathD }));
+
+  const tooltip = document.getElementById("tooltip");
+  const chartCard = document.querySelector(".chart-card");
+
+  data.forEach(d => {
+    const xx = x(new Date(d.date).getTime());
+    const yy = y(d.price);
+    const dot = el("circle", {
+      class: "price-dot",
+      cx: xx, cy: yy, r: d.estimated ? 4 : 4.5,
+      "stroke-dasharray": d.estimated ? "2,2" : "none"
+    });
+    dot.addEventListener("mousemove", (ev) => {
+      const rect = chartCard.getBoundingClientRect();
+      tooltip.style.opacity = 1;
+      tooltip.style.left = (ev.clientX - rect.left + 12) + "px";
+      tooltip.style.top = (ev.clientY - rect.top - 10) + "px";
+      tooltip.textContent = `${d.date} — US$${d.price.toFixed(3)} — ${d.note}`;
+    });
+    dot.addEventListener("mouseleave", () => { tooltip.style.opacity = 0; });
+    svg.appendChild(dot);
+
+    if (d.label) {
+      svg.appendChild(el("text", { class: "direct-label", x: xx, y: yy - 12, "text-anchor": "middle" }, `${d.label}: US$${d.price.toFixed(2)}`));
+    }
+  });
+
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById("themeToggle");
+    if (body.getAttribute("data-theme") === "light") {
+      body.setAttribute("data-theme", "dark");
+      btn.textContent = "Cambiar a modo claro";
+    } else {
+      body.setAttribute("data-theme", "light");
+      btn.textContent = "Cambiar a modo oscuro";
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&P 500, Dow Jones y Apple — Variación indexada (30-jul a 28-ago 2026)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --grid: #dddddd;
+    --card-bg: #f7f7f7;
+    --us-color: #008300;
+    --line1: #008300;
+    --line2: #4da64d;
+    --line3: #8fbf8f;
+    --tooltip-bg: #ffffff;
+    --tooltip-border: #333333;
+  }
+  [data-theme="dark"] {
+    --bg: #121212;
+    --fg: #f0f0f0;
+    --grid: #333333;
+    --card-bg: #1e1e1e;
+    --us-color: #008300;
+    --line1: #33cc33;
+    --line2: #66d966;
+    --line3: #99e699;
+    --tooltip-bg: #1e1e1e;
+    --tooltip-border: #aaaaaa;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    margin: 0;
+    padding: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.25rem; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; color: var(--fg); opacity: 0.75; margin-bottom: 16px; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button#toggleTheme {
+    background: var(--card-bg);
+    color: var(--fg);
+    border: 1px solid var(--grid);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0 16px 0; font-size: 0.85rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .axis-label { font-size: 0.7rem; fill: var(--fg); opacity: 0.7; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .data-line { fill: none; stroke-width: 2.5; }
+  .data-point { cursor: pointer; }
+  .direct-label { font-size: 0.72rem; font-weight: 600; }
+  #tooltip {
+    position: absolute;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--tooltip-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    display: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 0.82rem;
+  }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; }
+  th, td {
+    border: 1px solid var(--grid);
+    padding: 6px 8px;
+    text-align: right;
+  }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: var(--card-bg); }
+  .note { font-size: 0.75rem; opacity: 0.7; margin-top: 10px; }
+  .wrap { position: relative; }
+</style>
+</head>
+<body data-theme="light">
+<div class="container">
+  <h1>S&P 500, Dow Jones y Apple — variación indexada (base 100 = 30 de julio de 2026)</h1>
+  <p class="subtitle">Del 30 de julio al 28 de agosto de 2026. Solo dos puntos de datos verificados por serie (inicio y cierre del 28 de agosto); no hay interpolación diaria real, las líneas conectan únicamente los dos puntos verificados. Fuentes: fichas de este repositorio (ver tabla).</p>
+
+  <div class="toolbar">
+    <button id="toggleTheme" aria-label="Cambiar entre modo claro y oscuro">Modo oscuro</button>
+  </div>
+
+  <div class="legend" id="legend">
+    <div class="legend-item"><span class="swatch" style="background:var(--line1)"></span> S&P 500 (SPX)</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--line2)"></span> Dow Jones (US30/DJI)</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--line3)"></span> Apple (AAPL)</div>
+  </div>
+
+  <div class="wrap">
+    <svg id="chart" viewBox="0 0 800 420" role="img" aria-label="Gráfico de líneas mostrando la variación porcentual indexada de S&P 500, Dow Jones y Apple entre el 30 de julio y el 28 de agosto de 2026">
+    </svg>
+    <div id="tooltip" role="status"></div>
+  </div>
+
+  <table>
+    <caption>Tabla de datos — nivel/precio de cierre y variación estimada</caption>
+    <thead>
+      <tr>
+        <th>Instrumento</th>
+        <th>Cierre aprox. 30-jul-2026</th>
+        <th>Cierre 28-ago-2026</th>
+        <th>Variación</th>
+        <th>Índice (base 100)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>S&P 500 (SPX)</td>
+        <td>~7.413,68 pts (punto medio de rango 7.371,00-7.417,36; dato aproximado)</td>
+        <td>7.711,48 pts</td>
+        <td>+4,02%</td>
+        <td>104,0</td>
+      </tr>
+      <tr>
+        <td>Dow Jones (US30/DJI)</td>
+        <td>51.594,14 pts (cierre 29-jul, referencia de la ficha previa)</td>
+        <td>53.569,44 pts</td>
+        <td>+3,83%</td>
+        <td>103,8</td>
+      </tr>
+      <tr>
+        <td>Apple (AAPL)</td>
+        <td>331,81 USD</td>
+        <td>319,70 USD</td>
+        <td>-3,65%</td>
+        <td>96,4</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">Nota de integridad: el punto de partida del S&P 500 es un punto medio aproximado de un rango intradía (dato no verificado con cierre exacto, según ficha del 2026-07-30). El resto de los valores corresponde a cierres verificados citados en las fichas de actualización del 2026-08-30. Ver fichas .md en esta misma carpeta para fuentes completas.</p>
+</div>
+
+<script>
+(function () {
+  const data = {
+    spx: { label: "S&P 500 (SPX)", start: 7413.68, end: 7711.48, unit: "pts", colorVar: "--line1" },
+    dji: { label: "Dow Jones (US30/DJI)", start: 51594.14, end: 53569.44, unit: "pts", colorVar: "--line2" },
+    aapl: { label: "Apple (AAPL)", start: 331.81, end: 319.70, unit: "USD", colorVar: "--line3" }
+  };
+
+  const series = Object.keys(data).map(key => {
+    const d = data[key];
+    const idxStart = 100;
+    const idxEnd = (d.end / d.start) * 100;
+    return { key, ...d, idxStart, idxEnd };
+  });
+
+  const svg = document.getElementById("chart");
+  const W = 800, H = 420;
+  const marginL = 55, marginR = 90, marginT = 20, marginB = 50;
+  const plotW = W - marginL - marginR;
+  const plotH = H - marginT - marginB;
+
+  const allIdx = series.flatMap(s => [s.idxStart, s.idxEnd]);
+  const yMin = Math.floor(Math.min(...allIdx) - 2);
+  const yMax = Math.ceil(Math.max(...allIdx) + 2);
+
+  function xScale(i) { return marginL + i * plotW; } // i = 0 or 1
+  function yScale(v) { return marginT + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
+
+  function getColor(varName) {
+    return getComputedStyle(document.body).getPropertyValue(varName).trim();
+  }
+
+  function render() {
+    svg.innerHTML = "";
+    const ns = "http://www.w3.org/2000/svg";
+
+    // gridlines (Y)
+    const steps = 5;
+    for (let i = 0; i <= steps; i++) {
+      const val = yMin + (i / steps) * (yMax - yMin);
+      const y = yScale(val);
+      const line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", marginL);
+      line.setAttribute("x2", W - marginR);
+      line.setAttribute("y1", y);
+      line.setAttribute("y2", y);
+      line.setAttribute("class", "gridline");
+      svg.appendChild(line);
+
+      const label = document.createElementNS(ns, "text");
+      label.setAttribute("x", marginL - 8);
+      label.setAttribute("y", y + 4);
+      label.setAttribute("text-anchor", "end");
+      label.setAttribute("class", "axis-label");
+      label.textContent = val.toFixed(1);
+      svg.appendChild(label);
+    }
+
+    // X axis labels
+    const xLabels = ["30-jul-2026 (base 100)", "28-ago-2026"];
+    xLabels.forEach((txt, i) => {
+      const label = document.createElementNS(ns, "text");
+      label.setAttribute("x", xScale(i));
+      label.setAttribute("y", H - marginB + 22);
+      label.setAttribute("text-anchor", i === 0 ? "start" : "end");
+      label.setAttribute("class", "axis-label");
+      label.textContent = txt;
+      svg.appendChild(label);
+    });
+
+    series.forEach(s => {
+      const color = getColor(s.colorVar);
+      const x0 = xScale(0), y0 = yScale(s.idxStart);
+      const x1 = xScale(1), y1 = yScale(s.idxEnd);
+
+      const line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", x0);
+      line.setAttribute("y1", y0);
+      line.setAttribute("x2", x1);
+      line.setAttribute("y2", y1);
+      line.setAttribute("class", "data-line");
+      line.setAttribute("stroke", color);
+      svg.appendChild(line);
+
+      [{x: x0, y: y0, idx: s.idxStart, real: s.start, dateLbl: "30-jul-2026"},
+       {x: x1, y: y1, idx: s.idxEnd, real: s.end, dateLbl: "28-ago-2026"}].forEach(pt => {
+        const circle = document.createElementNS(ns, "circle");
+        circle.setAttribute("cx", pt.x);
+        circle.setAttribute("cy", pt.y);
+        circle.setAttribute("r", 5);
+        circle.setAttribute("fill", color);
+        circle.setAttribute("class", "data-point");
+        circle.addEventListener("mousemove", (e) => showTooltip(e, s, pt));
+        circle.addEventListener("mouseleave", hideTooltip);
+        svg.appendChild(circle);
+      });
+
+      // direct label at end point (selective, only end value)
+      const dl = document.createElementNS(ns, "text");
+      dl.setAttribute("x", x1 + 8);
+      dl.setAttribute("y", y1 + 4);
+      dl.setAttribute("class", "direct-label");
+      dl.setAttribute("fill", color);
+      const pct = (s.idxEnd - 100).toFixed(2);
+      dl.textContent = `${s.key.toUpperCase()} ${pct > 0 ? "+" : ""}${pct}%`;
+      svg.appendChild(dl);
+    });
+  }
+
+  const tooltip = document.getElementById("tooltip");
+  function showTooltip(e, s, pt) {
+    tooltip.style.display = "block";
+    tooltip.style.left = (e.pageX + 12) + "px";
+    tooltip.style.top = (e.pageY - 10) + "px";
+    tooltip.innerHTML = `<strong>${s.label}</strong><br>${pt.dateLbl}<br>Nivel: ${pt.real.toLocaleString("es-CO", {maximumFractionDigits: 2})} ${s.unit}<br>Índice: ${pt.idx.toFixed(2)}`;
+  }
+  function hideTooltip() { tooltip.style.display = "none"; }
+
+  render();
+
+  const btn = document.getElementById("toggleTheme");
+  btn.addEventListener("click", () => {
+    const current = document.body.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    document.body.setAttribute("data-theme", next);
+    btn.textContent = next === "dark" ? "Modo claro" : "Modo oscuro";
+    render();
+  });
+
+  window.addEventListener("resize", render);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSPX — Evolución de NAV/precio, jul-ago 2026</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --muted: #555555;
+    --grid: #e2e2e2;
+    --card: #f7f7f7;
+    --europa: #eda100; /* color fijo Europa, modo claro */
+    --border: #cccccc;
+  }
+  [data-theme="dark"] {
+    --bg: #121212;
+    --text: #f0f0f0;
+    --muted: #b8b8b8;
+    --grid: #333333;
+    --card: #1e1e1e;
+    --europa: #c98500; /* color fijo Europa, modo oscuro */
+    --border: #444444;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button#theme-toggle {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .line-europa { fill: none; stroke: var(--europa); stroke-width: 3; }
+  .point { fill: var(--europa); stroke: var(--bg); stroke-width: 1.5; }
+  .direct-label { font-size: 12px; font-weight: 600; fill: var(--text); }
+  .legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 0.85rem; color: var(--text); }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; background: var(--europa); display: inline-block; }
+  .tooltip {
+    position: absolute;
+    background: var(--text);
+    color: var(--bg);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+  th { background: var(--card); }
+  .note { font-size: 0.78rem; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+  .chart-container { position: relative; }
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <div class="toolbar">
+    <button id="theme-toggle" onclick="toggleTheme()">Modo oscuro</button>
+  </div>
+
+  <h1>CSPX — iShares Core S&amp;P 500 UCITS ETF (Acc) — NAV/precio, jul-ago 2026</h1>
+  <p class="subtitle">
+    Valores en USD. Puntos verificados con fuente y fecha propia (ver tabla). No hay interpolación entre puntos:
+    la línea recta entre ellos es solo una ayuda visual y no representa cotizaciones diarias intermedias verificadas.
+    Fecha de corte de datos: 2026-08-30. Mercado: Europa (vehículo UCITS listado en bolsas europeas; subyacente S&amp;P 500, EE. UU.).
+  </p>
+
+  <div class="chart-card">
+    <div class="chart-container">
+      <svg id="chart" viewBox="0 0 760 380" role="img" aria-label="Gráfico de línea con la evolución del NAV o precio de CSPX entre el 13 de julio y el 26 de agosto de 2026">
+      </svg>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <div class="legend">
+      <span class="legend-swatch" aria-hidden="true"></span>
+      <span>CSPX — Europa (NAV/precio aproximado, USD)</span>
+    </div>
+  </div>
+
+  <table>
+    <caption>Tabla de datos — vista alternativa (obligatoria de accesibilidad)</caption>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Valor (USD)</th>
+        <th>Tipo de dato</th>
+        <th>Fuente</th>
+      </tr>
+    </thead>
+    <tbody id="data-table-body"></tbody>
+  </table>
+
+  <p class="note">
+    Nota de integridad: los puntos de mediados de julio se muestran como rango observado (~806-814 USD), representado aquí
+    por su punto medio (~810 USD) únicamente a efectos de trazar la línea; el 28-jul y el 29-jul corresponden a NAV y precio
+    de cierre respectivamente (pueden diferir levemente entre sí); el 26-ago corresponde al NAV oficial del fondo.
+    No se representan precios de cotización en bolsa exactos para el 28-30 de agosto de 2026 por no haber sido verificados
+    (ver ficha .md asociada). Fuentes: justETF/Investing.com/StockAnalysis.com (jul, vía ficha previa del repositorio,
+    2026-07-24), Investing.com (28/29-jul-2026), Cbonds (26-ago-2026).
+  </p>
+</div>
+
+<script>
+const data = [
+  { date: "2026-07-13/17", label: "13-17 jul", value: 810, type: "Rango observado (punto medio de ~806-814)", source: "Investing.com / StockAnalysis.com, 2026-07-13 a 17" },
+  { date: "2026-07-28", label: "28 jul", value: 799.98, type: "NAV oficial del fondo", source: "Investing.com, 2026-07-28" },
+  { date: "2026-07-29", label: "29 jul", value: 793.80, type: "Precio de cierre (línea LSE)", source: "Investing.com, 2026-07-29" },
+  { date: "2026-08-26", label: "26 ago", value: 827.2152, type: "NAV oficial del fondo", source: "Cbonds, 2026-08-26" }
+];
+
+const svgNS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById("chart");
+const W = 760, H = 380;
+const marginL = 60, marginR = 30, marginT = 20, marginB = 50;
+const plotW = W - marginL - marginR;
+const plotH = H - marginT - marginB;
+
+const values = data.map(d => d.value);
+const minV = Math.floor(Math.min(...values) - 10);
+const maxV = Math.ceil(Math.max(...values) + 10);
+
+function xPos(i) { return marginL + (i / (data.length - 1)) * plotW; }
+function yPos(v) { return marginT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+
+function el(tag, attrs) {
+  const e = document.createElementNS(svgNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+// Gridlines + Y axis labels
+const steps = 5;
+for (let s = 0; s <= steps; s++) {
+  const v = minV + (s / steps) * (maxV - minV);
+  const y = yPos(v);
+  svg.appendChild(el("line", { x1: marginL, x2: W - marginR, y1: y, y2: y, class: "gridline" }));
+  const t = el("text", { x: marginL - 8, y: y + 4, "text-anchor": "end", class: "axis-label" });
+  t.textContent = v.toFixed(0) + " USD";
+  svg.appendChild(t);
+}
+
+// X axis labels
+data.forEach((d, i) => {
+  const x = xPos(i);
+  const t = el("text", { x: x, y: H - marginB + 20, "text-anchor": "middle", class: "axis-label" });
+  t.textContent = d.label;
+  svg.appendChild(t);
+});
+
+// Line path
+let pathD = "";
+data.forEach((d, i) => {
+  const x = xPos(i), y = yPos(d.value);
+  pathD += (i === 0 ? "M" : "L") + x + "," + y + " ";
+});
+svg.appendChild(el("path", { d: pathD, class: "line-europa" }));
+
+// Points + direct labels (selective: first and last, per accessibility rule)
+const tooltip = document.getElementById("tooltip");
+data.forEach((d, i) => {
+  const x = xPos(i), y = yPos(d.value);
+  const c = el("circle", { cx: x, cy: y, r: 5, class: "point" });
+  c.addEventListener("mousemove", (evt) => {
+    tooltip.style.opacity = 1;
+    tooltip.style.left = (evt.pageX + 12) + "px";
+    tooltip.style.top = (evt.pageY - 28) + "px";
+    tooltip.textContent = d.label + ": " + d.value.toFixed(2) + " USD (" + d.type + ")";
+  });
+  c.addEventListener("mouseleave", () => { tooltip.style.opacity = 0; });
+  svg.appendChild(c);
+
+  if (i === 0 || i === data.length - 1) {
+    const lbl = el("text", { x: x, y: y - 12, "text-anchor": "middle", class: "direct-label" });
+    lbl.textContent = d.value.toFixed(2) + " USD";
+    svg.appendChild(lbl);
+  }
+});
+
+// Populate table
+const tbody = document.getElementById("data-table-body");
+data.forEach(d => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = "<td>" + d.date + "</td><td>" + d.value.toFixed(2) + "</td><td>" + d.type + "</td><td>" + d.source + "</td>";
+  tbody.appendChild(tr);
+});
+
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById("theme-toggle");
+  if (body.getAttribute("data-theme") === "light") {
+    body.setAttribute("data-theme", "dark");
+    btn.textContent = "Modo claro";
+  } else {
+    body.setAttribute("data-theme", "light");
+    btn.textContent = "Modo oscuro";
+  }
+}
+</script>
+</body>
+</html>
