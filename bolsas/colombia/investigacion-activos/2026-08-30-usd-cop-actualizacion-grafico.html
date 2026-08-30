@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USD/COP — TRM últimos ~45 días (corte 2026-08-30)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --grid: #e2e2e2;
+    --serie-colombia: #2a78d6;
+    --tooltip-bg: #ffffff;
+    --tooltip-border: #2a78d6;
+    --table-header: #f2f2f2;
+    --muted: #555555;
+  }
+  [data-theme="dark"] {
+    --bg: #12161c;
+    --text: #eaeaea;
+    --grid: #2c333d;
+    --serie-colombia: #3987e5;
+    --tooltip-bg: #1c222b;
+    --tooltip-border: #3987e5;
+    --table-header: #1c222b;
+    --muted: #aab0ba;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    margin: 0;
+    padding: 1.5rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.15rem; margin-bottom: 0.2rem; }
+  .subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 0.5rem; }
+  button.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 0.35rem 0.7rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .line-colombia { fill: none; stroke: var(--serie-colombia); stroke-width: 2.5; }
+  .point-colombia { fill: var(--serie-colombia); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .point-label { font-size: 11px; fill: var(--text); font-weight: 600; }
+  .legend { display: flex; align-items: center; gap: 0.4rem; margin: 0.5rem 0 1rem 0; font-size: 0.85rem; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; background: var(--serie-colombia); display: inline-block; }
+  .tooltip {
+    position: absolute;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--tooltip-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 1.2rem; font-size: 0.85rem; }
+  caption { text-align: left; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
+  th, td { border: 1px solid var(--grid); padding: 0.45rem 0.6rem; text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: var(--table-header); }
+  .note { font-size: 0.78rem; color: var(--muted); margin-top: 0.8rem; line-height: 1.4; }
+  .chart-container { position: relative; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro">Modo oscuro</button>
+  </div>
+  <h1>USD/COP — TRM oficial, últimos ~45 días (30-jul a 30-ago de 2026)</h1>
+  <p class="subtitle">
+    Fecha de corte de datos: 2026-08-30. Solo se grafican puntos verificados en fichas internas con fuente y fecha
+    (Superintendencia Financiera de Colombia, dolarhoy.co, Portafolio, El Nuevo Siglo, Investing.com).
+    <strong>El tramo entre puntos se dibuja como línea recta de referencia visual y no representa cotizaciones diarias
+    interpoladas o estimadas</strong>; los valores intermedios no verificados se omiten deliberadamente.
+    El punto del 27-ago-2026 es un valor implícito calculado por el analista a partir de la variación reportada
+    para el 29-ago (dato no verificado en fuente primaria).
+  </p>
+  <div class="legend">
+    <span class="legend-swatch" aria-hidden="true"></span>
+    <span>Colombia — TRM oficial USD/COP</span>
+  </div>
+  <div class="chart-container">
+    <svg id="chart" viewBox="0 0 800 420" role="img" aria-label="Gráfico de línea de la TRM oficial USD/COP entre el 30 de julio y el 30 de agosto de 2026, con valores desde 3.041 hasta 3.252 pesos por dólar"></svg>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <table>
+    <caption>Tabla de datos — TRM oficial USD/COP (vista alternativa al gráfico)</caption>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>TRM (COP/USD)</th>
+        <th>Fuente</th>
+      </tr>
+    </thead>
+    <tbody id="dataTableBody"></tbody>
+  </table>
+
+  <p class="note">
+    Nota de integridad: todos los valores mostrados provienen de fichas de análisis internas ya publicadas en
+    <code>bolsas/colombia/</code>, cada una con su fuente primaria citada. No se han estimado ni interpolado cifras
+    para completar la serie diaria; los días sin dato verificado simplemente no aparecen como punto en el gráfico.
+    Para la serie diaria completa y certificada, consultar https://suameca.banrep.gov.co.
+  </p>
+</div>
+
+<script>
+(function () {
+  var data = [
+    { date: "2026-07-30", value: 3206.18, source: "El Nuevo Siglo / Superintendencia Financiera, 2026-07-30" },
+    { date: "2026-08-06", value: 3179.40, source: "Portafolio, 2026-08-06" },
+    { date: "2026-08-14", value: 3144.00, source: "Investing.com / agregadores de mercado, 2026-08-29 (no verificado en fuente primaria)" },
+    { date: "2026-08-20", value: 3041.32, source: "Investing.com / agregadores de mercado, 2026-08-29 (no verificado en fuente primaria)" },
+    { date: "2026-08-27", value: 3144.28, source: "Cálculo implícito del analista sobre variación reportada por dolarhoy.co, 2026-08-29 (no verificado en fuente primaria)" },
+    { date: "2026-08-29", value: 3202.79, source: "Superintendencia Financiera de Colombia / dolarhoy.co, 2026-08-29" },
+    { date: "2026-08-30", value: 3202.79, source: "Misma TRM del 29-ago; sin nueva certificación en día no hábil (Superintendencia Financiera / dolarhoy.co, 2026-08-29)" }
+  ];
+
+  var svg = document.getElementById("chart");
+  var tooltip = document.getElementById("tooltip");
+  var tbody = document.getElementById("dataTableBody");
+  var ns = "http://www.w3.org/2000/svg";
+
+  var W = 800, H = 420, marginL = 70, marginR = 30, marginT = 20, marginB = 60;
+  var plotW = W - marginL - marginR;
+  var plotH = H - marginT - marginB;
+
+  var values = data.map(function (d) { return d.value; });
+  var minV = Math.min.apply(null, values) - 40;
+  var maxV = Math.max.apply(null, values) + 40;
+
+  function xScale(i) { return marginL + (i / (data.length - 1)) * plotW; }
+  function yScale(v) { return marginT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+
+  function fmt(v) {
+    return v.toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // Grid + Y axis labels
+  var steps = 5;
+  for (var s = 0; s <= steps; s++) {
+    var v = minV + (s / steps) * (maxV - minV);
+    var y = yScale(v);
+    var line = document.createElementNS(ns, "line");
+    line.setAttribute("x1", marginL);
+    line.setAttribute("x2", W - marginR);
+    line.setAttribute("y1", y);
+    line.setAttribute("y2", y);
+    line.setAttribute("class", "grid-line");
+    svg.appendChild(line);
+
+    var label = document.createElementNS(ns, "text");
+    label.setAttribute("x", marginL - 10);
+    label.setAttribute("y", y + 4);
+    label.setAttribute("text-anchor", "end");
+    label.setAttribute("class", "axis-label");
+    label.textContent = "$" + Math.round(v).toLocaleString("es-CO");
+    svg.appendChild(label);
+  }
+
+  // X axis labels
+  data.forEach(function (d, i) {
+    var x = xScale(i);
+    var label = document.createElementNS(ns, "text");
+    label.setAttribute("x", x);
+    label.setAttribute("y", H - marginB + 20);
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("class", "axis-label");
+    var parts = d.date.split("-");
+    label.textContent = parts[2] + "-" + parts[1];
+    svg.appendChild(label);
+  });
+
+  // Line path
+  var pathD = data.map(function (d, i) {
+    var x = xScale(i), y = yScale(d.value);
+    return (i === 0 ? "M" : "L") + x + "," + y;
+  }).join(" ");
+  var path = document.createElementNS(ns, "path");
+  path.setAttribute("d", pathD);
+  path.setAttribute("class", "line-colombia");
+  svg.appendChild(path);
+
+  // Points + selective direct labels (min, max, last)
+  var maxIdx = values.indexOf(Math.max.apply(null, values));
+  var minIdx = values.indexOf(Math.min.apply(null, values));
+  var lastIdx = data.length - 1;
+
+  data.forEach(function (d, i) {
+    var x = xScale(i), y = yScale(d.value);
+    var circle = document.createElementNS(ns, "circle");
+    circle.setAttribute("cx", x);
+    circle.setAttribute("cy", y);
+    circle.setAttribute("r", 5);
+    circle.setAttribute("class", "point-colombia");
+    circle.setAttribute("tabindex", "0");
+    circle.setAttribute("role", "img");
+    circle.setAttribute("aria-label", d.date + ": $" + fmt(d.value) + " COP/USD");
+
+    function show() {
+      tooltip.style.opacity = "1";
+      tooltip.innerHTML = "<strong>" + d.date + "</strong><br>$" + fmt(d.value) + " COP/USD<br><span style='color:var(--muted)'>" + d.source + "</span>";
+      var rect = svg.getBoundingClientRect();
+      var scaleX = rect.width / W;
+      var scaleY = rect.height / H;
+      tooltip.style.left = (x * scaleX + 10) + "px";
+      tooltip.style.top = (y * scaleY - 10) + "px";
+    }
+    function hide() { tooltip.style.opacity = "0"; }
+
+    circle.addEventListener("mouseenter", show);
+    circle.addEventListener("mouseleave", hide);
+    circle.addEventListener("focus", show);
+    circle.addEventListener("blur", hide);
+    svg.appendChild(circle);
+
+    if (i === maxIdx || i === minIdx || i === lastIdx) {
+      var lbl = document.createElementNS(ns, "text");
+      lbl.setAttribute("x", x);
+      lbl.setAttribute("y", i === maxIdx ? y - 12 : y + 20);
+      lbl.setAttribute("text-anchor", "middle");
+      lbl.setAttribute("class", "point-label");
+      lbl.textContent = "$" + Math.round(d.value).toLocaleString("es-CO");
+      svg.appendChild(lbl);
+    }
+  });
+
+  // Data table
+  data.forEach(function (d) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.date + "</td><td>$" + fmt(d.value) + "</td><td>" + d.source + "</td>";
+    tbody.appendChild(tr);
+  });
+
+  // Theme toggle
+  var btn = document.getElementById("themeToggle");
+  var root = document.documentElement;
+  function applyTheme(mode) {
+    if (mode === "dark") {
+      root.setAttribute("data-theme", "dark");
+      btn.textContent = "Modo claro";
+    } else {
+      root.removeAttribute("data-theme");
+      btn.textContent = "Modo oscuro";
+    }
+  }
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(prefersDark ? "dark" : "light");
+  btn.addEventListener("click", function () {
+    var isDark = root.getAttribute("data-theme") === "dark";
+    applyTheme(isDark ? "light" : "dark");
+  });
+})();
+</script>
+</body>
+</html>
