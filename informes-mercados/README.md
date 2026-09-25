@@ -8,6 +8,8 @@ A diferencia de las fichas estándar de `bolsas/*/`, estos informes no pertenece
 
 `AAAA-MM-DD-informe-mercados.md` — informe general (resumen ejecutivo + datos clave + informe cualitativo + fuentes, por mercado).
 `AAAA-MM-DD-oportunidades-inversion.md` — oportunidades de inversión identificadas ese corte, con tesis y nivel de riesgo.
+`AAAA-MM-DD-matriz-comparativa.md` — matriz comparativa de todos los instrumentos actualizados en un corte (nivel, base, variación del período, catalizador y fuente), con ranking y contexto común.
+`AAAA-MM-DD-matriz-comparativa-grafico.html` — gráfico de barras de la variación del período, con color fijo por mercado y tabla de datos.
 `AAAA-MM-DD-informe-mercados-grafico.html` — artefacto HTML autocontenido (modo claro/oscuro, gráficas y tabla de datos) con el mismo contenido, siguiendo la skill **dataviz** del repositorio.
 
 ## Reglas
