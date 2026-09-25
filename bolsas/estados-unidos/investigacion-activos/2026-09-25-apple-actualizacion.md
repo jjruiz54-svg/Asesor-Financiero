@@ -40,7 +40,7 @@ Apple cerró el 25 de septiembre de 2026 en 341,07 USD, +5,15 USD (+1,53%) en el
 
 ## Comportamiento últimos 5 años
 
-La ventana 2021-2026 está en la ficha base [`2026-07-30-apple-analisis.md`](2026-07-30-apple-analisis.md). Hecho nuevo: la acción supera su máximo previo de julio (340,08 USD) con el primer ciclo de producto de la era Ternus.
+La ventana 2021-2026 está en la ficha base [`2026-07-30-apple-analisis.md`](2026-07-30-apple-analisis.md). Hecho nuevo: la acción supera su máximo previo de julio (340,08 USD, según ficha de julio) con el primer ciclo de producto de la era Ternus.
 
 ## Resultados financieros
 
@@ -51,7 +51,7 @@ No hubo reporte trimestral en septiembre. El resultado del trimestre fiscal de j
 - **Fed y valoración:** la Fed subió tasas a 3,75%-4,00% el 16-sep y 16 de 18 miembros esperan otra alza (Fuente: CNBC, 2026-09-16). Con el 10 años en 5,196% (Fuente: Reuters vía Investing.com, 2026-09-24), una acción de múltiplo alto como Apple es teóricamente vulnerable; sin embargo, el mercado premió a las megacaps tecnológicas con balance fuerte frente a los cíclicos (ver ficha del Dow).
 - **China:** la cumbre Trump-Xi del 24-sep y la extensión inicial de dos meses de la tregua comercial reducen, por ahora, el riesgo de aranceles sobre dispositivos ensamblados en China y sobre las ventas de Apple en ese país (Fuente: Reuters vía Yahoo Finance, 2026-09-24; implicación = opinión del analista). Taiwán figura entre los temas espinosos de la cumbre, relevante por la dependencia de TSMC.
 - **Consumo e inflación:** IPC de agosto 3,4% anual con gasolina +3,9% mensual (Fuente: BLS / Fox Business, 2026-09); precios más altos de la energía pueden restar poder de compra para un iPhone Pro de 1.199 USD o un plegable de 1.999 USD (opinión del analista).
-- **Impacto sobre Colombia:** con el dólar por encima de 3.300 COP (Fuente: Bloomberg Línea, 2026-09), el precio local de los iPhone y de los CEDEAR/ETF con exposición a Apple sube en pesos; para un inversionista colombiano, la ganancia de AAPL en septiembre se amplificó por la depreciación del peso (opinión del analista).
+- **Impacto sobre Colombia:** con el dólar por encima de 3.300 COP (Fuente: Bloomberg Línea, 2026-09), el precio local de los iPhone y el valor en pesos de las acciones de Apple o ETF con exposición a Apple negociados desde Colombia (por ejemplo, vía el Mercado Global Colombiano) sube; para un inversionista colombiano, la ganancia de AAPL en septiembre se amplificó por la depreciación del peso (opinión del analista).
 
 ## Escenarios
 
