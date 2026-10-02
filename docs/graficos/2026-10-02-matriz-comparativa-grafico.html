@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matriz comparativa de instrumentos — 02-oct-2026</title>
+<style>
+  :root {
+    --surface: #fcfcfb; --plane: #f4f3ee; --text-1: #0b0b0b; --text-2: #52514e; --text-3: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --c-colombia: #2a78d6; --c-eeuu: #008300; --c-asia: #e87ba4; --c-europa: #eda100; --c-cripto: #4a3aa7;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --surface: #1a1a19; --plane: #0f0f0e; --text-1: #ffffff; --text-2: #c3c2b7; --text-3: #8f8d86;
+      --grid: #2c2c2a; --axis: #3a3a37; --border: rgba(255,255,255,0.10);
+      --c-colombia: #3987e5; --c-eeuu: #008300; --c-asia: #d55181; --c-europa: #c98500; --c-cripto: #9085e9;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --surface: #1a1a19; --plane: #0f0f0e; --text-1: #ffffff; --text-2: #c3c2b7; --text-3: #8f8d86;
+    --grid: #2c2c2a; --axis: #3a3a37; --border: rgba(255,255,255,0.10);
+    --c-colombia: #3987e5; --c-eeuu: #008300; --c-asia: #d55181; --c-europa: #c98500; --c-cripto: #9085e9;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--plane); color: var(--text-1);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 48px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 22px 18px; margin-bottom: 22px; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  h1 { font-size: 1.35rem; margin: 0 0 6px; line-height: 1.3; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .sub { color: var(--text-2); font-size: 0.9rem; margin: 0 0 14px; max-width: 760px; }
+  button.theme { flex: none; border: 1px solid var(--border); background: var(--plane); color: var(--text-1);
+    border-radius: 8px; padding: 6px 12px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 4px 0 8px; font-size: 0.86rem; color: var(--text-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .chart { position: relative; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .zero { stroke: var(--axis); stroke-width: 1.5; }
+  .tick { fill: var(--text-3); font-size: 12px; }
+  .cat { fill: var(--text-1); font-size: 13px; }
+  .cat-sub { fill: var(--text-3); font-size: 11px; }
+  .val { fill: var(--text-1); font-size: 12.5px; font-weight: 600; }
+  .bar { cursor: pointer; outline: none; }
+  .bar:hover path, .bar:focus path { filter: brightness(1.08); }
+  .bar:focus-visible .hit { stroke: var(--text-1); stroke-width: 1.5; }
+  .hit { fill: transparent; }
+  .tip { position: absolute; pointer-events: none; background: var(--surface); color: var(--text-1);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 0.82rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18); opacity: 0; transition: opacity .12s; max-width: 280px; }
+  .tip b { display: block; margin-bottom: 2px; }
+  .tip .m { color: var(--text-2); }
+  .note { color: var(--text-3); font-size: 0.8rem; margin: 10px 0 0; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.84rem; }
+  caption { text-align: left; color: var(--text-2); font-size: 0.86rem; margin-bottom: 8px; }
+  th, td { padding: 7px 9px; border-bottom: 1px solid var(--grid); text-align: left; vertical-align: top; }
+  th { color: var(--text-2); font-weight: 600; background: var(--plane); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.num b { white-space: nowrap; }
+  table { min-width: 720px; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+  .nv { color: var(--text-3); font-style: italic; }
+  footer { color: var(--text-3); font-size: 0.78rem; }
+  @media (max-width: 640px) { .panel { padding: 16px 12px; } h1 { font-size: 1.15rem; } }
+  @media (forced-colors: active) { .bar path { forced-color-adjust: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="panel">
+    <div class="top">
+      <div>
+        <h1>¿Quién ganó y quién perdió? Variación semanal de cada instrumento, 25-sep → 02-oct-2026</h1>
+        <p class="sub">Variación porcentual de la semana en la moneda de cotización de cada instrumento, desde el último cierre de la ficha del 25-sep (algunas bases son del 23 o 24-sep) hasta el último cierre verificado al 2026-10-02, ordenada de mayor a menor. China continental está cerrada por la Semana Dorada (1-7 oct): Shanghái y Shenzhen van al 30-sep. Para USD/COP, una barra negativa significa que el <b>dólar se abarató</b> y el peso se apreció.</p>
+      </div>
+      <button class="theme" id="themeBtn" type="button">Modo oscuro</button>
+    </div>
+
+    <div class="legend" aria-label="Leyenda: color por mercado">
+      <span><i style="background:var(--c-colombia)"></i>Colombia</span>
+      <span><i style="background:var(--c-eeuu)"></i>Estados Unidos</span>
+      <span><i style="background:var(--c-asia)"></i>Asia</span>
+      <span><i style="background:var(--c-europa)"></i>Europa</span>
+      <span><i style="background:var(--c-cripto)"></i>Criptomonedas</span>
+    </div>
+
+    <div class="chart" id="chart">
+      <svg id="svg" role="img" aria-labelledby="svgTitle svgDesc">
+        <title id="svgTitle">Barras horizontales de variación porcentual por instrumento</title>
+        <desc id="svgDesc">WLD +31,4 %, Nikkei +2,93 %, BTC +0,4 %, DAX −0,14 %, S&amp;P 500 −0,27 %, STI −0,28 %, ETH −0,4 %, CSPX −0,48 %, Euro Stoxx 50 −0,63 %, USD/COP −0,66 %, KOSPI −1,09 %, Shanghái −1,19 %, Dow Jones −1,26 %, FTSE 100 −2,04 %, Apple −2,16 %, Hang Seng −2,19 %, CAC 40 −2,28 %, IBEX 35 −2,49 %, COLCAP −3,04 %, Shenzhen −3,22 %.</desc>
+      </svg>
+      <div class="tip" id="tip" role="status" aria-live="polite"></div>
+    </div>
+    <p class="note">Las cifras vienen de las fichas de cada sub-agente con corte 2026-10-02 (fuente y fecha en la tabla); las variaciones son cálculo propio de cada agente. No se ajustan por tipo de cambio: CSPX baja −0,48 % en USD, pero ≈ +0,13 % en EUR. Los cierres europeos y el de Apple vienen de fuentes fuera de la lista de confianza (marcadas en la tabla). Ningún punto se interpoló ni estimó.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Matriz comparativa (vista de tabla)</h2>
+    <div class="table-wrap">
+      <table>
+        <caption>Todos los instrumentos actualizados el 2026-10-02 con variación verificada frente al corte anterior; también se listan sin gráfico los que no la tienen.</caption>
+        <thead>
+          <tr><th>Mercado</th><th>Instrumento</th><th class="num">Nivel al corte</th><th class="num">Base</th><th class="num">Variación</th><th>Catalizador</th><th>Fuente</th></tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>Informe consolidado por el orquestador a partir de los agentes bolsa-colombia, bolsa-eeuu, bolsa-asia, bolsa-europa y criptomonedas. Ficha: <code>informes-mercados/2026-10-02-matriz-comparativa.md</code>. Material educativo y de estudio personal; no constituye asesoría financiera.</footer>
+</div>
+
+<script>
+(function () {
+  const MK = {
+    colombia: { name: "Colombia", v: "--c-colombia" },
+    eeuu:     { name: "Estados Unidos", v: "--c-eeuu" },
+    asia:     { name: "Asia", v: "--c-asia" },
+    europa:   { name: "Europa", v: "--c-europa" },
+    cripto:   { name: "Criptomonedas", v: "--c-cripto" }
+  };
+  // label: etiqueta directa visible (obligatoria en Asia y Europa; selectiva en el resto)
+  const rows = [
+    { m: "cripto",   n: "Worldcoin (WLD)",   lvl: "0,5676 USD (02-oct)",    base: "0,4318 USD (25-sep)",  pct: 31.4,  cat: "Ruptura técnica 27-sep; suministro +3,9 %", src: "CoinMarketCap, 2026-10-02", label: true },
+    { m: "asia",     n: "Nikkei 225",        lvl: "68.309,46 (02-oct)",     base: "66.364,20 (25-sep)",   pct: 2.93,  cat: "Micron +3,3 % el 1-oct; Tankan +24", src: "Investing.com / News On Japan, 2026-10-02", label: true },
+    { m: "cripto",   n: "Bitcoin (BTC)",     lvl: "84.544,70 USD (02-oct)", base: "84.184,47 USD (25-sep)", pct: 0.4, cat: "Tocó ~87.000; liquidaciones ~US$600 M", src: "CoinMarketCap, 2026-10-02", label: false },
+    { m: "europa",   n: "DAX",               lvl: "25.231,20 (02-oct)",     base: "25.266,53 (24-sep)",   pct: -0.14, cat: "Infineon +8,8 % sostiene", src: "dpa-AFX vía onvista, 2026-10-02 (fuera de lista)", label: true },
+    { m: "eeuu",     n: "S&P 500",           lvl: "7.722,72 (02-oct)",      base: "7.743,41 (25-sep)",    pct: -0.27, cat: "Empleo débil (+29k) vs. bono 10a 5,28 %", src: "AP vía WTOP, 2026-10-02", label: false },
+    { m: "asia",     n: "STI (Singapur)",    lvl: "5.667,68 (01-oct)",      base: "5.683,37 (24-sep)",    pct: -0.28, cat: "Cierre 2-oct no verificado", src: "Yahoo Finance Singapur, 2026-10-01", label: true },
+    { m: "cripto",   n: "Ethereum (ETH)",    lvl: "2.666,80 USD (02-oct)",  base: "2.676,17 USD (25-sep)", pct: -0.4, cat: "ETF ETH +US$832 M en septiembre", src: "CoinMarketCap, 2026-10-02", label: false },
+    { m: "europa",   n: "CSPX (NAV USD)",    lvl: "826,98 USD (01-oct)",    base: "830,97 USD (24-sep)",  pct: -0.48, cat: "≈ +0,13 % en EUR por euro débil", src: "iShares / BlackRock, 2026-10-01", label: true },
+    { m: "europa",   n: "Euro Stoxx 50",     lvl: "6.233,29 (02-oct)",      base: "6.272,5 (24-sep)",     pct: -0.63, cat: "Inflación flash 3,8 %", src: "finanzen.ch (STOXX), 2026-10-02 (fuera de lista)", label: true },
+    { m: "colombia", n: "USD/COP (TRM)",     lvl: "$3.307,73 (02-oct)",     base: "$3.329,61 (25-sep)",   pct: -0.66, cat: "Banrep sube a 12,25 %; peso se aprecia", src: "La República / Superfinanciera, 2026-10-02", label: true },
+    { m: "asia",     n: "KOSPI",             lvl: "7.003,74 (02-oct)",      base: "7.080,92 (23-sep)",    pct: -1.09, cat: "Reabre tras Chuseok con venta de bonos", src: "SBS News / Seoul Economic Daily, 2026-10-02", label: true },
+    { m: "asia",     n: "SSE Composite",     lvl: "3.842,19 (30-sep)",      base: "3.888,4 (24-sep)",     pct: -1.19, cat: "Semana Dorada; PBoC recorta PSL", src: "Futu News / BBN Times, 2026-09-30", label: true },
+    { m: "eeuu",     n: "Dow Jones (US30)",  lvl: "51.176,96 (02-oct)",     base: "51.828,62 (25-sep)",   pct: -1.26, cat: "Cíclicos pagan tasas largas", src: "AP vía WTOP, 2026-10-02", label: true },
+    { m: "europa",   n: "FTSE 100",          lvl: "10.461,95 (02-oct)",     base: "10.679,99 (24-sep)",   pct: -2.04, cat: "Gilt 30a sobre 6 %", src: "BBN Times, 2026-10-02 (fuera de lista)", label: true },
+    { m: "eeuu",     n: "Apple (AAPL)",      lvl: "333,69 USD (02-oct)",    base: "341,07 USD (25-sep)",  pct: -2.16, cat: "Morgan Stanley baja objetivo a 355", src: "Yahoo Finance / stockanalysis, 2026-10-02 (por confirmar)", label: false },
+    { m: "asia",     n: "Hang Seng",         lvl: "23.972,29 (02-oct)",     base: "24.510,09 (25-sep)",   pct: -2.19, cat: "Decepción con estímulo; HSBC −5,38 %", src: "Futu News / China Daily HK, 2026-10-02", label: true },
+    { m: "europa",   n: "CAC 40",            lvl: "7.897,19 (02-oct)",      base: "8.081,43 (24-sep)",    pct: -2.28, cat: "OAT 10a ~4,96 %; presupuesto 2027", src: "BFM Bourse, 2026-10-02 (fuera de lista)", label: true },
+    { m: "europa",   n: "IBEX 35",           lvl: "19.085,30 (02-oct)",     base: "19.573,40 (24-sep)",   pct: -2.49, cat: "Banca arrastra (−2,17 % el 1-oct)", src: "El Periódico de Ceuta / Capital, 2026-10-02 (fuera de lista)", label: true },
+    { m: "colombia", n: "MSCI COLCAP",       lvl: "2.530,05 (01-oct)",      base: "2.609,40 (24-sep)",    pct: -3.04, cat: "4 sesiones a la baja tras Banrep", src: "Valora Analitik, 2026-10-01", label: true },
+    { m: "asia",     n: "SZSE Component",    lvl: "12.887,6 (30-sep)",      base: "13.316,97 (24-sep)",   pct: -3.22, cat: "Semana Dorada (reabre 8-oct)", src: "Trading Economics, 2026-09-30", label: true }
+  ];
+  const extra = [];
+
+  const fmt = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " %";
+  const NS = "http://www.w3.org/2000/svg";
+  const mk = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+
+  // Tabla
+  const tb = document.getElementById("tbody");
+  [...rows, ...extra].forEach(r => {
+    const tr = document.createElement("tr");
+    const v = r.pct === undefined ? '<span class="nv">dato no verificado</span>' : fmt(r.pct);
+    tr.innerHTML = `<td><span class="sw" style="background:var(${MK[r.m].v})"></span>${MK[r.m].name}</td><td>${r.n}</td>` +
+      `<td class="num">${r.lvl}</td><td class="num">${r.base || '<span class="nv">dato no verificado</span>'}</td>` +
+      `<td class="num"><b>${v}</b></td><td>${r.cat}</td><td>${r.src}</td>`;
+    tb.appendChild(tr);
+  });
+
+  // Gráfico
+  const svg = document.getElementById("svg"), tip = document.getElementById("tip"), box = document.getElementById("chart");
+  function draw() {
+    [...svg.querySelectorAll("g, line.gridline, text.tick, line.zero")].forEach(n => n.remove());
+    const W = Math.max(360, box.clientWidth), narrow = W < 560;
+    const L = narrow ? 118 : 178, R = 58, T = 26, rowH = 32, barH = 18, B = 8;
+    const H = T + rows.length * rowH + B;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const min = -5, max = 35, x = v => L + (v - min) / (max - min) * (W - L - R);
+    for (const t of [-5, 0, 5, 10, 20, 30]) {
+      svg.appendChild(mk("line", { x1: x(t), x2: x(t), y1: T - 6, y2: H - B, class: t === 0 ? "zero" : "gridline" }));
+      const tt = mk("text", { x: x(t), y: T - 12, "text-anchor": "middle", class: "tick" });
+      tt.textContent = (t > 0 ? "+" : t < 0 ? "−" : "") + Math.abs(t) + " %";
+      svg.appendChild(tt);
+    }
+    rows.forEach((r, i) => {
+      const cy = T + i * rowH + rowH / 2, y = cy - barH / 2;
+      const g = mk("g", { class: "bar", tabindex: 0, role: "img", "aria-label": `${r.n}, ${MK[r.m].name}: ${fmt(r.pct)}` });
+      g.appendChild(mk("rect", { class: "hit", x: 2, y: T + i * rowH + 1, width: W - 4, height: rowH - 2, rx: 6 }));
+      const x0 = x(0), x1 = x(r.pct), rad = Math.min(4, Math.abs(x1 - x0));
+      let d;
+      if (r.pct >= 0) d = `M${x0},${y} H${x1 - rad} Q${x1},${y} ${x1},${y + rad} V${y + barH - rad} Q${x1},${y + barH} ${x1 - rad},${y + barH} H${x0} Z`;
+      else d = `M${x0},${y} H${x1 + rad} Q${x1},${y} ${x1},${y + rad} V${y + barH - rad} Q${x1},${y + barH} ${x1 + rad},${y + barH} H${x0} Z`;
+      g.appendChild(mk("path", { d, fill: `var(${MK[r.m].v})` }));
+      const c = mk("text", { x: L - 12, y: cy - (narrow ? 0 : 1), "text-anchor": "end", "dominant-baseline": "middle", class: "cat" });
+      c.textContent = r.n; g.appendChild(c);
+      if (r.label) {
+        const pos = r.pct >= 0;
+        // Negativas: la etiqueta va al lado derecho del 0 (espacio libre) para no chocar con el nombre
+        const vt = mk("text", { x: pos ? x1 + 6 : x0 + 6, y: cy, "text-anchor": "start", "dominant-baseline": "middle", class: "val" });
+        vt.textContent = fmt(r.pct); g.appendChild(vt);
+      }
+      const show = (ev) => {
+        tip.innerHTML = `<b>${r.n}</b><span class="m">${MK[r.m].name}</span><br>Variación: <b style="display:inline">${fmt(r.pct)}</b><br>${r.base} → ${r.lvl}<br><span class="m">${r.src}</span>`;
+        const bb = box.getBoundingClientRect();
+        let px, py;
+        if (ev && ev.clientX) { px = ev.clientX - bb.left + 14; py = ev.clientY - bb.top + 14; }
+        else { px = (x1 / W) * bb.width + 10; py = (cy / H) * bb.height; }
+        tip.style.opacity = 1;
+        const tw = tip.offsetWidth; if (px + tw > bb.width) px = Math.max(0, px - tw - 28);
+        tip.style.left = px + "px"; tip.style.top = py + "px";
+      };
+      g.addEventListener("mousemove", show); g.addEventListener("focus", () => show());
+      g.addEventListener("mouseleave", () => tip.style.opacity = 0); g.addEventListener("blur", () => tip.style.opacity = 0);
+      svg.appendChild(g);
+    });
+  }
+  draw(); window.addEventListener("resize", draw);
+
+  // Tema
+  const btn = document.getElementById("themeBtn"), root = document.documentElement;
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const sync = () => btn.textContent = isDark() ? "Modo claro" : "Modo oscuro";
+  btn.addEventListener("click", () => { root.dataset.theme = isDark() ? "light" : "dark"; sync(); });
+  sync();
+})();
+</script>
+</body>
+</html>

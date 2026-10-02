@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USD/COP — TRM oficial 30-ago a 2-oct de 2026 (corte 2026-10-02)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --grid: #e2e2e2;
+    --serie-colombia: #2a78d6;
+    --tooltip-bg: #ffffff;
+    --tooltip-border: #2a78d6;
+    --table-header: #f2f2f2;
+    --muted: #555555;
+    --event: #6b6b6b;
+    --highlight: #eef4fc;
+  }
+  [data-theme="dark"] {
+    --bg: #12161c;
+    --text: #eaeaea;
+    --grid: #2c333d;
+    --serie-colombia: #3987e5;
+    --tooltip-bg: #1c222b;
+    --tooltip-border: #3987e5;
+    --table-header: #1c222b;
+    --muted: #aab0ba;
+    --event: #9aa1ab;
+    --highlight: #18222f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    margin: 0;
+    padding: 1.5rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.15rem; margin-bottom: 0.2rem; }
+  .subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 0.5rem; }
+  button.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 0.35rem 0.7rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .line-colombia { fill: none; stroke: var(--serie-colombia); stroke-width: 2.5; stroke-linejoin: round; }
+  .point-colombia { fill: var(--serie-colombia); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .point-colombia:focus { outline: none; stroke: var(--text); stroke-width: 2; }
+  .point-label { font-size: 11px; fill: var(--text); font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
+  .event-line { stroke: var(--event); stroke-width: 1; stroke-dasharray: 4 4; }
+  .event-label { font-size: 11px; fill: var(--event); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; stroke-linejoin: round; }
+  .base-line { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0.8; }
+  .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin: 0.5rem 0 1rem 0; font-size: 0.85rem; }
+  .legend-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; background: var(--serie-colombia); display: inline-block; }
+  .legend-dash { width: 18px; height: 0; border-top: 1px dashed var(--event); display: inline-block; }
+  .legend-dot { width: 18px; height: 0; border-top: 1px dotted var(--muted); display: inline-block; }
+  .tooltip {
+    position: absolute;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--tooltip-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 1.2rem; font-size: 0.85rem; }
+  caption { text-align: left; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
+  th, td { border: 1px solid var(--grid); padding: 0.45rem 0.6rem; text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  td:last-child, th:last-child { text-align: left; }
+  th { background: var(--table-header); }
+  tr.new-point td { background: var(--highlight); }
+  .note { font-size: 0.78rem; color: var(--muted); margin-top: 0.8rem; line-height: 1.4; }
+  .chart-container { position: relative; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro">Modo oscuro</button>
+  </div>
+  <h1>USD/COP — TRM oficial del 30 de agosto al 2 de octubre de 2026</h1>
+  <p class="subtitle">
+    Fecha de corte de datos: 2026-10-02. Solo se grafican valores de TRM citados en la ficha
+    <code>2026-10-02-usd-cop-actualizacion.md</code> (Superintendencia Financiera de Colombia, vía La República y Portafolio).
+    El eje horizontal es proporcional al calendario. <strong>Los tramos entre puntos son rectas de referencia visual,
+    no cotizaciones interpoladas ni estimadas</strong>. Faltan el 2, 3 y 4 de septiembre (TRM no verificada) y los fines de semana,
+    cuando rige la TRM del viernes. Las líneas discontinuas verticales marcan el alza de la Fed (16-sep) y el alza del Banco de la República (30-sep);
+    la línea punteada horizontal marca la base de comparación de la ficha previa (25-sep, $3.329,61).
+  </p>
+  <div class="legend">
+    <span class="legend-item"><span class="legend-swatch" aria-hidden="true"></span>Colombia — TRM oficial USD/COP</span>
+    <span class="legend-item"><span class="legend-dash" aria-hidden="true"></span>Eventos: alza Fed a 3,75 %-4,00 % (16-sep); alza Banrep a 12,25 % (30-sep)</span>
+    <span class="legend-item"><span class="legend-dot" aria-hidden="true"></span>Base 25-sep ($3.329,61)</span>
+  </div>
+  <div class="chart-container">
+    <svg id="chart" viewBox="0 0 800 420" role="img" aria-label="Gráfico de línea de la TRM oficial USD/COP entre el 30 de agosto y el 2 de octubre de 2026. Parte de 3.202,79 pesos, baja a un mínimo de 3.072,27 el 14 de septiembre, sube tras el alza de la Fed hasta un máximo de 3.349,63 el 29 de septiembre y retrocede a 3.307,73 el 2 de octubre, después del alza de tasas del Banco de la República a 12,25 % del 30 de septiembre."></svg>
+    <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+  </div>
+
+  <table>
+    <caption>Tabla de datos — TRM oficial USD/COP (vista alternativa al gráfico). Filas resaltadas: puntos nuevos frente a la ficha del 25-sep.</caption>
+    <thead>
+      <tr>
+        <th>Fecha de vigencia</th>
+        <th>TRM (COP/USD)</th>
+        <th>Variación vs. punto anterior</th>
+        <th>Fuente</th>
+      </tr>
+    </thead>
+    <tbody id="dataTableBody"></tbody>
+  </table>
+
+  <table>
+    <caption>Resumen de variaciones (cálculos del analista sobre TRM certificada por la Superintendencia Financiera)</caption>
+    <thead>
+      <tr><th>Comparación</th><th>Variación</th><th>Detalle</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2-oct vs. 25-sep (ficha previa)</td><td>−$21,88 (−0,66 %)</td><td>$3.307,73 frente a $3.329,61</td></tr>
+      <tr><td>2-oct vs. máximo del 29-sep</td><td>−$41,90 (−1,25 %)</td><td>$3.307,73 frente a $3.349,63</td></tr>
+      <tr><td>2-oct vs. 30-ago</td><td>+$104,94 (+3,28 %)</td><td>$3.307,73 frente a $3.202,79</td></tr>
+      <tr><td>YTD 2026 (vs. 31-dic-2025)</td><td>≈ −11,96 %</td><td>$3.307,73 frente a $3.757,08</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">
+    Nota de integridad: todos los valores vienen de la ficha <code>bolsas/colombia/investigacion-activos/2026-10-02-usd-cop-actualizacion.md</code>
+    (el tramo del 30-ago al 25-sep se toma de la ficha previa <code>2026-09-25-usd-cop-actualizacion.md</code> y se repite en la nueva), donde cada valor tiene su fuente y fecha.
+    No se estimaron ni interpolaron cifras para completar la serie diaria. Las cifras se tomaron de los extractos de prensa
+    (La República, Portafolio) que citan la certificación de la Superintendencia Financiera. El MSCI COLCAP no se grafica aquí
+    porque tiene otra escala (regla de un solo eje Y); sus cierres están en la ficha. Para la serie oficial completa,
+    consultar https://suameca.banrep.gov.co. Contenido educativo; no es asesoría financiera.
+  </p>
+</div>
+
+<script>
+(function () {
+  var data = [
+    { date: "2026-08-30", value: 3202.79, source: "Superintendencia Financiera / dolarhoy.co, 2026-08-29 (ficha 2026-08-30)" },
+    { date: "2026-09-01", value: 3213.97, source: "Portafolio, 2026-09-01" },
+    { date: "2026-09-07", value: 3126.08, source: "Portafolio, 2026-09-11 (vigente 5 al 8-sep)" },
+    { date: "2026-09-09", value: 3116.47, source: "Portafolio, 2026-09-11" },
+    { date: "2026-09-10", value: 3099.48, source: "Portafolio, 2026-09-11" },
+    { date: "2026-09-11", value: 3101.00, source: "Portafolio, 2026-09-11" },
+    { date: "2026-09-14", value: 3072.27, source: "Portafolio, 2026-09-18" },
+    { date: "2026-09-15", value: 3109.30, source: "Portafolio, 2026-09-18" },
+    { date: "2026-09-16", value: 3100.45, source: "Portafolio, 2026-09-18" },
+    { date: "2026-09-17", value: 3128.46, source: "Portafolio, 2026-09-18" },
+    { date: "2026-09-18", value: 3151.73, source: "Portafolio, 2026-09-18" },
+    { date: "2026-09-21", value: 3192.92, source: "Portafolio, 2026-09-21 (vigente desde el 19-sep)" },
+    { date: "2026-09-22", value: 3192.53, source: "La República, 2026-09-22" },
+    { date: "2026-09-23", value: 3208.66, source: "La República, 2026-09-24; Portafolio, 2026-09-23" },
+    { date: "2026-09-24", value: 3264.39, source: "La República / Superintendencia Financiera, 2026-09-24" },
+    { date: "2026-09-25", value: 3329.61, source: "La República / Superintendencia Financiera, 2026-09-25" },
+    { date: "2026-09-28", value: 3306.86, source: "La República, 2026-09-28 (vigente desde el 26-sep)", isNew: true },
+    { date: "2026-09-29", value: 3349.63, source: "Portafolio / La República, 2026-09-29", isNew: true },
+    { date: "2026-09-30", value: 3341.23, source: "Portafolio / La República, 2026-09-30", isNew: true },
+    { date: "2026-10-01", value: 3312.84, source: "Portafolio, 2026-10-01", isNew: true },
+    { date: "2026-10-02", value: 3307.73, source: "La República / Portafolio, 2026-10-02", isNew: true }
+  ];
+  var baseRef = { date: "2026-09-25", value: 3329.61 };
+  // Posición de las etiquetas de eventos elegida para no chocar con las etiquetas de datos:
+  // Fed arriba (a mediados de septiembre la serie está baja); Banrep abajo (a fin de mes la serie está alta).
+  var events = [
+    { date: "2026-09-16", label: "Alza Fed +25 pb (16-sep)", pos: "top", anchor: "start" },
+    { date: "2026-09-30", label: "Alza Banrep a 12,25 % (30-sep)", pos: "bottom", anchor: "end" }
+  ];
+  var xTicks = ["2026-08-30", "2026-09-07", "2026-09-14", "2026-09-21", "2026-09-28", "2026-10-02"];
+
+  var svg = document.getElementById("chart");
+  var tooltip = document.getElementById("tooltip");
+  var tbody = document.getElementById("dataTableBody");
+  var ns = "http://www.w3.org/2000/svg";
+
+  var W = 800, H = 420, marginL = 70, marginR = 40, marginT = 30, marginB = 60;
+  var plotW = W - marginL - marginR;
+  var plotH = H - marginT - marginB;
+
+  function toTime(s) {
+    var p = s.split("-");
+    return Date.UTC(+p[0], +p[1] - 1, +p[2]);
+  }
+  var t0 = toTime(data[0].date);
+  var t1 = toTime(data[data.length - 1].date);
+
+  var values = data.map(function (d) { return d.value; });
+  var minV = 3000, maxV = 3400, stepV = 50;
+
+  function xScale(dateStr) { return marginL + ((toTime(dateStr) - t0) / (t1 - t0)) * plotW; }
+  function yScale(v) { return marginT + plotH - ((v - minV) / (maxV - minV)) * plotH; }
+
+  function fmt(v) {
+    return v.toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function shortDate(s) {
+    var p = s.split("-");
+    return p[2] + "-" + p[1];
+  }
+  function el(name, attrs, text) {
+    var e = document.createElementNS(ns, name);
+    for (var k in attrs) { e.setAttribute(k, attrs[k]); }
+    if (text !== undefined) { e.textContent = text; }
+    svg.appendChild(e);
+    return e;
+  }
+
+  // Grid + eje Y (un solo eje)
+  for (var v = minV; v <= maxV; v += stepV) {
+    var y = yScale(v);
+    el("line", { x1: marginL, x2: W - marginR, y1: y, y2: y, "class": "grid-line" });
+    el("text", { x: marginL - 10, y: y + 4, "text-anchor": "end", "class": "axis-label" },
+      "$" + v.toLocaleString("es-CO"));
+  }
+
+  // Eje X: ticks selectivos (fechas en escala de calendario)
+  xTicks.forEach(function (d) {
+    el("text", { x: xScale(d), y: H - marginB + 20, "text-anchor": "middle", "class": "axis-label" }, shortDate(d));
+  });
+  el("text", { x: marginL + plotW / 2, y: H - marginB + 42, "text-anchor": "middle", "class": "axis-label" },
+    "Fecha de vigencia de la TRM (2026)");
+
+  // Línea horizontal de referencia: base 25-sep (desde ese día hasta el final)
+  var yBase = yScale(baseRef.value);
+  el("line", { x1: xScale(baseRef.date), x2: W - marginR, y1: yBase, y2: yBase, "class": "base-line" });
+
+  // Marcadores de eventos
+  events.forEach(function (ev) {
+    var x = xScale(ev.date);
+    el("line", { x1: x, x2: x, y1: marginT, y2: marginT + plotH, "class": "event-line" });
+    var ty = ev.pos === "top" ? marginT + 12 : marginT + plotH - 8;
+    var tx = ev.anchor === "start" ? x + 6 : x - 6;
+    el("text", { x: tx, y: ty, "text-anchor": ev.anchor, "class": "event-label" }, ev.label);
+  });
+
+  // Línea
+  var pathD = data.map(function (d, i) {
+    return (i === 0 ? "M" : "L") + xScale(d.date) + "," + yScale(d.value);
+  }).join(" ");
+  el("path", { d: pathD, "class": "line-colombia" });
+
+  // Etiquetas directas selectivas: inicio, mínimo, máximo y último.
+  // Posiciones fijadas a mano para evitar superposiciones:
+  //  - inicio: arriba (debajo la línea baja hacia el 7-sep y la cruzaría);
+  //  - mínimo: abajo y alineado a la derecha del punto, para no cruzar la línea del evento Fed (16-sep);
+  //  - máximo: arriba y a la izquierda (deja libre la línea del evento Banrep, 30-sep);
+  //  - último: abajo a la izquierda (separado del máximo).
+  var maxIdx = values.indexOf(Math.max.apply(null, values));
+  var minIdx = values.indexOf(Math.min.apply(null, values));
+  var lastIdx = data.length - 1;
+  var firstIdx = 0;
+  var labelSpec = {};
+  labelSpec[firstIdx] = { dy: -18, dx: 4, anchor: "start", text: "30-ago: $" + fmt(data[firstIdx].value) };
+  labelSpec[minIdx] = { dy: 22, dx: 16, anchor: "end", text: "Mín. 14-sep: $" + fmt(data[minIdx].value) };
+  labelSpec[maxIdx] = { dy: -14, dx: -4, anchor: "end", text: "Máx. 29-sep: $" + fmt(data[maxIdx].value) };
+  labelSpec[lastIdx] = { dy: 24, dx: 4, anchor: "end", text: "2-oct: $" + fmt(data[lastIdx].value) };
+
+  data.forEach(function (d, i) {
+    var x = xScale(d.date), y = yScale(d.value);
+    var prev = i > 0 ? data[i - 1].value : null;
+    var circle = el("circle", {
+      cx: x, cy: y, r: 5, "class": "point-colombia", tabindex: "0", role: "img",
+      "aria-label": d.date + ": $" + fmt(d.value) + " COP/USD"
+    });
+
+    function show() {
+      var delta = prev === null ? "" :
+        "<br>Var. vs. punto anterior: " + (d.value - prev >= 0 ? "+" : "−") + "$" + fmt(Math.abs(d.value - prev)) +
+        " (" + (d.value - prev >= 0 ? "+" : "−") + fmt(Math.abs((d.value - prev) / prev * 100)) + " %)";
+      var vsBase = "";
+      if (toTime(d.date) > toTime(baseRef.date)) {
+        var db = d.value - baseRef.value;
+        vsBase = "<br>Var. vs. base 25-sep: " + (db >= 0 ? "+" : "−") + "$" + fmt(Math.abs(db)) +
+          " (" + (db >= 0 ? "+" : "−") + fmt(Math.abs(db / baseRef.value * 100)) + " %)";
+      }
+      tooltip.innerHTML = "<strong>" + d.date + "</strong><br>$" + fmt(d.value) + " COP/USD" + delta + vsBase +
+        "<br><span style='color:var(--muted)'>" + d.source + "</span>";
+      tooltip.style.opacity = "1";
+      var rect = svg.getBoundingClientRect();
+      var scaleX = rect.width / W;
+      var scaleY = rect.height / H;
+      var left = x * scaleX + 10;
+      var tw = tooltip.offsetWidth;
+      if (left + tw > rect.width) { left = x * scaleX - tw - 10; }
+      if (left < 0) { left = 0; }
+      tooltip.style.left = left + "px";
+      tooltip.style.top = (y * scaleY - 10) + "px";
+    }
+    function hide() { tooltip.style.opacity = "0"; }
+
+    circle.addEventListener("mouseenter", show);
+    circle.addEventListener("mouseleave", hide);
+    circle.addEventListener("focus", show);
+    circle.addEventListener("blur", hide);
+
+    var spec = labelSpec[i];
+    if (spec) {
+      el("text", {
+        x: x + spec.dx, y: y + spec.dy, "text-anchor": spec.anchor, "class": "point-label"
+      }, spec.text);
+    }
+  });
+
+  // Tabla de datos
+  data.forEach(function (d, i) {
+    var tr = document.createElement("tr");
+    if (d.isNew) { tr.className = "new-point"; }
+    var varTxt = "—";
+    if (i > 0) {
+      var diff = d.value - data[i - 1].value;
+      varTxt = (diff >= 0 ? "+" : "−") + "$" + fmt(Math.abs(diff)) + " (" + (diff >= 0 ? "+" : "−") +
+        fmt(Math.abs(diff / data[i - 1].value * 100)) + " %)";
+    }
+    tr.innerHTML = "<td>" + d.date + "</td><td>$" + fmt(d.value) + "</td><td>" + varTxt + "</td><td>" + d.source + "</td>";
+    tbody.appendChild(tr);
+  });
+
+  // Modo claro / oscuro
+  var btn = document.getElementById("themeToggle");
+  var root = document.documentElement;
+  function applyTheme(mode) {
+    if (mode === "dark") {
+      root.setAttribute("data-theme", "dark");
+      btn.textContent = "Modo claro";
+    } else {
+      root.removeAttribute("data-theme");
+      btn.textContent = "Modo oscuro";
+    }
+  }
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(prefersDark ? "dark" : "light");
+  btn.addEventListener("click", function () {
+    var isDark = root.getAttribute("data-theme") === "dark";
+    applyTheme(isDark ? "light" : "dark");
+  });
+})();
+</script>
+</body>
+</html>
