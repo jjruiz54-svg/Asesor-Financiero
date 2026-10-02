@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WLD — Precio spot en CoinMarketCap, 30 de agosto a 2 de octubre de 2026</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --muted: #555555;
+    --grid: #e0e0e0;
+    --card: #f7f7f8;
+    --border: #d5d5d8;
+    --series: #4a3aa7;
+    --ref: #8a8a94;
+    --tooltip-bg: #1a1a1a;
+    --tooltip-text: #ffffff;
+  }
+  [data-theme="dark"] {
+    --bg: #14141a;
+    --text: #f0f0f2;
+    --muted: #b5b5c0;
+    --grid: #33333d;
+    --card: #1e1e26;
+    --border: #3a3a45;
+    --series: #9085e9;
+    --ref: #8a8a94;
+    --tooltip-bg: #f0f0f2;
+    --tooltip-text: #14141a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button#themeToggle {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  button#themeToggle:hover { opacity: 0.85; }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    position: relative;
+  }
+  svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .event-line { stroke: var(--ref); stroke-width: 1; stroke-dasharray: 3,3; }
+  .event-label { font-size: 10px; fill: var(--muted); }
+  .atl-line { stroke: var(--ref); stroke-width: 1.2; stroke-dasharray: 6,4; }
+  .atl-label { font-size: 10.5px; fill: var(--muted); }
+  .price-line { fill: none; stroke: var(--series); stroke-width: 2.5; }
+  .price-dot { fill: var(--series); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .price-dot:hover, .price-dot:focus { r: 7; outline: none; }
+  /* Halo del color de fondo para que las etiquetas no se crucen visualmente con las líneas de eventos */
+  .direct-label { font-size: 11px; fill: var(--text); font-weight: 600; paint-order: stroke; stroke: var(--card); stroke-width: 4px; stroke-linejoin: round; }
+  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 0.8rem; color: var(--text); align-items: center; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 14px; height: 3px; background: var(--series); border-radius: 2px; }
+  .legend-dash { width: 16px; height: 0; border-top: 2px dashed var(--ref); }
+  .tooltip {
+    position: absolute;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    max-width: 340px;
+    line-height: 1.4;
+    z-index: 10;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.82rem;
+  }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  th, td {
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 600; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  .footer-src { font-size: 0.72rem; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <h1>WLD (Worldcoin): +31,4% en una semana, de US$0,432 a US$0,568</h1>
+  <p class="subtitle">
+    Precio spot en USD según CoinMarketCap, del 30 de agosto al 2 de octubre de 2026, con un solo eje vertical. Solo se grafican cotizaciones de CoinMarketCap citadas en la ficha, sin puntos interpolados ni estimados. Las referencias de CoinGecko y CoinDesk del mismo día aparecen en los tooltips y en la tabla.
+    Fecha de corte: 2026-10-02.
+  </p>
+
+  <div class="toolbar">
+    <button id="themeToggle" onclick="toggleTheme()">Cambiar a modo oscuro</button>
+  </div>
+
+  <div class="chart-card">
+    <svg id="chart" viewBox="0 0 820 400" role="img" aria-label="Gráfico de línea del precio de WLD en dólares según CoinMarketCap. Pasa de 0,378 dólares el 30 de agosto a 0,432 el 25 de septiembre, 0,525 el 27 de septiembre y 0,568 el 2 de octubre de 2026, una subida de 31,4 por ciento desde el 25 de septiembre.">
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch"></span> Precio WLD en CoinMarketCap (USD)</div>
+      <div class="legend-item"><span class="legend-dash"></span> Mínimo histórico (ATL) y fechas de eventos</div>
+    </div>
+    <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+  </div>
+
+  <table id="dataTable">
+    <caption>Tabla de datos: vista alternativa del gráfico</caption>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Precio (USD)</th>
+        <th>Referencia / evento</th>
+        <th>Fuente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2026-08-30</td><td class="num">0,377844</td><td>Corte de la ficha del 30-ago; cap. US$1.366,9 millones</td><td>CoinMarketCap, 2026-08-30</td></tr>
+      <tr><td>2026-09-25</td><td class="num">0,431836</td><td>Corte de la ficha anterior (base); cap. US$1.577,0 millones; puesto #50</td><td>CoinMarketCap, 2026-09-25</td></tr>
+      <tr><td>2026-09-27</td><td class="num">0,525</td><td>Ruptura técnica, +9,08% en 24h</td><td>CoinMarketCap (Top Stories / CMC AI), 2026-09-27</td></tr>
+      <tr><td>2026-10-02</td><td class="num">0,567593</td><td>Corte de esta ficha; cap. US$2.153,3 millones; puesto #45; +31,4% desde el 25-sep</td><td>CoinMarketCap, 2026-10-02</td></tr>
+      <tr><td>2026-09-25</td><td class="num">0,4569</td><td>Referencia (no graficada); cap. US$1.668,4 millones; puesto #59</td><td>CoinGecko, 2026-09-25</td></tr>
+      <tr><td>2026-10-02</td><td class="num">0,5619</td><td>Referencia (no graficada); cap. US$2.135,0 millones; puesto #53; +23,0% desde el 25-sep</td><td>CoinGecko, 2026-10-02</td></tr>
+      <tr><td>2026-09-24</td><td class="num">0,41</td><td>Referencia (no graficada)</td><td>CoinDesk, 2026-09-24</td></tr>
+      <tr><td>2026-10-02</td><td class="num">0,5463</td><td>Referencia (no graficada), 16:41 ET; +9,10% en 24h</td><td>CoinDesk, 2026-10-02</td></tr>
+      <tr><td>Histórico</td><td class="num">0,2279</td><td>Mínimo histórico (ATL) del 17-may-2026, línea de referencia</td><td>CoinMarketCap, 2026-10-02</td></tr>
+      <tr><td>2026-09-24</td><td>—</td><td>Hackeo de Bitget (US$351,6 millones, luego US$387,5 millones)</td><td>CoinDesk, 2026-09-25 / The Block, 2026-09-26</td></tr>
+      <tr><td>2026-09-30</td><td>—</td><td>PCE de agosto: 3,4% anual, subyacente 3,0%</td><td>The Block, 2026-09-30</td></tr>
+      <tr><td>2026-10-01</td><td>—</td><td>La SEC propone una regla de custodia cripto</td><td>CoinDesk / The Block, 2026-10-01</td></tr>
+      <tr><td>2026-10-02</td><td>—</td><td>Empleo de septiembre: +29.000; desempleo 4,2%</td><td>The Block, 2026-10-02</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">
+    <strong>Nota de integridad de datos:</strong> la línea une solo cotizaciones de CoinMarketCap, para no mezclar metodologías. Entre el 30-ago y el 25-sep no hay cotizaciones puntuales verificadas, así que el tramo recto entre esas fechas <em>no</em> representa la trayectoria real, que tuvo volatilidad intermedia (por ejemplo, la caída de 11% del 24-sep). Las referencias de CoinGecko y CoinDesk no se dibujan como puntos porque el 2-oct quedarían superpuestas a menos de 10 píxeles del punto de CoinMarketCap; se muestran en el tooltip de cada punto y en la tabla. La hora exacta de la cifra de CoinMarketCap del 2-oct no se pudo verificar. La capitalización no se grafica, porque exigiría un segundo eje. Variación calculada con la misma fuente (CoinMarketCap): +31,4% entre el 25-sep y el 2-oct, y +50,2% desde el 30-ago.
+  </p>
+
+  <p class="footer-src">
+    Fuentes: CoinMarketCap (coinmarketcap.com), CoinGecko (coingecko.com), CoinDesk (coindesk.com), The Block (theblock.co). Ficha de análisis asociada: <code>bolsas/criptomonedas/investigacion-activos/2026-10-02-wld-actualizacion.md</code>.
+  </p>
+</div>
+
+<script>
+  // Solo datos citados en la ficha 2026-10-02-wld-actualizacion.md (serie CoinMarketCap)
+  // lx/ly: posición de la etiqueta directa relativa al punto; anchor: alineación del texto
+  const data = [
+    { date: "2026-08-30", price: 0.377844,
+      note: "CoinMarketCap, 30-ago-2026 (corte de la ficha del 30-ago)",
+      label: "30-ago: US$0,378", lx: 0, ly: 24, anchor: "start" },
+    { date: "2026-09-25", price: 0.431836,
+      note: "CoinMarketCap, 25-sep-2026 (base). Ref.: CoinGecko US$0,4569; CoinDesk US$0,41 (24-sep)",
+      label: "25-sep: US$0,432", lx: -27, ly: 26, anchor: "end" },
+    { date: "2026-09-27", price: 0.525,
+      note: "CoinMarketCap (Top Stories), 27-sep-2026: ruptura técnica, +9,08% en 24h" },
+    { date: "2026-10-02", price: 0.567593,
+      note: "CoinMarketCap, 2-oct-2026 (corte; +31,4% vs. 25-sep). Ref.: CoinGecko US$0,5619; CoinDesk US$0,5463 (16:41 ET)",
+      label: "2-oct: US$0,568 (+31,4%)", lx: -10, ly: -14, anchor: "end" }
+  ];
+  const atl = 0.2279;
+  const eventsA = ["2026-09-24"];
+  const eventsB = ["2026-09-30", "2026-10-01", "2026-10-02"];
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("chart");
+  const W = 820, H = 400;
+  const marginL = 60, marginR = 40, marginT = 56, marginB = 44;
+  const plotW = W - marginL - marginR;
+  const plotH = H - marginT - marginB;
+
+  const ts = s => new Date(s + "T00:00:00Z").getTime();
+  const minT = ts("2026-08-28");
+  const maxT = ts("2026-10-04");
+  const minP = 0;
+  const maxP = 0.7;
+
+  function x(t) { return marginL + ((t - minT) / (maxT - minT)) * plotW; }
+  function y(p) { return marginT + plotH - ((p - minP) / (maxP - minP)) * plotH; }
+
+  function el(tag, attrs, text) {
+    const e = document.createElementNS(svgNS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  // Cuadrícula y etiquetas del eje Y (un único eje)
+  const ySteps = 7;
+  for (let i = 0; i <= ySteps; i++) {
+    const p = minP + (maxP - minP) * (i / ySteps);
+    const yy = y(p);
+    svg.appendChild(el("line", { class: "grid-line", x1: marginL, x2: W - marginR, y1: yy, y2: yy }));
+    svg.appendChild(el("text", { class: "axis-label", x: marginL - 10, y: yy + 4, "text-anchor": "end" }, "US$" + p.toFixed(2).replace(".", ",")));
+  }
+
+  // Etiquetas del eje X
+  ["2026-08-30", "2026-09-06", "2026-09-13", "2026-09-20", "2026-09-27", "2026-10-02"].forEach(d => {
+    const xx = x(ts(d));
+    const [, mo, da] = d.split("-");
+    svg.appendChild(el("text", { class: "axis-label", x: xx, y: H - marginB + 18, "text-anchor": "middle" }, `${da}/${mo}`));
+  });
+
+  // Línea de referencia del ATL
+  svg.appendChild(el("line", { class: "atl-line", x1: marginL, x2: W - marginR, y1: y(atl), y2: y(atl) }));
+  svg.appendChild(el("text", { class: "atl-label", x: marginL + 6, y: y(atl) - 6 }, "Mínimo histórico: US$0,2279 (CMC, 17-may-2026)"));
+
+  // Líneas verticales de eventos, con etiquetas en dos filas para evitar superposición
+  eventsA.concat(eventsB).forEach(d => {
+    const xx = x(ts(d));
+    svg.appendChild(el("line", { class: "event-line", x1: xx, x2: xx, y1: marginT, y2: H - marginB }));
+  });
+  svg.appendChild(el("text", { class: "event-label", x: x(ts("2026-09-24")) + 4, y: marginT - 28, "text-anchor": "end" }, "24-sep: hackeo de Bitget"));
+  svg.appendChild(el("text", { class: "event-label", x: x(ts("2026-10-02")) + 4, y: marginT - 10, "text-anchor": "end" }, "30-sep a 2-oct: PCE moderada · SEC custodia · empleo débil"));
+
+  // Línea de precio (solo CoinMarketCap)
+  const pathD = data.map((d, i) => (i === 0 ? "M" : "L") + x(ts(d.date)) + "," + y(d.price)).join(" ");
+  svg.appendChild(el("path", { class: "price-line", d: pathD }));
+
+  const tooltip = document.getElementById("tooltip");
+  const chartCard = document.querySelector(".chart-card");
+  const fmt = v => v.toLocaleString("es-CO", { minimumFractionDigits: 3, maximumFractionDigits: 6 });
+
+  function showTip(evt, d, node) {
+    const rect = chartCard.getBoundingClientRect();
+    let cx, cy;
+    if (evt && evt.type === "mousemove") {
+      cx = evt.clientX; cy = evt.clientY;
+    } else {
+      const b = node.getBoundingClientRect(); cx = b.left + b.width / 2; cy = b.top;
+    }
+    tooltip.textContent = `${d.date} · US$${fmt(d.price)} · ${d.note}`;
+    tooltip.style.opacity = 1;
+    let left = cx - rect.left + 12;
+    const maxLeft = rect.width - tooltip.offsetWidth - 8;
+    if (left > maxLeft) left = Math.max(8, cx - rect.left - tooltip.offsetWidth - 12);
+    tooltip.style.left = left + "px";
+    tooltip.style.top = Math.max(0, cy - rect.top - tooltip.offsetHeight - 10) + "px";
+  }
+  function hideTip() { tooltip.style.opacity = 0; }
+
+  // Las etiquetas se dibujan después de todos los puntos para que el halo no tape ningún marcador
+  const labels = [];
+  function addDot(d) {
+    const xx = x(ts(d.date)), yy = y(d.price);
+    const dot = el("circle", { class: "price-dot", cx: xx, cy: yy, r: 5, tabindex: 0, "aria-label": `${d.date}: US$${fmt(d.price)}, ${d.note}` });
+    dot.addEventListener("mousemove", e => showTip(e, d, dot));
+    dot.addEventListener("focus", e => showTip(e, d, dot));
+    dot.addEventListener("mouseleave", hideTip);
+    dot.addEventListener("blur", hideTip);
+    svg.appendChild(dot);
+    if (d.label) {
+      labels.push(el("text", { class: "direct-label", x: xx + d.lx, y: yy + d.ly, "text-anchor": d.anchor, "aria-hidden": "true" }, d.label));
+    }
+  }
+
+  // Etiquetas directas selectivas: 30-ago, 25-sep (base) y 2-oct (corte); el 27-sep solo con tooltip
+  data.forEach(d => addDot(d));
+  labels.forEach(l => svg.insertBefore(l, svg.querySelector(".price-line")));
+
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById("themeToggle");
+    if (body.getAttribute("data-theme") === "light") {
+      body.setAttribute("data-theme", "dark");
+      btn.textContent = "Cambiar a modo claro";
+    } else {
+      body.setAttribute("data-theme", "light");
+      btn.textContent = "Cambiar a modo oscuro";
+    }
+  }
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) { toggleTheme(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&amp;P 500, Dow Jones y Apple — Variación indexada (25-sep a 2-oct 2026)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #555555;
+    --grid: #dddddd;
+    --card-bg: #f5f5f5;
+    --us-color: #008300;
+    --baseline: #777777;
+    --tooltip-bg: #ffffff;
+    --tooltip-border: #333333;
+  }
+  [data-theme="dark"] {
+    --bg: #121212;
+    --fg: #f0f0f0;
+    --muted: #bbbbbb;
+    --grid: #333333;
+    --card-bg: #1e1e1e;
+    --us-color: #008300;
+    --baseline: #8a8a8a;
+    --tooltip-bg: #1e1e1e;
+    --tooltip-border: #aaaaaa;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    margin: 0;
+    padding: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.25rem; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button#toggleTheme {
+    background: var(--card-bg);
+    color: var(--fg);
+    border: 1px solid var(--grid);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0 16px 0; font-size: 0.85rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-item svg { width: 40px; height: 12px; }
+  svg#chart { width: 100%; height: auto; overflow: visible; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .baseline { stroke: var(--baseline); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .data-line { fill: none; stroke: var(--us-color); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .data-point { cursor: pointer; fill: var(--us-color); stroke: var(--bg); stroke-width: 1.5; }
+  .data-point:focus { outline: none; stroke: var(--fg); stroke-width: 2.5; }
+  .direct-label { font-size: 12px; font-weight: 700; fill: var(--fg); }
+  .leader { stroke: var(--baseline); stroke-width: 1; }
+  #tooltip {
+    position: absolute;
+    background: var(--tooltip-bg);
+    color: var(--fg);
+    border: 1px solid var(--tooltip-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    display: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    white-space: nowrap;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 0.82rem; }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; }
+  th, td { border: 1px solid var(--grid); padding: 6px 8px; text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: var(--card-bg); }
+  .note { font-size: 0.75rem; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+  .wrap { position: relative; }
+</style>
+</head>
+<body data-theme="light">
+<div class="container">
+  <h1>S&amp;P 500, Dow Jones y Apple — variación indexada (base 100 = cierre del 25 de septiembre de 2026)</h1>
+  <p class="subtitle">Cierres diarios del 25 de septiembre al 2 de octubre de 2026 (6 sesiones). Solo se grafican cierres citados en las fichas del 2026-10-02; las líneas unen cierres consecutivos y no representan la trayectoria intradía. No hay puntos interpolados ni estimados. Los cierres diarios de Apple provienen de agregadores fuera de la lista de confianza y están marcados "por confirmar" en su ficha (cadena aritméticamente coherente). Todas las series usan el color de Estados Unidos; se distinguen por tipo de trazo y forma de marcador.</p>
+
+  <div class="toolbar">
+    <button id="toggleTheme" aria-label="Cambiar entre modo claro y oscuro">Modo oscuro</button>
+  </div>
+
+  <div class="legend" id="legend" aria-label="Leyenda">
+    <div class="legend-item"><svg viewBox="0 0 40 12" aria-hidden="true"><line x1="0" y1="6" x2="40" y2="6" stroke="#008300" stroke-width="3"/><circle cx="20" cy="6" r="4" fill="#008300"/></svg> S&amp;P 500 (SPX) — línea continua, círculos</div>
+    <div class="legend-item"><svg viewBox="0 0 40 12" aria-hidden="true"><line x1="0" y1="6" x2="40" y2="6" stroke="#008300" stroke-width="3" stroke-dasharray="8 4"/><rect x="16" y="2" width="8" height="8" fill="#008300"/></svg> Dow Jones (US30/DJI) — guiones, cuadrados</div>
+    <div class="legend-item"><svg viewBox="0 0 40 12" aria-hidden="true"><line x1="0" y1="6" x2="40" y2="6" stroke="#008300" stroke-width="3" stroke-dasharray="2 4"/><path d="M20 1 L25 11 L15 11 Z" fill="#008300"/></svg> Apple (AAPL) — puntos, triángulos</div>
+  </div>
+
+  <div class="wrap">
+    <svg id="chart" viewBox="0 0 800 430" role="img" aria-label="Gráfico de líneas con la variación indexada a base 100 del S&amp;P 500, el Dow Jones y Apple entre el 25 de septiembre y el 2 de octubre de 2026. El S&amp;P 500 termina en 99,73 (-0,27%), el Dow Jones en 98,74 (-1,26%) y Apple en 97,84 (-2,16%). Los tres tocaron su mínimo de la semana entre el 29 y el 30 de septiembre."></svg>
+    <div id="tooltip" role="status" aria-live="polite"></div>
+  </div>
+
+  <table>
+    <caption>Tabla de datos — cierres e índice base 100 (25-sep-2026 = 100)</caption>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>S&amp;P 500 (pts)</th>
+        <th>Índice SPX</th>
+        <th>Dow Jones (pts)</th>
+        <th>Índice DJI</th>
+        <th>Apple (USD)*</th>
+        <th>Índice AAPL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>25-sep-2026 (base)</td><td>7.743,41</td><td>100,00</td><td>51.828,62</td><td>100,00</td><td>341,07</td><td>100,00</td></tr>
+      <tr><td>28-sep-2026</td><td>7.683,69</td><td>99,23</td><td>51.481,51</td><td>99,33</td><td>338,40</td><td>99,22</td></tr>
+      <tr><td>29-sep-2026</td><td>7.670,84</td><td>99,06</td><td>51.349,92</td><td>99,08</td><td>329,40</td><td>96,58</td></tr>
+      <tr><td>30-sep-2026</td><td>7.651,54</td><td>98,81</td><td>50.906,05</td><td>98,22</td><td>333,02</td><td>97,64</td></tr>
+      <tr><td>1-oct-2026</td><td>7.666,45</td><td>99,01</td><td>50.926,56</td><td>98,26</td><td>330,32</td><td>96,85</td></tr>
+      <tr><td>2-oct-2026</td><td>7.722,72</td><td>99,73</td><td>51.176,96</td><td>98,74</td><td>333,69</td><td>97,84</td></tr>
+      <tr><td><strong>Variación de la semana</strong></td><td colspan="2"><strong>-0,27%</strong></td><td colspan="2"><strong>-1,26%</strong></td><td colspan="2"><strong>-2,16%</strong></td></tr>
+    </tbody>
+  </table>
+  <p class="note">Fuentes: índices — AP vía WTOP (2026-09-25, 2026-09-28, 2026-10-01, 2026-10-02) y AP vía ABC News (2026-09-30); 28 y 29-sep de SPX/DJI vía Yahoo Finance ("Stock Market News", 2026-09-29/30), verificados contra las variaciones en puntos y las cifras YTD de AP. Apple — 25-sep: CNBC / Yahoo Finance (2026-09-25); 28-sep a 2-oct: agregadores de búsqueda web (Yahoo Finance / stockanalysis) y MarketBeat (2026-09-29 y 2026-09-30). *Cierres de Apple por confirmar en fuente de la lista. Índice = cierre / cierre del 25-sep × 100. Ver fichas 2026-10-02-*-actualizacion.md en esta carpeta.</p>
+</div>
+
+<script>
+(function () {
+  // Eje X: días calendario desde el viernes 25-sep-2026 (día 0). Solo sesiones con cierre citado.
+  var data = [
+    { key: "spx", label: "S&P 500 (SPX)", short: "SPX", unit: "pts", dec: 2, dash: "", marker: "circle",
+      points: [
+        { d: 0, date: "25-sep-2026", v: 7743.41 },
+        { d: 3, date: "28-sep-2026", v: 7683.69 },
+        { d: 4, date: "29-sep-2026", v: 7670.84 },
+        { d: 5, date: "30-sep-2026", v: 7651.54 },
+        { d: 6, date: "1-oct-2026",  v: 7666.45 },
+        { d: 7, date: "2-oct-2026",  v: 7722.72 }
+      ] },
+    { key: "dji", label: "Dow Jones (US30/DJI)", short: "DJI", unit: "pts", dec: 2, dash: "8 4", marker: "square",
+      points: [
+        { d: 0, date: "25-sep-2026", v: 51828.62 },
+        { d: 3, date: "28-sep-2026", v: 51481.51 },
+        { d: 4, date: "29-sep-2026", v: 51349.92 },
+        { d: 5, date: "30-sep-2026", v: 50906.05 },
+        { d: 6, date: "1-oct-2026",  v: 50926.56 },
+        { d: 7, date: "2-oct-2026",  v: 51176.96 }
+      ] },
+    { key: "aapl", label: "Apple (AAPL)", short: "AAPL", unit: "USD", dec: 2, dash: "2 4", marker: "triangle",
+      points: [
+        { d: 0, date: "25-sep-2026", v: 341.07 },
+        { d: 3, date: "28-sep-2026", v: 338.40 },
+        { d: 4, date: "29-sep-2026", v: 329.40 },
+        { d: 5, date: "30-sep-2026", v: 333.02 },
+        { d: 6, date: "1-oct-2026",  v: 330.32 },
+        { d: 7, date: "2-oct-2026",  v: 333.69 }
+      ] }
+  ];
+
+  var series = data.map(function (s) {
+    var base = s.points[0].v;
+    s.pts = s.points.map(function (p) { return { d: p.d, date: p.date, v: p.v, idx: (p.v / base) * 100 }; });
+    return s;
+  });
+
+  var svg = document.getElementById("chart");
+  var ns = "http://www.w3.org/2000/svg";
+  var W = 800, H = 430;
+  var mL = 55, mR = 120, mT = 30, mB = 55;
+  var plotW = W - mL - mR, plotH = H - mT - mB;
+  var dMax = 7;
+
+  var allIdx = [];
+  series.forEach(function (s) { s.pts.forEach(function (p) { allIdx.push(p.idx); }); });
+  var yMin = Math.floor(Math.min.apply(null, allIdx) - 0.4);   // 96
+  var yMax = Math.ceil(Math.max.apply(null, allIdx) + 0.4);    // 101
+
+  function xS(d) { return mL + (d / dMax) * plotW; }
+  function yS(v) { return mT + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
+  function fmt(n, dec) { return n.toLocaleString("es-CO", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+  function mk(tag, attrs) { var el = document.createElementNS(ns, tag); for (var k in attrs) el.setAttribute(k, attrs[k]); return el; }
+
+  function marker(type, x, y) {
+    if (type === "square") return mk("rect", { x: x - 5, y: y - 5, width: 10, height: 10 });
+    if (type === "triangle") return mk("path", { d: "M" + x + " " + (y - 6) + " L" + (x + 6) + " " + (y + 5) + " L" + (x - 6) + " " + (y + 5) + " Z" });
+    return mk("circle", { cx: x, cy: y, r: 5 });
+  }
+
+  function render() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    // Cuadrícula y eje Y (un solo eje)
+    for (var v = yMin; v <= yMax; v += 1) {
+      var y = yS(v);
+      svg.appendChild(mk("line", { x1: mL, x2: W - mR, y1: y, y2: y, "class": "gridline" }));
+      var t = mk("text", { x: mL - 8, y: y + 4, "text-anchor": "end", "class": "axis-label" });
+      t.textContent = fmt(v, 0);
+      svg.appendChild(t);
+    }
+    var yt = mk("text", { x: mL - 8, y: mT - 12, "text-anchor": "end", "class": "axis-label" });
+    yt.textContent = "Índice";
+    svg.appendChild(yt);
+
+    // Línea base 100. La etiqueta va DENTRO del área de trazado, encima de la línea y
+    // entre los días 1 y 2 (zona sin datos y lejos del margen derecho donde están las
+    // etiquetas finales), así no choca con ellas ni con los marcadores del día 0.
+    var yb = yS(100);
+    svg.appendChild(mk("line", { x1: mL, x2: W - mR, y1: yb, y2: yb, "class": "baseline" }));
+    var tb = mk("text", { x: xS(1.5), y: yb - 7, "text-anchor": "middle", "class": "axis-label" });
+    tb.textContent = "base 100 (25-sep)";
+    svg.appendChild(tb);
+
+    // Eje X: solo sesiones con datos
+    var ticks = [{ d: 0, t: "25-sep" }, { d: 3, t: "28-sep" }, { d: 4, t: "29-sep" }, { d: 5, t: "30-sep" }, { d: 6, t: "1-oct" }, { d: 7, t: "2-oct" }];
+    ticks.forEach(function (o) {
+      var x = xS(o.d);
+      svg.appendChild(mk("line", { x1: x, x2: x, y1: H - mB, y2: H - mB + 5, "class": "gridline" }));
+      var tx = mk("text", { x: x, y: H - mB + 20, "text-anchor": "middle", "class": "axis-label" });
+      tx.textContent = o.t;
+      svg.appendChild(tx);
+    });
+    var xl = mk("text", { x: mL + plotW / 2, y: H - 8, "text-anchor": "middle", "class": "axis-label" });
+    xl.textContent = "2026 — días calendario (26 y 27-sep: fin de semana, sin sesión)";
+    svg.appendChild(xl);
+
+    // Series
+    series.forEach(function (s) {
+      var dPath = s.pts.map(function (p, i) { return (i === 0 ? "M" : "L") + xS(p.d) + "," + yS(p.idx); }).join(" ");
+      var path = mk("path", { d: dPath, "class": "data-line" });
+      if (s.dash) path.setAttribute("stroke-dasharray", s.dash);
+      svg.appendChild(path);
+    });
+    // Marcadores encima de todas las líneas (el día 0 coincide en 100 para las 3 series:
+    // se dibuja un único marcador neutro para no apilar formas)
+    series.forEach(function (s) {
+      s.pts.forEach(function (p, i) {
+        if (i === 0) return;
+        var m = marker(s.marker, xS(p.d), yS(p.idx));
+        m.setAttribute("class", "data-point");
+        m.setAttribute("tabindex", "0");
+        m.setAttribute("aria-label", s.label + ", " + p.date + ": " + fmt(p.v, s.dec) + " " + s.unit + ", índice " + fmt(p.idx, 2));
+        m.addEventListener("mousemove", function (e) { showTip(e, [{ s: s, p: p }]); });
+        m.addEventListener("mouseleave", hideTip);
+        m.addEventListener("focus", function (e) { showTip(e, [{ s: s, p: p }]); });
+        m.addEventListener("blur", hideTip);
+        svg.appendChild(m);
+      });
+    });
+    var base = mk("circle", { cx: xS(0), cy: yb, r: 6, "class": "data-point", tabindex: "0",
+      "aria-label": "Base 25-sep-2026: SPX 7.743,41 pts, DJI 51.828,62 pts, AAPL 341,07 USD; índice 100 para las tres series" });
+    var baseItems = series.map(function (s) { return { s: s, p: s.pts[0] }; });
+    base.addEventListener("mousemove", function (e) { showTip(e, baseItems); });
+    base.addEventListener("mouseleave", hideTip);
+    base.addEventListener("focus", function (e) { showTip(e, baseItems); });
+    base.addEventListener("blur", hideTip);
+    svg.appendChild(base);
+
+    // Etiquetas directas selectivas: solo el valor final, con separación mínima
+    // vertical para evitar superposición.
+    var minGap = 16;
+    var labels = series.map(function (s) {
+      var last = s.pts[s.pts.length - 1];
+      return { s: s, last: last, yTarget: yS(last.idx), y: yS(last.idx) };
+    }).sort(function (a, b) { return a.yTarget - b.yTarget; });
+    for (var i = 1; i < labels.length; i++) {
+      if (labels[i].y - labels[i - 1].y < minGap) labels[i].y = labels[i - 1].y + minGap;
+    }
+    labels.forEach(function (l) {
+      var xEnd = xS(l.last.d);
+      if (Math.abs(l.y - l.yTarget) > 1) {
+        svg.appendChild(mk("line", { x1: xEnd + 7, y1: l.yTarget, x2: xEnd + 12, y2: l.y, "class": "leader" }));
+      }
+      var pct = l.last.idx - 100;
+      var tl = mk("text", { x: xEnd + 14, y: l.y + 4, "class": "direct-label" });
+      tl.textContent = l.s.short + " " + (pct > 0 ? "+" : "") + fmt(pct, 2) + "%";
+      svg.appendChild(tl);
+    });
+  }
+
+  var tooltip = document.getElementById("tooltip");
+  function showTip(e, items) {
+    var wrap = svg.parentElement.getBoundingClientRect();
+    var x, y;
+    if (e.type === "mousemove") { x = e.clientX - wrap.left; y = e.clientY - wrap.top; }
+    else { var r = e.target.getBoundingClientRect(); x = r.left - wrap.left + r.width / 2; y = r.top - wrap.top; }
+    var html = "<strong>" + items[0].p.date + "</strong>";
+    items.forEach(function (it) {
+      html += "<br>" + it.s.label + ": " + fmt(it.p.v, it.s.dec) + " " + it.s.unit + " (índice " + fmt(it.p.idx, 2) + ")";
+    });
+    tooltip.innerHTML = html;
+    tooltip.style.display = "block";
+    var tw = tooltip.offsetWidth;
+    var left = x + 12;
+    if (left + tw > wrap.width) left = Math.max(0, x - tw - 12);
+    tooltip.style.left = left + "px";
+    tooltip.style.top = (y - 10) + "px";
+  }
+  function hideTip() { tooltip.style.display = "none"; }
+
+  render();
+
+  var btn = document.getElementById("toggleTheme");
+  function setTheme(t) {
+    document.body.setAttribute("data-theme", t);
+    btn.textContent = t === "dark" ? "Modo claro" : "Modo oscuro";
+  }
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) setTheme("dark");
+  btn.addEventListener("click", function () {
+    setTheme(document.body.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+})();
+</script>
+</body>
+</html>

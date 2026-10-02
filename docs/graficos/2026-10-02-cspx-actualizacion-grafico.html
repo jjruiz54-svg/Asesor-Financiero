@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSPX y bolsas europeas — actualización al 2 de octubre de 2026</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --muted: #555555;
+    --grid: #e2e2e2;
+    --card: #f7f7f7;
+    --europa: #eda100; /* color fijo Europa, modo claro */
+    --border: #cccccc;
+    --zero: #888888;
+  }
+  [data-theme="dark"] {
+    --bg: #121212;
+    --text: #f0f0f0;
+    --muted: #b8b8b8;
+    --grid: #333333;
+    --card: #1e1e1e;
+    --europa: #c98500; /* color fijo Europa, modo oscuro */
+    --border: #444444;
+    --zero: #9a9a9a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  h2 { font-size: 1.05rem; margin: 28px 0 4px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin: 0 0 14px; line-height: 1.4; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button#theme-toggle {
+    background: var(--card); color: var(--text); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 0.85rem;
+  }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .chart-container { position: relative; }
+  svg { width: 100%; height: auto; display: block; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .cat-label { font-size: 12px; fill: var(--text); }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .zeroline { stroke: var(--zero); stroke-width: 1.5; }
+  .line-europa { fill: none; stroke: var(--europa); stroke-width: 3; }
+  .point { fill: var(--europa); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .bar { fill: var(--europa); cursor: pointer; }
+  .point:focus, .bar:focus { outline: none; stroke: var(--text); stroke-width: 2.5; }
+  .direct-label { font-size: 12px; font-weight: 600; fill: var(--text); }
+  .annotation { font-size: 11px; fill: var(--muted); }
+  .legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 0.85rem; color: var(--text); }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; background: var(--europa); display: inline-block; }
+  .tooltip {
+    position: absolute; background: var(--text); color: var(--bg); padding: 6px 10px; border-radius: 6px;
+    font-size: 0.78rem; pointer-events: none; opacity: 0; transition: opacity 0.1s; white-space: nowrap; z-index: 10;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.85rem; }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+  th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--card); }
+  td.num { text-align: right; white-space: nowrap; }
+  .note { font-size: 0.78rem; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+</style>
+</head>
+<body data-theme="light">
+<div class="wrap">
+  <div class="toolbar">
+    <button id="theme-toggle" type="button" onclick="toggleTheme()">Modo oscuro</button>
+  </div>
+
+  <h1>CSPX y bolsas europeas — actualización al 2 de octubre de 2026</h1>
+  <p class="subtitle">
+    Ficha asociada: <code>2026-10-02-cspx-actualizacion.md</code>. Mercado: Europa (CSPX es un vehículo UCITS listado en bolsas europeas;
+    su subyacente es el S&amp;P 500). Fecha de corte: NAV de CSPX al 2026-10-01; índices europeos al cierre del 2026-10-02.
+  </p>
+
+  <!-- Gráfico 1: NAV de CSPX -->
+  <h2>1. NAV de CSPX (USD), 28 jul – 1 oct 2026</h2>
+  <p class="subtitle">
+    NAV oficial del fondo (comparación NAV con NAV). Eje X proporcional al tiempo. Solo cinco puntos verificados; la línea recta entre ellos
+    es una ayuda visual y no representa valores diarios intermedios (no hay interpolación ni estimación de datos).
+  </p>
+  <div class="chart-card">
+    <div class="chart-container" id="c1">
+      <svg id="chart1" viewBox="0 0 760 380" role="img"
+        aria-label="Gráfico de línea del NAV de CSPX: 799,98 USD el 28 de julio, 827,22 el 26 de agosto, 830,97 el 24 de septiembre, 825,36 el 30 de septiembre y 826,98 USD el 1 de octubre de 2026"></svg>
+      <div class="tooltip" id="tip1" role="status" aria-live="polite"></div>
+    </div>
+    <div class="legend">
+      <span class="legend-swatch" aria-hidden="true"></span>
+      <span>CSPX — Europa (NAV oficial del fondo, USD)</span>
+    </div>
+  </div>
+  <table>
+    <caption>Tabla de datos del gráfico 1 — vista alternativa</caption>
+    <thead><tr><th>Fecha</th><th>NAV (USD)</th><th>Variación vs. punto anterior</th><th>Fuente</th></tr></thead>
+    <tbody id="tbody1"></tbody>
+  </table>
+
+  <!-- Gráfico 2: variación desde el 24-sep -->
+  <h2>2. Variación desde el cierre del 24 de septiembre de 2026 (%)</h2>
+  <p class="subtitle">
+    Cálculo propio: último valor / valor base del 24-sep − 1. Último valor: cierre del 2-oct para los índices; NAV del 1-oct para CSPX
+    (un día de desfase). Etiquetas directas en CSPX, la mayor caída y la menor caída; el resto de cifras, en la tabla y al pasar el cursor.
+  </p>
+  <div class="chart-card">
+    <div class="chart-container" id="c2">
+      <svg id="chart2" viewBox="0 0 760 330" role="img"
+        aria-label="Gráfico de barras horizontales con la variación desde el 24 de septiembre: CSPX -0,48%, Euro Stoxx 50 -0,63%, DAX -0,14%, CAC 40 -2,28%, FTSE 100 -2,04%, IBEX 35 -2,49%"></svg>
+      <div class="tooltip" id="tip2" role="status" aria-live="polite"></div>
+    </div>
+    <div class="legend">
+      <span class="legend-swatch" aria-hidden="true"></span>
+      <span>Europa — variación % desde el 24-sep-2026 (cálculo propio)</span>
+    </div>
+  </div>
+  <table>
+    <caption>Tabla de datos del gráfico 2 — vista alternativa</caption>
+    <thead><tr><th>Instrumento</th><th>Base (24-sep)</th><th>Último valor (fecha)</th><th>Variación</th><th>Fuente del último valor</th></tr></thead>
+    <tbody id="tbody2"></tbody>
+  </table>
+
+  <p class="note">
+    Nota de integridad: todas las cifras están citadas en la ficha <code>2026-10-02-cspx-actualizacion.md</code>. Las variaciones porcentuales son cálculo propio.
+    No se representan el STOXX Europe 600, el precio de CSPX en LSE ni el NAV del 2-oct por no estar verificados. Los cierres de índices proceden de
+    fuentes fuera de la lista de confianza del sub-agente (dpa-AFX/onvista, finanzen.ch, BFM Bourse, BBN Times, El Periódico de Ceuta) y quedan pendientes
+    de confirmación con fuente primaria. Material educativo; no es asesoría financiera.
+  </p>
+</div>
+
+<script>
+const svgNS = "http://www.w3.org/2000/svg";
+function el(tag, attrs) {
+  const e = document.createElementNS(svgNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function fmt(v, d) { return v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function pct(v) { return (v >= 0 ? "+" : "−") + fmt(Math.abs(v), 2) + "%"; }
+
+function attachTip(node, svg, W, H, container, tooltip, text, ax, ay) {
+  function show(evt) {
+    const rect = container.getBoundingClientRect();
+    let px, py;
+    if (evt && evt.type !== "focus" && evt.clientX !== undefined) {
+      px = evt.clientX - rect.left; py = evt.clientY - rect.top;
+    } else {
+      const sr = svg.getBoundingClientRect();
+      px = (ax / W) * sr.width; py = (ay / H) * sr.height;
+    }
+    tooltip.textContent = text;
+    tooltip.style.opacity = 1;
+    const tw = tooltip.offsetWidth;
+    tooltip.style.left = Math.max(0, Math.min(px + 12, rect.width - tw)) + "px";
+    tooltip.style.top = Math.max(0, py - 38) + "px";
+  }
+  function hide() { tooltip.style.opacity = 0; }
+  node.addEventListener("mousemove", show);
+  node.addEventListener("focus", show);
+  node.addEventListener("mouseleave", hide);
+  node.addEventListener("blur", hide);
+}
+
+/* ---------- Gráfico 1: NAV de CSPX ---------- */
+const nav = [
+  { date: "2026-07-28", label: "28 jul", day: 0,  value: 799.98,   source: "Investing.com, 2026-07-28 (vía ficha 2026-07-29)" },
+  { date: "2026-08-26", label: "26 ago", day: 29, value: 827.2152, source: "Cbonds, 2026-08-26" },
+  { date: "2026-09-24", label: "24 sep", day: 58, value: 830.9652, source: "iShares / BlackRock, 2026-09-24" },
+  { date: "2026-09-30", label: "30 sep", day: 64, value: 825.36,   source: "iShares / BlackRock, 2026-09-30" },
+  { date: "2026-10-01", label: "1 oct",  day: 65, value: 826.98,   source: "iShares / BlackRock, 2026-10-01" }
+];
+(function () {
+  const svg = document.getElementById("chart1");
+  const container = document.getElementById("c1");
+  const tooltip = document.getElementById("tip1");
+  const W = 760, H = 380, mL = 70, mR = 70, mT = 30, mB = 50;
+  const pW = W - mL - mR, pH = H - mT - mB;
+  const minV = 790, maxV = 840, maxDay = 65;
+  const x = d => mL + (d.day / maxDay) * pW;
+  const y = v => mT + pH - ((v - minV) / (maxV - minV)) * pH;
+
+  // Único eje Y con cuadrícula
+  for (let s = 0; s <= 5; s++) {
+    const v = minV + s * 10;
+    svg.appendChild(el("line", { x1: mL, x2: W - mR, y1: y(v), y2: y(v), class: "gridline" }));
+    const t = el("text", { x: mL - 8, y: y(v) + 4, "text-anchor": "end", class: "axis-label" });
+    t.textContent = v + " USD";
+    svg.appendChild(t);
+  }
+  // Etiquetas del eje X (se omite "30 sep" para evitar superposición con "1 oct"; está en la tabla y el tooltip)
+  nav.forEach(d => {
+    if (d.label === "30 sep") return;
+    const t = el("text", { x: x(d), y: H - mB + 20, "text-anchor": d.label === "1 oct" ? "start" : "middle", class: "axis-label" });
+    t.textContent = d.label;
+    svg.appendChild(t);
+  });
+  // Línea
+  let p = "";
+  nav.forEach((d, i) => { p += (i ? "L" : "M") + x(d) + "," + y(d.value) + " "; });
+  svg.appendChild(el("path", { d: p, class: "line-europa" }));
+  // Puntos con tooltip
+  nav.forEach((d, i) => {
+    const prev = i ? nav[i - 1] : null;
+    const chg = prev ? (d.value / prev.value - 1) * 100 : null;
+    const txt = d.label + " 2026: " + fmt(d.value, 2) + " USD" +
+      (chg !== null ? " (" + pct(chg) + " vs. " + prev.label + ")" : "") + " — " + d.source;
+    const c = el("circle", { cx: x(d), cy: y(d.value), r: 5, class: "point", tabindex: 0, "aria-label": txt });
+    attachTip(c, svg, W, H, container, tooltip, txt, x(d), y(d.value));
+    svg.appendChild(c);
+  });
+  // Etiquetas directas selectivas (sin superposición)
+  const first = nav[0], base = nav[2], last = nav[4];
+  let t = el("text", { x: x(first), y: y(first.value) - 14, "text-anchor": "start", class: "direct-label" });
+  t.textContent = fmt(first.value, 2) + " USD";
+  svg.appendChild(t);
+  t = el("text", { x: x(base), y: y(base.value) - 14, "text-anchor": "end", class: "direct-label" });
+  t.textContent = "Base 24 sep: " + fmt(base.value, 2) + " USD";
+  svg.appendChild(t);
+  t = el("text", { x: x(last), y: y(last.value) + 30, "text-anchor": "end", class: "direct-label" });
+  t.textContent = "1 oct: " + fmt(last.value, 2) + " USD";
+  svg.appendChild(t);
+  t = el("text", { x: x(last), y: y(last.value) + 46, "text-anchor": "end", class: "annotation" });
+  t.textContent = pct((last.value / base.value - 1) * 100) + " desde el 24 sep (cálculo propio)";
+  svg.appendChild(t);
+
+  // Tabla
+  const tb = document.getElementById("tbody1");
+  nav.forEach((d, i) => {
+    const prev = i ? nav[i - 1] : null;
+    const chg = prev ? (d.value / prev.value - 1) * 100 : null;
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.date + "</td><td class='num'>" + fmt(d.value, 2) + "</td><td class='num'>" +
+      (chg !== null ? pct(chg) + " (cálculo propio)" : "—") + "</td><td>" + d.source + "</td>";
+    tb.appendChild(tr);
+  });
+})();
+
+/* ---------- Gráfico 2: variación desde el 24-sep ---------- */
+const chg = [
+  { name: "CSPX (NAV, USD)", base: 830.9652, last: 826.98,   lastDate: "2026-10-01", dec: 2, source: "iShares / BlackRock, 2026-10-01" },
+  { name: "Euro Stoxx 50",   base: 6272.5,   last: 6233.29,  lastDate: "2026-10-02", dec: 2, source: "finanzen.ch (datos STOXX), 2026-10-02" },
+  { name: "DAX",             base: 25266.53, last: 25231.20, lastDate: "2026-10-02", dec: 2, source: "dpa-AFX vía onvista / finanzen.ch, 2026-10-02" },
+  { name: "CAC 40",          base: 8081.43,  last: 7897.19,  lastDate: "2026-10-02", dec: 2, source: "BFM Bourse, 2026-10-02" },
+  { name: "FTSE 100",        base: 10679.99, last: 10461.95, lastDate: "2026-10-02", dec: 2, source: "BBN Times, 2026-10-02" },
+  { name: "IBEX 35",         base: 19573.40, last: 19085.30, lastDate: "2026-10-02", dec: 2, source: "El Periódico de Ceuta / Capital, 2026-10-02" }
+];
+chg.forEach(d => { d.pct = (d.last / d.base - 1) * 100; });
+(function () {
+  const svg = document.getElementById("chart2");
+  const container = document.getElementById("c2");
+  const tooltip = document.getElementById("tip2");
+  const W = 760, H = 330, mL = 170, mR = 30, mT = 15, mB = 45;
+  const pW = W - mL - mR, pH = H - mT - mB;
+  const minP = -3, maxP = 0;
+  const x = v => mL + ((v - minP) / (maxP - minP)) * pW;
+  const rowH = pH / chg.length, barH = 24;
+
+  // Único eje de valores (horizontal) con cuadrícula
+  for (let v = minP; v <= maxP + 1e-9; v += 0.5) {
+    svg.appendChild(el("line", { x1: x(v), x2: x(v), y1: mT, y2: mT + pH, class: v === 0 ? "zeroline" : "gridline" }));
+    const t = el("text", { x: x(v), y: mT + pH + 18, "text-anchor": v === 0 ? "end" : "middle", class: "axis-label" });
+    t.textContent = (v === 0 ? "0" : "−" + fmt(Math.abs(v), 1)) + "%";
+    svg.appendChild(t);
+  }
+
+  // Selección de etiquetas directas: CSPX, mayor caída y menor caída
+  const idx = chg.map((d, i) => i);
+  const minIdx = idx.reduce((a, b) => chg[b].pct < chg[a].pct ? b : a);
+  const maxIdx = idx.reduce((a, b) => chg[b].pct > chg[a].pct ? b : a);
+  const labelled = new Set([0, minIdx, maxIdx]);
+
+  chg.forEach((d, i) => {
+    const cy = mT + i * rowH + rowH / 2;
+    const x0 = x(0), x1 = x(d.pct);
+    // Nombre de la categoría
+    const n = el("text", { x: mL - 10, y: cy + 4, "text-anchor": "end", class: "cat-label" });
+    n.textContent = d.name;
+    svg.appendChild(n);
+    // Barra
+    const txt = d.name + ": " + fmt(d.base, d.dec) + " (24-sep) → " + fmt(d.last, d.dec) + " (" + d.lastDate + "), " +
+      pct(d.pct) + " — " + d.source;
+    const r = el("rect", { x: Math.min(x0, x1), y: cy - barH / 2, width: Math.max(1, Math.abs(x1 - x0)), height: barH,
+      rx: 2, class: "bar", tabindex: 0, "aria-label": txt });
+    attachTip(r, svg, W, H, container, tooltip, txt, Math.min(x0, x1), cy);
+    svg.appendChild(r);
+    // Etiqueta directa a la izquierda del extremo de la barra (fuera de la barra, sin superposición)
+    if (labelled.has(i)) {
+      const l = el("text", { x: x1 - 6, y: cy + 4, "text-anchor": "end", class: "direct-label" });
+      l.textContent = pct(d.pct);
+      svg.appendChild(l);
+    }
+  });
+
+  // Tabla
+  const tb = document.getElementById("tbody2");
+  chg.forEach(d => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.name + "</td><td class='num'>" + fmt(d.base, d.dec) + "</td><td class='num'>" +
+      fmt(d.last, d.dec) + " (" + d.lastDate + ")</td><td class='num'>" + pct(d.pct) + "</td><td>" + d.source + "</td>";
+    tb.appendChild(tr);
+  });
+})();
+
+function setTheme(theme) {
+  document.body.setAttribute("data-theme", theme);
+  document.getElementById("theme-toggle").textContent = theme === "dark" ? "Modo claro" : "Modo oscuro";
+}
+function toggleTheme() { setTheme(document.body.getAttribute("data-theme") === "light" ? "dark" : "light"); }
+if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) setTheme("dark");
+</script>
+</body>
+</html>
