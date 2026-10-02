@@ -69,7 +69,8 @@
   .price-line { fill: none; stroke: var(--series); stroke-width: 2.5; }
   .price-dot { fill: var(--series); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
   .price-dot:hover, .price-dot:focus { r: 7; outline: none; }
-  .direct-label { font-size: 11px; fill: var(--text); font-weight: 600; }
+  /* Halo del color de fondo para que las etiquetas no se crucen visualmente con las líneas de eventos */
+  .direct-label { font-size: 11px; fill: var(--text); font-weight: 600; paint-order: stroke; stroke: var(--card); stroke-width: 4px; stroke-linejoin: round; }
   .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 0.8rem; color: var(--text); align-items: center; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-swatch { width: 14px; height: 3px; background: var(--series); border-radius: 2px; }
@@ -178,7 +179,7 @@
       label: "30-ago: US$0,378", lx: 0, ly: 24, anchor: "start" },
     { date: "2026-09-25", price: 0.431836,
       note: "CoinMarketCap, 25-sep-2026 (base). Ref.: CoinGecko US$0,4569; CoinDesk US$0,41 (24-sep)",
-      label: "25-sep: US$0,432", lx: -6, ly: 26, anchor: "end" },
+      label: "25-sep: US$0,432", lx: -27, ly: 26, anchor: "end" },
     { date: "2026-09-27", price: 0.525,
       note: "CoinMarketCap (Top Stories), 27-sep-2026: ruptura técnica, +9,08% en 24h" },
     { date: "2026-10-02", price: 0.567593,
@@ -266,6 +267,8 @@
   }
   function hideTip() { tooltip.style.opacity = 0; }
 
+  // Las etiquetas se dibujan después de todos los puntos para que el halo no tape ningún marcador
+  const labels = [];
   function addDot(d) {
     const xx = x(ts(d.date)), yy = y(d.price);
     const dot = el("circle", { class: "price-dot", cx: xx, cy: yy, r: 5, tabindex: 0, "aria-label": `${d.date}: US$${fmt(d.price)}, ${d.note}` });
@@ -275,12 +278,13 @@
     dot.addEventListener("blur", hideTip);
     svg.appendChild(dot);
     if (d.label) {
-      svg.appendChild(el("text", { class: "direct-label", x: xx + d.lx, y: yy + d.ly, "text-anchor": d.anchor }, d.label));
+      labels.push(el("text", { class: "direct-label", x: xx + d.lx, y: yy + d.ly, "text-anchor": d.anchor, "aria-hidden": "true" }, d.label));
     }
   }
 
   // Etiquetas directas selectivas: 30-ago, 25-sep (base) y 2-oct (corte); el 27-sep solo con tooltip
   data.forEach(d => addDot(d));
+  labels.forEach(l => svg.insertBefore(l, svg.querySelector(".price-line")));
 
   function toggleTheme() {
     const body = document.body;

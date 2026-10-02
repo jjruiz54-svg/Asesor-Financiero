@@ -9,7 +9,7 @@
 
 ## Resumen ejecutivo
 
-El Dow Jones Industrial Average cerró el 2 de octubre de 2026 en 51.176,96 puntos, +250,40 puntos (+0,5%) en el día (Fuente: AP vía WTOP, 2026-10-02). Frente al cierre del 25 de septiembre (51.828,62 puntos, ficha previa) el índice **pierde -1,26%** (-651,66 puntos), peor que el S&P 500 (-0,27%) en la misma semana. El 30 de septiembre cayó 443,87 puntos (-0,9%) hasta 50.906,05, el cierre más bajo de la serie seguida desde agosto, y cerró **septiembre con -4,3%** y el tercer trimestre con -2,7% (Fuente: AP vía ABC News, 2026-09-30; Yahoo Finance, 2026-09-30). La causa sigue siendo la misma de la ficha anterior: rendimientos del Tesoro en máximos desde 2002 que castigan a los sectores cíclicos y financieros con gran peso en el Dow (Fuente: Yahoo Finance, 2026-10-01).
+El Dow Jones Industrial Average cerró el 2 de octubre de 2026 en 51.176,96 puntos, +250,40 puntos (+0,5%) en el día (Fuente: AP vía WTOP, 2026-10-02). Frente al cierre del 25 de septiembre (51.828,62 puntos, ficha previa) el índice **pierde -1,26%** (-651,66 puntos), peor que el S&P 500 (-0,27%) en la misma semana. El 30 de septiembre cayó 443,87 puntos (-0,9%) hasta 50.906,05, el cierre más bajo entre los registrados en estas fichas desde el 28 de agosto, y cerró **septiembre con -4,3%** y el tercer trimestre con -2,7% (Fuente: AP vía ABC News, 2026-09-30; Yahoo Finance, 2026-09-30). La causa sigue siendo la misma de la ficha anterior: rendimientos del Tesoro en máximos desde 2002 que castigan a los sectores cíclicos y financieros con gran peso en el Dow (Fuente: Yahoo Finance, 2026-09-30 y 2026-10-01).
 
 ## Datos clave
 
@@ -34,7 +34,7 @@ El Dow Jones Industrial Average cerró el 2 de octubre de 2026 en 51.176,96 punt
 
 1. **Lunes 28-sep (-0,67%):** el 10 años subió a 5,23% (máximo desde 2007 en ese momento) por la volatilidad del petróleo ligada al enfrentamiento EE. UU.-Irán (Fuente: AP vía WTOP, 2026-09-28; Yahoo Finance, 2026-09-29). CNBC tituló que el Dow sumaba pérdidas consecutivas por el ascenso de los rendimientos (Fuente: CNBC, 2026-09-28).
 2. **Martes 29-sep (-0,26%):** rendimientos altos y caída de la confianza del consumidor (Fuente: Yahoo Finance, 2026-09-29).
-3. **Miércoles 30-sep (-0,86%):** el PIB del segundo trimestre se revisó al alza a 2,2%, lo que mantuvo altos los rendimientos pese a un PCE más suave; el Dow fue el índice más golpeado y cerró su peor mes del año en la serie seguida (Fuente: AP vía ABC News, 2026-09-30; BEA vía Advisor Perspectives, 2026-09-30).
+3. **Miércoles 30-sep (-0,86%):** el PIB del segundo trimestre se revisó al alza a 2,2%, lo que mantuvo altos los rendimientos pese a un PCE más suave; el Dow fue el más golpeado de los grandes índices ese día (-0,9% frente a -0,3% del S&P 500 y +0,2% del Nasdaq) (Fuente: AP vía ABC News, 2026-09-30; BEA vía Advisor Perspectives, 2026-09-30).
 4. **Jueves 1-oct (+0,04%):** el 10 años tocó 5,338%, máximo desde abril de 2002, y luego cedió; el Dow terminó prácticamente plano (Fuente: Yahoo Finance, 2026-10-01; AP vía WTOP, 2026-10-01).
 5. **Viernes 2-oct (+0,49%):** el empleo débil de septiembre redujo la probabilidad de un alza de la Fed en octubre (Fuente: AP vía WTOP, 2026-10-02; CNBC, 2026-10-02).
 
@@ -42,16 +42,16 @@ El Dow Jones Industrial Average cerró el 2 de octubre de 2026 en 51.176,96 punt
 
 ## Comportamiento últimos 5 años
 
-La ventana histórica 2021-2026 está en la ficha base [`2026-07-30-us30-analisis.md`](2026-07-30-us30-analisis.md). Hecho nuevo: septiembre de 2026 (-4,3%) fue el primer mes negativo tras la racha de cinco meses positivos que terminó en agosto (Fuente: CNBC, 2026-08-31; Yahoo Finance, 2026-09-30), y el tercer trimestre cerró en -2,7%.
+La ventana histórica 2021-2026 está en la ficha base [`2026-07-30-us30-analisis.md`](2026-07-30-us30-analisis.md). Hecho nuevo: septiembre de 2026 (-4,3%) cortó la racha de cinco meses positivos que llegaba hasta agosto (Fuente: CNBC, 2026-08-31; Yahoo Finance, 2026-09-30), y el tercer trimestre cerró en -2,7%.
 
 ## Contexto geopolítico y macroeconómico
 
 - **Empleo de septiembre (2-oct):** +29.000 nóminas (consenso Dow Jones: +84.000), desempleo 4,2% desde 4,1%, revisiones de julio y agosto por -60.000 empleos en conjunto (Fuente: BLS / CNBC, 2026-10-02). Para un índice cíclico como el Dow, un mercado laboral que se enfría es un arma de doble filo: aleja alzas de la Fed, pero anticipa menor demanda para industriales y consumo (opinión del analista).
-- **Inflación PCE de agosto (30-sep):** general 3,4% anual (0,3% mensual); núcleo 3,0% anual (0,2% mensual), ambos por debajo de lo esperado (Fuente: CNBC, 2026-09-30).
+- **Inflación PCE de agosto (30-sep):** general 3,4% anual (0,3% mensual); núcleo 3,0% anual (0,2% mensual), ambos por debajo de lo esperado (Fuente: CNBC, 2026-09-30). *El PCE es la medida de inflación preferida por la Fed; el "núcleo" excluye alimentos y energía.*
 - **Fed:** tasa en 3,75%-4,00% desde el 16-sep (Fuente: CNBC, 2026-09-16). Probabilidad de alza en octubre según CME FedWatch: ~17% tras el empleo, frente a ~36% una semana antes; diciembre sigue con alta probabilidad de alza (Fuente: CNBC, 2026-10-02).
-- **Bonos del Tesoro:** 10 años en 5,338% intradía el 1-oct y 30 años en 5,64%, máximos desde 2002 (Fuente: Yahoo Finance, 2026-10-01); cierre del 2-oct del 10 años en 5,281% (+~5 pb) (Fuente: CNBC, 2026-10-02). Para los bancos del Dow una curva empinada ayuda al margen, pero encarece el crédito de clientes industriales y de consumo.
+- **Bonos del Tesoro:** 10 años en 5,338% intradía el 1-oct y 30 años en 5,64%, máximos desde 2002 (Fuente: Yahoo Finance, 2026-10-01); cierre del 2-oct del 10 años en 5,281% (+~5 pb) (Fuente: CNBC, 2026-10-02). Para los bancos del Dow una curva empinada ayuda al margen, pero encarece el crédito de clientes industriales y de consumo (opinión del analista).
 - **Política fiscal:** ley de financiamiento temporal hasta el 11-dic aprobada; no hubo cierre del gobierno el 1-oct (Fuente: Bloomberg, 2026-09).
-- **Medio Oriente y energía:** Brent +4,4% a 102,31 USD el 1-oct por el envío reportado de un tercer grupo de portaaviones y la prohibición rusa de exportar diésel (Fuente: CNBC, 2026-10-01); Brent con +14% en septiembre (Fuente: Reuters vía CNBC, 2026-10-02). Combustible más caro presiona a aerolíneas, transporte e industriales del Dow.
+- **Medio Oriente y energía:** Brent +4,4% a 102,31 USD el 1-oct por el envío reportado de un tercer grupo de portaaviones y la prohibición rusa de exportar diésel (Fuente: CNBC, 2026-10-01); Brent con +14% en septiembre (Fuente: Reuters vía CNBC, 2026-10-02). Combustible más caro presiona a aerolíneas, transporte e industriales del Dow (opinión del analista).
 - **EE. UU.-China:** tregua comercial extendida hasta el 10-ene-2027 (Fuente: Reuters vía Investing.com, 2026-09-23). Positivo para exportadores industriales del Dow (Boeing, Caterpillar) mientras dure (opinión del analista).
 - **Impacto sobre Colombia:** TRM de 3.307,73 COP el 2-oct (Fuente: Bloomberg Línea, 2026-10-02). La debilidad del Dow refleja tasas largas altas en EE. UU., que encarecen el financiamiento externo de Colombia; el Brent cerca de 100 USD compensa parcialmente vía ingresos petroleros (opinión del analista).
 
@@ -87,12 +87,13 @@ La ventana histórica 2021-2026 está en la ficha base [`2026-07-30-us30-analisi
 - CNBC, "Brent oil jumps more than 4% as U.S. reportedly sends third aircraft carrier to Middle East", 2026-10-01 — https://www.cnbc.com/2026/10/01/oil-prices-today-wti-brent.html
 - Reuters vía CNBC, "Oil rises slightly as market weighs mixed supply signals", 2026-10-02 — https://www.cnbc.com/2026/10/02/oil-rises-slightly-as-market-weighs-mixed-supply-signals.html
 - CNBC, "Fed rate decision September 2026: Rates rise to 3.75%-4%", 2026-09-16 — https://www.cnbc.com/2026/09/16/fed-rate-decision-september-2026.html
+- CNBC, "Dow falls more than 400 points, oil rises after new U.S. strikes against Iran", 2026-08-31 — https://www.cnbc.com/2026/08/31/stock-market-today-live-updates.html
 - BLS, Employment Situation Summary – September 2026, 2026-10-02 — https://www.bls.gov/news.release/empsit.nr0.htm (acceso directo bloqueado; contenido vía búsqueda y CNBC)
 - Bloomberg, "Congress Sends Funding Bill to Avert US Shutdown to Trump", 2026-09 — https://www.bloomberg.com/news/articles/2026-09-01/congress-sends-funding-bill-to-avert-us-shutdown-to-trump
-- BEA vía Advisor Perspectives, "Q2 GDP Third Estimate: Real GDP Revised Upward to 2.2%", 2026-09-30 — https://www.advisorperspectives.com/dshort/updates/2026/09/30/q2-gdp-third-estimate-real-gdp-at-2-2
+- BEA vía Advisor Perspectives, "Q2 GDP Third Estimate: Real GDP Revised Upward to 2.2%", 2026-09-30 — https://www.advisorperspectives.com/dshort/updates/2026/09/30/q2-gdp-third-estimate-real-gdp-at-2-2 (BEA es fuente oficial; el intermediario está fuera de la lista)
 - Reuters vía Investing.com, "US, China agree to extend trade truce by two months, work on bigger deal, Bessent says", 2026-09-23 — https://www.investing.com/news/stock-market-news/us-treasurys-bessent-chinas-he-to-meet-on-unfinished-business-before-trumpxi-summit-4913529
 - CNN Business, "The S&P 500 is back at a record high and the Dow just hit 54,000", 2026-08-04 — https://www.cnn.com/2026/08/04/investing/us-stock-market
 - Bloomberg Línea, cotización USD/COP, 2026-10-02 — https://www.bloomberglinea.com/quote/USDCOP:CUR/
 - Vista Partners, "Daily Stock Market Summary (Tuesday, September 29, 2026)", 2026-09-29 — https://vistapglobal.com/daily-stock-market-summary-tuesday-september-29-2026-stocks-finish-lower-as-yields-stay-elevated-amzn-ccl-eprx-f-fico-iova-meta-modd-ser-shop-tgt-wmt/ (fuera de la lista; solo corroboración del Dow del 29-sep. Su nivel del S&P 500 para ese día, 7.697,91, NO cuadra con AP y se descarta)
 
-**Nota metodológica:** las páginas de AP/WTOP, Yahoo Finance e Investing.com no pudieron abrirse directamente (bloqueo del proxy de red el 2026-10-02); las cifras provienen de fragmentos indexados por la búsqueda web. La cadena de cierres del Dow 25-sep → 2-oct es aritméticamente consistente con las variaciones en puntos de AP y con sus cifras YTD del 28-sep y del 1-oct (ambas implican un cierre de 2025 de 48.063,29 puntos).
+**Nota metodológica:** las páginas de AP/WTOP, Yahoo Finance e Investing.com no pudieron abrirse directamente (bloqueo del proxy de red el 2026-10-02); las cifras provienen de fragmentos indexados por la búsqueda web. La cadena de cierres del Dow 25-sep → 2-oct es aritméticamente consistente con las variaciones en puntos de AP y con sus cifras YTD del 28-sep y del 1-oct (ambas implican un cierre de 2025 de 48.063,29 puntos). Esta ficha no reemplaza las previas; debe leerse junto con ellas.
