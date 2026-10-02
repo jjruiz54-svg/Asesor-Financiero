@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercados de Asia — Variación % desde la ficha del 25-sep al 2-oct de 2026</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --grid: #dddddd;
+    --zero: #888888;
+    --card-bg: #f7f7f7;
+    --border: #cccccc;
+    --asia: #e87ba4;
+  }
+  [data-theme="dark"] {
+    --bg: #14161a;
+    --fg: #eaeaea;
+    --grid: #383b40;
+    --zero: #8a8d92;
+    --card-bg: #1f2227;
+    --border: #3a3d42;
+    --asia: #d55181;
+  }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    margin: 0;
+    padding: 24px;
+    transition: background 0.2s, color 0.2s;
+  }
+  h1 { font-size: 1.3rem; margin-bottom: 4px; }
+  .subtitle { font-size: 0.85rem; opacity: 0.75; margin-bottom: 18px; }
+  .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  button.theme-toggle {
+    background: var(--card-bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .chart-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .zeroline { stroke: var(--zero); stroke-width: 1.5; }
+  .axis-label { font-size: 11px; fill: var(--fg); opacity: 0.8; }
+  .cat-label { font-size: 12px; fill: var(--fg); }
+  .cat-sub { font-size: 10px; fill: var(--fg); opacity: 0.7; }
+  .direct-label { font-size: 12px; font-weight: 700; fill: var(--fg); }
+  .bar { fill: var(--asia); cursor: pointer; }
+  .bar:hover, .bar:focus { opacity: 0.8; outline: none; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 0.82rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 14px; height: 10px; border-radius: 2px; display: inline-block; background: var(--asia); }
+  .tooltip {
+    position: absolute;
+    background: var(--card-bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    white-space: nowrap;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 24px;
+    font-size: 0.82rem;
+  }
+  caption { text-align: left; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: right;
+  }
+  th:first-child, td:first-child, td.src { text-align: left; }
+  th { background: var(--card-bg); }
+  .pos { color: #1a7a3d; }
+  [data-theme="dark"] .pos { color: #5fd68a; }
+  .neg { color: #c02f2f; }
+  [data-theme="dark"] .neg { color: #ff8080; }
+  .container { max-width: 960px; margin: 0 auto; position: relative; }
+  .note { font-size: 0.75rem; opacity: 0.7; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="container" id="container">
+  <div class="toolbar">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo claro/oscuro">Modo oscuro</button>
+  </div>
+  <h1>Mercados de Asia — Variación desde la ficha del 25 de septiembre de 2026</h1>
+  <p class="subtitle">Variación porcentual entre el último cierre de la ficha 2026-09-25 y el último cierre disponible al 2-oct-2026. Las fechas difieren por feriados: China continental cerrada del 1 al 7 de octubre (Semana Dorada; Shanghái y Shenzhen al 30-sep); Hong Kong cerrado el 1-oct; STI al 1-oct (cierre del 2-oct no verificado). Las fechas base también difieren (ver tabla). Sin datos interpolados ni estimados. (Fuente: News On Japan, Investing.com, Futu News, China Daily HK, Seoul Economic Daily, SBS News, BBN Times, Trading Economics, Yahoo Finance Singapur, 2026-09-30 a 2026-10-02; bases según ficha 2026-09-25.)</p>
+
+  <div class="chart-card">
+    <svg id="chart" viewBox="0 0 860 380" role="img" aria-label="Gráfico de barras horizontales con la variación porcentual desde la ficha del 25 de septiembre de 2026: Nikkei 225 +2,93 %, STI −0,28 %, KOSPI −1,09 %, SSE Composite −1,19 %, Hang Seng −2,19 %, SZSE Component −3,22 %"></svg>
+    <div class="legend" id="legend">
+      <div class="legend-item"><span class="legend-swatch"></span><span>Asia — variación % del periodo (etiqueta directa en cada barra)</span></div>
+    </div>
+    <p class="note">Color de mercado Asia: #e87ba4 en modo claro / #d55181 en modo oscuro, según la paleta fija del repositorio. Como el contraste en modo claro es inferior a 3:1, cada barra lleva etiqueta directa con su valor en el color de texto. Un solo eje de valores (%). Bajo cada índice se indica el rango de fechas base → final.</p>
+  </div>
+
+  <table id="dataTable">
+    <caption>Tabla de datos — cierres y variación del periodo</caption>
+    <thead>
+      <tr>
+        <th>Índice</th>
+        <th>Cierre base</th>
+        <th>Fecha base</th>
+        <th>Último cierre</th>
+        <th>Fecha último cierre</th>
+        <th>Variación del periodo</th>
+        <th>Fuente del último cierre</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <p class="note">Cierres base heredados de <code>2026-09-25-resumen-mercados-asia.md</code>: Nikkei (Business Standard/News On Japan, 2026-09-25); KOSPI (The Korea Times/IBTimes, 2026-09-23); SSE (Trading Economics/Futu News, 2026-09-24, un decimal); Hang Seng (KuCoin News/Xinhua, 2026-09-25); SZSE (Trading Economics, 2026-09-24); STI (Business Today Malaysia, 2026-09-25, cierre del 24-sep). Detalle completo y discrepancias entre fuentes en <code>2026-10-02-resumen-mercados-asia.md</code>.</p>
+
+  <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(function() {
+  // Solo datos citados en la ficha 2026-10-02-resumen-mercados-asia.md
+  var data = [
+    { name: "Nikkei 225 (Tokio)", start: 66364.20, startDate: "25-sep-2026", end: 68309.46, endDate: "2-oct-2026", src: "Investing.com / News On Japan, 2026-10-02" },
+    { name: "STI (Singapur)", start: 5683.37, startDate: "24-sep-2026", end: 5667.68, endDate: "1-oct-2026", src: "Yahoo Finance Singapur, 2026-10-01" },
+    { name: "KOSPI (Seúl)", start: 7080.92, startDate: "23-sep-2026", end: 7003.74, endDate: "2-oct-2026", src: "SBS News / Seoul Economic Daily, 2026-10-02" },
+    { name: "SSE Composite (Shanghái)", start: 3888.4, startDate: "24-sep-2026", end: 3842.19, endDate: "30-sep-2026", src: "Futu News / BBN Times, 2026-09-30" },
+    { name: "Hang Seng (Hong Kong)", start: 24510.09, startDate: "25-sep-2026", end: 23972.29, endDate: "2-oct-2026", src: "Futu News / China Daily HK, 2026-10-02" },
+    { name: "SZSE Component (Shenzhen)", start: 13316.97, startDate: "24-sep-2026", end: 12887.6, endDate: "30-sep-2026", src: "Trading Economics, 2026-09-30" }
+  ];
+
+  data.forEach(function(d) { d.pct = ((d.end - d.start) / d.start) * 100; });
+
+  function fmtNum(v) { return v.toLocaleString("es-CO", { maximumFractionDigits: 2 }); }
+  function fmtPct(v) { return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2).replace(".", ",") + " %"; }
+  function shortDate(s) { return s.replace("-2026", ""); }
+
+  var svgNS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("chart");
+  var W = 860, H = 380;
+  var mL = 210, mR = 60, mT = 16, mB = 44;
+  var plotW = W - mL - mR, plotH = H - mT - mB;
+  var xMin = -5, xMax = 5;
+  function xs(v) { return mL + ((v - xMin) / (xMax - xMin)) * plotW; }
+  var band = plotH / data.length, barH = band * 0.5;
+
+  function el(tag, attrs) {
+    var e = document.createElementNS(svgNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  var tooltip = document.getElementById("tooltip");
+  var container = document.getElementById("container");
+
+  function render() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    for (var t = xMin; t <= xMax; t += 1) {
+      var x = xs(t);
+      svg.appendChild(el("line", { x1: x, x2: x, y1: mT, y2: H - mB, "class": t === 0 ? "zeroline" : "gridline" }));
+      var lab = el("text", { x: x, y: H - mB + 18, "text-anchor": "middle", "class": "axis-label" });
+      lab.textContent = (t > 0 ? "+" : t < 0 ? "−" : "") + Math.abs(t) + " %";
+      svg.appendChild(lab);
+    }
+    var xt = el("text", { x: mL + plotW / 2, y: H - 4, "text-anchor": "middle", "class": "axis-label" });
+    xt.textContent = "Variación % desde el último cierre de la ficha 2026-09-25";
+    svg.appendChild(xt);
+
+    data.forEach(function(d, i) {
+      var yC = mT + band * i + band / 2;
+      var x0 = xs(0), x1 = xs(d.pct);
+
+      var cat = el("text", { x: mL - 12, y: yC - 2, "text-anchor": "end", "class": "cat-label" });
+      cat.textContent = d.name;
+      svg.appendChild(cat);
+      var sub = el("text", { x: mL - 12, y: yC + 12, "text-anchor": "end", "class": "cat-sub" });
+      sub.textContent = shortDate(d.startDate) + " → " + shortDate(d.endDate);
+      svg.appendChild(sub);
+
+      var rect = el("rect", {
+        x: Math.min(x0, x1), y: yC - barH / 2,
+        width: Math.max(Math.abs(x1 - x0), 1.5), height: barH,
+        rx: 3, "class": "bar", tabindex: 0,
+        "aria-label": d.name + ": " + fmtPct(d.pct) + " (" + d.startDate + " a " + d.endDate + ")"
+      });
+      function show(e) {
+        tooltip.style.opacity = 1;
+        var cr = container.getBoundingClientRect();
+        var px, py;
+        if (e.type === "focus") { var r = rect.getBoundingClientRect(); px = r.right; py = r.top; }
+        else { px = e.clientX; py = e.clientY; }
+        tooltip.innerHTML = "<strong>" + d.name + "</strong><br>" + d.startDate + ": " + fmtNum(d.start) + " pts<br>" +
+          d.endDate + ": " + fmtNum(d.end) + " pts<br>Variación: " + fmtPct(d.pct) + "<br><span style='opacity:.75'>Fuente: " + d.src + "</span>";
+        var left = px - cr.left + 14;
+        var maxLeft = cr.width - tooltip.offsetWidth - 4;
+        if (left > maxLeft) left = Math.max(0, px - cr.left - tooltip.offsetWidth - 14);
+        tooltip.style.left = left + "px";
+        tooltip.style.top = (py - cr.top - 30) + "px";
+      }
+      function hide() { tooltip.style.opacity = 0; }
+      rect.addEventListener("mousemove", show);
+      rect.addEventListener("focus", show);
+      rect.addEventListener("mouseleave", hide);
+      rect.addEventListener("blur", hide);
+      svg.appendChild(rect);
+
+      // etiqueta directa obligatoria (contraste < 3:1 del color Asia en modo claro)
+      var pos = d.pct >= 0;
+      var dl = el("text", { x: pos ? x1 + 8 : x1 - 8, y: yC + 4, "text-anchor": pos ? "start" : "end", "class": "direct-label" });
+      dl.textContent = fmtPct(d.pct);
+      svg.appendChild(dl);
+    });
+  }
+
+  render();
+
+  var tbody = document.getElementById("tableBody");
+  data.forEach(function(d) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.name + "</td><td>" + fmtNum(d.start) + "</td><td>" + d.startDate + "</td><td>" + fmtNum(d.end) +
+      "</td><td>" + d.endDate + "</td><td class='" + (d.pct >= 0 ? "pos" : "neg") + "'>" + fmtPct(d.pct) + "</td><td class='src'>" + d.src + "</td>";
+    tbody.appendChild(tr);
+  });
+
+  var btn = document.getElementById("themeToggle");
+  var root = document.documentElement;
+  function setTheme(mode) {
+    if (mode === "dark") { root.setAttribute("data-theme", "dark"); btn.textContent = "Modo claro"; }
+    else { root.removeAttribute("data-theme"); btn.textContent = "Modo oscuro"; }
+  }
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(prefersDark ? "dark" : "light");
+  btn.addEventListener("click", function() {
+    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+  });
+})();
+</script>
+</body>
+</html>
