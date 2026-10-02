@@ -101,8 +101,8 @@
     <code>2026-10-02-usd-cop-actualizacion.md</code> (Superintendencia Financiera de Colombia, vía La República y Portafolio).
     El eje horizontal es proporcional al calendario. <strong>Los tramos entre puntos son rectas de referencia visual,
     no cotizaciones interpoladas ni estimadas</strong>. Faltan el 2, 3 y 4 de septiembre (TRM no verificada) y los fines de semana,
-    cuando rige la TRM del viernes. Las líneas punteadas marcan el alza de la Fed (16-sep) y el alza del Banco de la República (30-sep);
-    la línea de puntos horizontal marca la base de comparación de la ficha previa (25-sep, $3.329,61).
+    cuando rige la TRM del viernes. Las líneas discontinuas verticales marcan el alza de la Fed (16-sep) y el alza del Banco de la República (30-sep);
+    la línea punteada horizontal marca la base de comparación de la ficha previa (25-sep, $3.329,61).
   </p>
   <div class="legend">
     <span class="legend-item"><span class="legend-swatch" aria-hidden="true"></span>Colombia — TRM oficial USD/COP</span>
@@ -142,7 +142,7 @@
 
   <p class="note">
     Nota de integridad: todos los valores vienen de la ficha <code>bolsas/colombia/investigacion-activos/2026-10-02-usd-cop-actualizacion.md</code>
-    (y, para el tramo 30-ago a 25-sep, de la ficha previa <code>2026-09-25-usd-cop-actualizacion.md</code>), donde cada uno tiene su fuente y fecha.
+    (el tramo del 30-ago al 25-sep se toma de la ficha previa <code>2026-09-25-usd-cop-actualizacion.md</code> y se repite en la nueva), donde cada valor tiene su fuente y fecha.
     No se estimaron ni interpolaron cifras para completar la serie diaria. Las cifras se tomaron de los extractos de prensa
     (La República, Portafolio) que citan la certificación de la Superintendencia Financiera. El MSCI COLCAP no se grafica aquí
     porque tiene otra escala (regla de un solo eje Y); sus cierres están en la ficha. Para la serie oficial completa,
@@ -176,8 +176,8 @@
     { date: "2026-10-02", value: 3307.73, source: "La República / Portafolio, 2026-10-02", isNew: true }
   ];
   var baseRef = { date: "2026-09-25", value: 3329.61 };
-  // Posición de la etiqueta de cada evento elegida para no chocar con las etiquetas de datos:
-  // Fed arriba (la serie está baja a mediados de septiembre); Banrep abajo (la serie está alta a fin de mes).
+  // Posición de las etiquetas de eventos elegida para no chocar con las etiquetas de datos:
+  // Fed arriba (a mediados de septiembre la serie está baja); Banrep abajo (a fin de mes la serie está alta).
   var events = [
     { date: "2026-09-16", label: "Alza Fed +25 pb (16-sep)", pos: "top", anchor: "start" },
     { date: "2026-09-30", label: "Alza Banrep a 12,25 % (30-sep)", pos: "bottom", anchor: "end" }
@@ -255,15 +255,19 @@
   }).join(" ");
   el("path", { d: pathD, "class": "line-colombia" });
 
-  // Etiquetas directas selectivas: inicio, mínimo, máximo, último.
-  // Posiciones fijadas a mano para evitar superposiciones (máximo arriba, último abajo a la izquierda).
+  // Etiquetas directas selectivas: inicio, mínimo, máximo y último.
+  // Posiciones fijadas a mano para evitar superposiciones:
+  //  - inicio: arriba (debajo la línea baja hacia el 7-sep y la cruzaría);
+  //  - mínimo: abajo y alineado a la derecha del punto, para no cruzar la línea del evento Fed (16-sep);
+  //  - máximo: arriba y a la izquierda (deja libre la línea del evento Banrep, 30-sep);
+  //  - último: abajo a la izquierda (separado del máximo).
   var maxIdx = values.indexOf(Math.max.apply(null, values));
   var minIdx = values.indexOf(Math.min.apply(null, values));
   var lastIdx = data.length - 1;
   var firstIdx = 0;
   var labelSpec = {};
-  labelSpec[firstIdx] = { dy: 22, dx: 4, anchor: "start", text: "30-ago: $" + fmt(data[firstIdx].value) };
-  labelSpec[minIdx] = { dy: 22, dx: 0, anchor: "middle", text: "Mín. 14-sep: $" + fmt(data[minIdx].value) };
+  labelSpec[firstIdx] = { dy: -18, dx: 4, anchor: "start", text: "30-ago: $" + fmt(data[firstIdx].value) };
+  labelSpec[minIdx] = { dy: 22, dx: 16, anchor: "end", text: "Mín. 14-sep: $" + fmt(data[minIdx].value) };
   labelSpec[maxIdx] = { dy: -14, dx: -4, anchor: "end", text: "Máx. 29-sep: $" + fmt(data[maxIdx].value) };
   labelSpec[lastIdx] = { dy: 24, dx: 4, anchor: "end", text: "2-oct: $" + fmt(data[lastIdx].value) };
 
