@@ -212,7 +212,7 @@ La TRM vigente está ≈ 36,4 % por debajo del máximo histórico de noviembre d
 - Valora Analitik, "Ampliación: inflación en Colombia volvió a acelerarse a septiembre, pero se mantuvo dentro de expectativas del mercado" (2026-10, día no verificado): https://www.valoraanalitik.com/ampliacion-inflacion-en-colombia-volvio-a-acelerarse-a-septiembre-pero-se-mantuvo-dentro-de-expectativas-del-mercado/
 - Valora Analitik, "Inflaciones básicas en Colombia se moderan en septiembre y dan un respiro al mercado" (2026-10, día no verificado): https://www.valoraanalitik.com/inflaciones-basicas-en-colombia-se-moderan-en-septiembre-y-dan-un-respiro-al-mercado/
 - Valora Analitik, cierre del MSCI COLCAP del 8-oct (2026-10-08): https://www.valoraanalitik.com/video-indice-msci-colcap-cierra-con-un-retroceso-de-036/
-- Valora Analitik, cierre del MSCI COLCAP del 7-oct (2026-10-07; URL atribuida por el buscador): https://www.valoraanalitik.com/video-acciones-de-cibest-lideran-la-correccion-del-indice-msci-colcap/
+- Valora Analitik, cierre del MSCI COLCAP del 7-oct (2026-10-07; URL exacta no identificada; nota candidata no confirmada: https://www.valoraanalitik.com/video-acciones-de-cibest-lideran-la-correccion-del-indice-msci-colcap/)
 - Valora Analitik, "El índice MSCI Colcap sube 2,69 % al finalizar la jornada" (2026-10-05): https://www.valoraanalitik.com/el-indice-msci-colcap-sube-269-al-finalizar-la-jornada/
 - Valora Analitik, cierre semanal del MSCI COLCAP al 2-oct (2026-10-02): https://www.valoraanalitik.com/video-el-indice-msci-colcap-cae-270-en-su-acumulado-semanal/
 - Valora Analitik, cierre del MSCI COLCAP del 6-oct (2026-10-06): URL exacta no identificada (cifra tomada de un extracto del buscador atribuido a Valora Analitik)
